@@ -1,0 +1,103 @@
+{{!-- templates/radio-config.hbs v1.0.6 --}}
+{{!-- Single root element required by ApplicationV2 --}}
+<div class="cp-config-root">
+<div class="cp-config-body">
+  <div class="cp-config-channels">
+
+    {{#each channels as |channel i|}}
+    <div class="cp-config-channel" data-channel-index="{{i}}">
+
+      <div class="cp-config-channel-header">
+        <span class="cp-config-ch-num">▶ CHANNEL {{i}}</span>
+        <button class="cp-config-remove-btn" data-cp-action="removeChannel" data-index="{{i}}" type="button">
+          <i class="fas fa-times"></i> REMOVE
+        </button>
+      </div>
+
+      {{!-- Name + Frequency --}}
+      <div class="cp-config-grid">
+        <div class="cp-config-field">
+          <label class="cp-config-label">Channel Name</label>
+          <input class="cp-config-input" type="text" name="ch-name" value="{{channel.name}}" placeholder="CORP FM" />
+        </div>
+        <div class="cp-config-field">
+          <label class="cp-config-label">Frequency</label>
+          <input class="cp-config-input" type="text" name="ch-freq" value="{{channel.freq}}" placeholder="88.1" />
+        </div>
+      </div>
+
+      {{!-- Playlist — uses pre-computed playlistOptions to avoid Handlebars scope issues --}}
+      <div class="cp-config-grid full" style="margin-top:8px;">
+        <div class="cp-config-field">
+          <label class="cp-config-label">Linked Playlist</label>
+          <select class="cp-config-select" name="ch-playlistId">
+            <option value="">— None —</option>
+            {{#each channel.playlistOptions as |opt|}}
+              <option value="{{opt.id}}" {{#if opt.selected}}selected{{/if}}>{{opt.name}}</option>
+            {{/each}}
+          </select>
+        </div>
+      </div>
+
+      {{!-- Logo + Tagline --}}
+      <div class="cp-config-grid" style="margin-top:8px;">
+        <div class="cp-config-field">
+          <label class="cp-config-label">Logo (emoji / text)</label>
+          <input class="cp-config-input" type="text" name="ch-logo" value="{{channel.logo}}" placeholder="📻" />
+        </div>
+        <div class="cp-config-field">
+          <label class="cp-config-label">Tagline</label>
+          <input class="cp-config-input" type="text" name="ch-tagline" value="{{channel.tagline}}" placeholder="THE VOICE OF THE SPRAWL" />
+        </div>
+      </div>
+
+      {{!-- Description --}}
+      <div class="cp-config-grid full" style="margin-top:8px;">
+        <div class="cp-config-field">
+          <label class="cp-config-label">Station Description</label>
+          <textarea class="cp-config-textarea" name="ch-description" placeholder="Station lore, broadcast info...">{{channel.description}}</textarea>
+        </div>
+      </div>
+
+      {{!-- Colours: picker syncs to text via _onRender wire-up --}}
+      <div class="cp-config-grid" style="margin-top:8px;">
+        <div class="cp-config-field">
+          <label class="cp-config-label">Background Colour</label>
+          <div class="cp-color-row">
+            <input class="cp-config-color cp-picker-bg"  type="color" value="{{channel.bgColor}}" />
+            <input class="cp-config-input cp-text-bg"    type="text"  value="{{channel.bgColor}}" placeholder="#050810" />
+          </div>
+        </div>
+        <div class="cp-config-field">
+          <label class="cp-config-label">Accent / Neon Colour</label>
+          <div class="cp-color-row">
+            <input class="cp-config-color cp-picker-accent" type="color" value="{{channel.accentColor}}" />
+            <input class="cp-config-input cp-text-accent"   type="text"  value="{{channel.accentColor}}" placeholder="#00f5ff" />
+          </div>
+        </div>
+      </div>
+
+      {{!-- Background Image --}}
+      <div class="cp-config-grid full" style="margin-top:8px;">
+        <div class="cp-config-field">
+          <label class="cp-config-label">Background Image URL</label>
+          <input class="cp-config-input" type="text" name="ch-bgImage" value="{{channel.bgImage}}" placeholder="path/to/image.jpg or https://..." />
+        </div>
+      </div>
+
+    </div>
+    {{/each}}
+
+    <button class="cp-add-channel-btn" data-cp-action="addChannel" type="button">
+      <i class="fas fa-plus"></i> ADD CHANNEL
+    </button>
+
+  </div>
+</div>
+
+<div class="cp-config-footer">
+  <button class="cp-save-btn" data-cp-action="saveChannels" type="button">
+    <i class="fas fa-save"></i> SAVE CHANNELS
+  </button>
+</div>
+</div>{{!-- /.cp-config-root --}}

@@ -1,0 +1,27 @@
+{
+  "id": "cyberpunk-radio",
+  "title": "Cyberpunk Radio",
+  "description": "A cyberpunk-styled radio UI module for Foundry VTT that maps playlists to customizable radio channels with full GM and player controls.",
+  "version": "1.0.6",
+  "compatibility": {
+    "minimum": "13",
+    "verified": "13",
+    "maximum": "13"
+  },
+  "authors": [
+    {
+      "name": "FailingUp",
+      "url": "https://www.patreon.com/FailingUp"
+    }
+  ],
+  "esmodules": ["scripts/main.js"],
+  "styles": ["styles/radio.css"],
+  "languages": [{ "lang": "en", "name": "English", "path": "lang/en.json" }],
+  "socket": true,
+  "url": "https://www.patreon.com/FailingUp",
+  "manifest": "",
+  "download": "",
+  "readme": "README.md",
+  "bugs": "",
+  "license": "LICENSE"
+}

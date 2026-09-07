@@ -1,0 +1,40 @@
+{
+  "CPRADIO": {
+    "Title": "Cyberpunk Radio",
+    "OpenRadio": "Open Radio",
+    "Settings": {
+      "ShowPlayerButton": "Show Player Button",
+      "ShowPlayerButtonHint": "Show the radio button in the player UI controls.",
+      "AllowPlayerControl": "Allow Player Control",
+      "AllowPlayerControlHint": "Allow players to control radio playback (volume, next/prev track)."
+    },
+    "UI": {
+      "NoChannels": "NO SIGNAL — Configure channels in GM settings",
+      "NoPlaylist": "NO PLAYLIST LINKED",
+      "ConfigureChannels": "Configure Channels",
+      "Channel": "CH",
+      "Volume": "VOL",
+      "Static": "SCANNING...",
+      "Off": "OFF THE AIR",
+      "NowPlaying": "NOW PLAYING",
+      "Freq": "FREQ"
+    },
+    "Config": {
+      "Title": "Radio Channel Configuration",
+      "RemoveTitle": "Remove Channel",
+      "AddChannel": "Add Channel",
+      "RemoveChannel": "Remove",
+      "ChannelName": "Channel Name",
+      "ChannelFreq": "Frequency",
+      "ChannelPlaylist": "Playlist",
+      "ChannelTagline": "Tagline",
+      "ChannelDescription": "Station Description",
+      "ChannelBgColor": "Background Color",
+      "ChannelAccentColor": "Accent Color",
+      "ChannelBgImage": "Background Image URL",
+      "ChannelLogo": "Station Logo/Icon (emoji or text)",
+      "Save": "Save Channels",
+      "None": "— None —"
+    }
+  }
+}

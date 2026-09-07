@@ -1,0 +1,146 @@
+{{!-- templates/radio-app.hbs --}}
+{{!-- Cyberpunk Radio — Main UI Template --}}
+
+<div class="cp-radio-body">
+
+  {{!-- ── Main Display Screen ── --}}
+  <div class="cp-display">
+    <div class="cp-display-bg"></div>
+    <div class="cp-display-bg-overlay"></div>
+    <div class="cp-display-content">
+
+      {{#if hasChannels}}
+        {{#if channel}}
+          {{!-- Frequency & Signal --}}
+          <div class="cp-freq-bar">
+            <span class="cp-freq-label">{{localize "CPRADIO.UI.Freq"}}</span>
+            <span class="cp-freq-value">{{freq}} MHz</span>
+            <div class="cp-signal-bars">
+              <div class="cp-signal-bar" data-bar="1"></div>
+              <div class="cp-signal-bar" data-bar="2"></div>
+              <div class="cp-signal-bar" data-bar="3"></div>
+              <div class="cp-signal-bar" data-bar="4"></div>
+              <div class="cp-signal-bar" data-bar="5"></div>
+            </div>
+          </div>
+
+          {{!-- Station Identity --}}
+          {{#if channel.logo}}
+            <div class="cp-station-logo">{{channel.logo}}</div>
+          {{/if}}
+          <div class="cp-station-name">{{channel.name}}</div>
+          {{#if channel.tagline}}
+            <div class="cp-station-tagline">{{channel.tagline}}</div>
+          {{/if}}
+
+          {{!-- Now Playing --}}
+          <div class="cp-now-playing-wrap">
+            <div class="cp-np-label">{{localize "CPRADIO.UI.NowPlaying"}}</div>
+            <div class="cp-ticker-wrap">
+              {{#if isPlaying}}
+                {{#if nowPlaying}}
+                  <span class="cp-ticker-text">
+                    ▶ {{nowPlaying}} &nbsp;&nbsp;&nbsp;&nbsp; ▶ {{nowPlaying}}
+                  </span>
+                {{else}}
+                  <span class="cp-ticker-text short">▶ {{localize "CPRADIO.UI.NoPlaylist"}}</span>
+                {{/if}}
+              {{else}}
+                <span class="cp-ticker-text short">■ {{localize "CPRADIO.UI.Off"}}</span>
+              {{/if}}
+            </div>
+          </div>
+
+        {{else}}
+          {{!-- No channel selected --}}
+          <div class="cp-static-display">
+            <div class="cp-static-text">{{localize "CPRADIO.UI.Static"}}</div>
+          </div>
+        {{/if}}
+
+      {{else}}
+        {{!-- No channels configured --}}
+        <div class="cp-no-channels">
+          {{localize "CPRADIO.UI.NoChannels"}}
+        </div>
+      {{/if}}
+
+    </div>
+  </div>
+
+  {{!-- ── Channel Tuner ── --}}
+  {{#if hasChannels}}
+    <div class="cp-tuner-section">
+      <div class="cp-tuner-label">{{localize "CPRADIO.UI.Channel"}} SELECT</div>
+      <div class="cp-channel-tabs">
+        {{#each channels as |ch i|}}
+          <button
+            class="cp-channel-tab {{#if (eq i ../chIdx)}}active{{/if}} {{#unless ch.playlistId}}off-air{{/unless}}"
+            data-cp-action="switchChannel"
+            data-index="{{i}}"
+            title="{{ch.name}} — {{ch.freq}} MHz"
+          >
+            CH.{{i}}
+          </button>
+        {{/each}}
+      </div>
+    </div>
+  {{/if}}
+
+  {{!-- ── Playback Controls ── --}}
+  {{#if canControl}}
+    <div class="cp-controls">
+      <button class="cp-skip-btn" data-cp-action="prevTrack" title="Previous Track">
+        <i class="fas fa-step-backward"></i>
+      </button>
+
+      <button class="cp-play-btn" data-cp-action="togglePlay" title="{{#if isPlaying}}Pause{{else}}Play{{/if}}">
+        <i class="fas fa-{{#if isPlaying}}pause{{else}}play{{/if}}"></i>
+      </button>
+
+      <button class="cp-skip-btn" data-cp-action="nextTrack" title="Next Track">
+        <i class="fas fa-step-forward"></i>
+      </button>
+
+      <div class="cp-volume-wrap">
+        <span class="cp-vol-label">{{localize "CPRADIO.UI.Volume"}}</span>
+        <input
+          class="cp-volume-slider"
+          type="range"
+          min="0"
+          max="1"
+          step="0.01"
+          value="{{volumeRaw}}"
+        />
+        <span class="cp-vol-value">{{volume}}</span>
+      </div>
+    </div>
+  {{/if}}
+
+  {{!-- ── Station Description ── --}}
+  {{#if channel.description}}
+    <div class="cp-station-desc">
+      <div class="cp-desc-text">{{channel.description}}</div>
+    </div>
+  {{/if}}
+
+  {{!-- ── GM Bar ── --}}
+  <div class="cp-gm-bar">
+    <div class="cp-gm-left">
+      <span class="cp-gm-status {{#if isPlaying}}playing{{/if}}">
+        {{#if isPlaying}}● ON AIR{{else}}○ OFF AIR{{/if}}
+      </span>
+      <button class="cp-theme-toggle-btn" data-cp-action="toggleTheme" title="Switch Theme">
+        <i class="cp-theme-btn-icon {{#if (eq theme 'fantasy')}}fas fa-broadcast-tower{{else}}fas fa-dragon{{/if}}"></i>
+        <span class="cp-theme-btn-label">{{#if (eq theme 'fantasy')}}CYBER{{else}}FANTASY{{/if}}</span>
+      </button>
+    </div>
+
+    {{#if isGM}}
+      <button class="cp-config-btn" data-cp-action="openConfig">
+        <i class="fas fa-cog"></i> {{localize "CPRADIO.UI.ConfigureChannels"}}
+      </button>
+    {{/if}}
+  </div>
+
+</div>

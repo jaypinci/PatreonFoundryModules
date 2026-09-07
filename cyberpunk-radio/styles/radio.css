@@ -1,0 +1,1275 @@
+/* ============================================================
+   CYBERPUNK RADIO — Foundry VTT Module Styles
+   Aesthetic: Neon-noir terminal radio with CRT effects
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap');
+
+/* ── CSS Variables ─────────────────────────────────────── */
+:root {
+  --cp-bg:           #050810;
+  --cp-panel:        #0a0f1a;
+  --cp-border:       #1a2a3a;
+  --cp-neon-cyan:    #00f5ff;
+  --cp-neon-pink:    #ff006e;
+  --cp-neon-yellow:  #ffe600;
+  --cp-neon-green:   #39ff14;
+  --cp-text:         #c8d8e8;
+  --cp-text-dim:     #4a6a7a;
+  --cp-scan-line:    rgba(0, 245, 255, 0.03);
+  --cp-glow-cyan:    0 0 8px #00f5ff, 0 0 20px rgba(0,245,255,0.3);
+  --cp-glow-pink:    0 0 8px #ff006e, 0 0 20px rgba(255,0,110,0.3);
+  --cp-glow-green:   0 0 8px #39ff14, 0 0 20px rgba(57,255,20,0.3);
+  --cp-font-display: 'Orbitron', monospace;
+  --cp-font-mono:    'Share Tech Mono', monospace;
+  --cp-font-body:    'Rajdhani', sans-serif;
+
+  /* Channel-specific overrides (set per channel) */
+  --ch-bg:      #050810;
+  --ch-accent:  #00f5ff;
+  --ch-bg-img:  none;
+}
+
+/* ── Application Window ────────────────────────────────── */
+#cyberpunk-radio-app {
+  font-family: var(--cp-font-mono);
+  background: var(--cp-bg);
+  border: 1px solid var(--cp-border);
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 0 40px rgba(0,245,255,0.08), inset 0 0 80px rgba(0,0,0,0.6);
+  min-width: 480px;
+  max-width: 560px;
+}
+
+#cyberpunk-radio-app .window-header {
+  background: linear-gradient(90deg, #000812, #0a1520, #000812);
+  border-bottom: 1px solid var(--cp-neon-cyan);
+  box-shadow: var(--cp-glow-cyan);
+  padding: 6px 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+#cyberpunk-radio-app .window-title {
+  font-family: var(--cp-font-display);
+  font-size: 0.7em;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  color: var(--cp-neon-cyan);
+  text-shadow: var(--cp-glow-cyan);
+  text-transform: uppercase;
+}
+
+#cyberpunk-radio-app .window-header button {
+  color: var(--cp-text-dim);
+  background: none;
+  border: none;
+  font-size: 0.9em;
+}
+
+#cyberpunk-radio-app .window-header button:hover {
+  color: var(--cp-neon-pink);
+  text-shadow: var(--cp-glow-pink);
+}
+
+/* ── Scan-line CRT Effect ──────────────────────────────── */
+.cp-radio-body {
+  position: relative;
+  overflow: hidden;
+}
+
+.cp-radio-body::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    var(--cp-scan-line) 2px,
+    var(--cp-scan-line) 4px
+  );
+  pointer-events: none;
+  z-index: 10;
+  animation: scanScroll 8s linear infinite;
+}
+
+@keyframes scanScroll {
+  0%   { background-position: 0 0; }
+  100% { background-position: 0 100px; }
+}
+
+/* ── Display Panel (main screen) ──────────────────────── */
+.cp-display {
+  position: relative;
+  min-height: 180px;
+  padding: 0;
+  overflow: hidden;
+  transition: background 0.6s ease;
+  background: var(--ch-bg, #050810);
+}
+
+.cp-display-bg {
+  position: absolute;
+  inset: 0;
+  background-image: var(--ch-bg-img, none);
+  background-size: cover;
+  background-position: center;
+  opacity: 0.25;
+  transition: all 0.6s ease;
+}
+
+.cp-display-bg-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(0,0,0,0.7) 0%,
+    rgba(0,0,0,0.3) 50%,
+    rgba(0,0,0,0.8) 100%
+  );
+}
+
+.cp-display-content {
+  position: relative;
+  z-index: 2;
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* Channel Frequency Bar */
+.cp-freq-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.cp-freq-label {
+  font-family: var(--cp-font-display);
+  font-size: 0.55em;
+  color: var(--cp-text-dim);
+  letter-spacing: 0.15em;
+}
+
+.cp-freq-value {
+  font-family: var(--cp-font-display);
+  font-size: 1.4em;
+  font-weight: 900;
+  color: var(--ch-accent, var(--cp-neon-cyan));
+  text-shadow: 0 0 10px var(--ch-accent, var(--cp-neon-cyan));
+  letter-spacing: 0.05em;
+  animation: freqFlicker 6s ease-in-out infinite;
+}
+
+@keyframes freqFlicker {
+  0%, 95%, 100% { opacity: 1; }
+  96%            { opacity: 0.7; }
+  97%            { opacity: 1; }
+  98%            { opacity: 0.5; }
+  99%            { opacity: 1; }
+}
+
+.cp-signal-bars {
+  display: flex;
+  gap: 2px;
+  align-items: flex-end;
+  margin-left: auto;
+}
+
+.cp-signal-bar {
+  width: 4px;
+  background: var(--ch-accent, var(--cp-neon-cyan));
+  opacity: 0.3;
+  border-radius: 1px;
+  transition: opacity 0.3s ease, box-shadow 0.3s ease;
+}
+
+.cp-signal-bar.active {
+  opacity: 1;
+  box-shadow: 0 0 4px var(--ch-accent, var(--cp-neon-cyan));
+}
+
+.cp-signal-bar:nth-child(1) { height: 6px; }
+.cp-signal-bar:nth-child(2) { height: 10px; }
+.cp-signal-bar:nth-child(3) { height: 14px; }
+.cp-signal-bar:nth-child(4) { height: 18px; }
+.cp-signal-bar:nth-child(5) { height: 22px; }
+
+/* Station Name */
+.cp-station-logo {
+  font-size: 1.8em;
+  line-height: 1;
+  margin-bottom: 2px;
+}
+
+.cp-station-name {
+  font-family: var(--cp-font-display);
+  font-size: 1.1em;
+  font-weight: 700;
+  color: #fff;
+  text-shadow: 0 0 12px rgba(255,255,255,0.4);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.cp-station-tagline {
+  font-family: var(--cp-font-body);
+  font-size: 0.75em;
+  font-weight: 300;
+  color: var(--ch-accent, var(--cp-neon-cyan));
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+
+/* Now Playing Ticker */
+.cp-now-playing-wrap {
+  margin-top: 10px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  padding-top: 8px;
+}
+
+.cp-np-label {
+  font-family: var(--cp-font-display);
+  font-size: 0.5em;
+  color: var(--cp-text-dim);
+  letter-spacing: 0.25em;
+  margin-bottom: 4px;
+}
+
+.cp-ticker-wrap {
+  overflow: hidden;
+  width: 100%;
+  position: relative;
+}
+
+.cp-ticker-text {
+  font-family: var(--cp-font-mono);
+  font-size: 0.8em;
+  color: #fff;
+  white-space: nowrap;
+  display: inline-block;
+  animation: tickerScroll 18s linear infinite;
+}
+
+.cp-ticker-text.short { animation: none; }
+
+@keyframes tickerScroll {
+  0%   { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+
+/* Static State */
+.cp-static-display {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.cp-static-text {
+  font-family: var(--cp-font-display);
+  font-size: 1.2em;
+  color: var(--cp-text-dim);
+  letter-spacing: 0.3em;
+  animation: staticPulse 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes staticPulse {
+  0%   { opacity: 0.3; }
+  100% { opacity: 0.8; }
+}
+
+/* ── Channel Tuner Dial ────────────────────────────────── */
+.cp-tuner-section {
+  padding: 10px 20px;
+  background: #030608;
+  border-top: 1px solid var(--cp-border);
+  border-bottom: 1px solid var(--cp-border);
+}
+
+.cp-tuner-label {
+  font-size: 0.55em;
+  color: var(--cp-text-dim);
+  letter-spacing: 0.2em;
+  margin-bottom: 6px;
+  font-family: var(--cp-font-display);
+}
+
+.cp-channel-tabs {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.cp-channel-tab {
+  font-family: var(--cp-font-display);
+  font-size: 0.6em;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  padding: 4px 10px;
+  border: 1px solid var(--cp-border);
+  border-radius: 2px;
+  background: transparent;
+  color: var(--cp-text-dim);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-transform: uppercase;
+  position: relative;
+  overflow: hidden;
+}
+
+.cp-channel-tab:hover {
+  border-color: var(--cp-text-dim);
+  color: var(--cp-text);
+}
+
+.cp-channel-tab.active {
+  border-color: var(--ch-accent, var(--cp-neon-cyan));
+  color: var(--ch-accent, var(--cp-neon-cyan));
+  text-shadow: 0 0 8px var(--ch-accent, var(--cp-neon-cyan));
+  box-shadow: 0 0 8px rgba(0,245,255,0.15), inset 0 0 8px rgba(0,245,255,0.05);
+}
+
+.cp-channel-tab.off-air {
+  border-color: #1a0810;
+  color: #2a1020;
+}
+
+/* ── Playback Controls ─────────────────────────────────── */
+.cp-controls {
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #030608;
+}
+
+.cp-play-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid var(--ch-accent, var(--cp-neon-cyan));
+  background: transparent;
+  color: var(--ch-accent, var(--cp-neon-cyan));
+  font-size: 1em;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+  box-shadow: 0 0 10px rgba(0,245,255,0.2);
+  flex-shrink: 0;
+}
+
+.cp-play-btn:hover {
+  background: var(--ch-accent, var(--cp-neon-cyan));
+  color: #000;
+  box-shadow: 0 0 20px var(--ch-accent, var(--cp-neon-cyan));
+}
+
+.cp-skip-btn {
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--cp-border);
+  border-radius: 2px;
+  background: transparent;
+  color: var(--cp-text-dim);
+  font-size: 0.75em;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+
+.cp-skip-btn:hover {
+  border-color: var(--ch-accent, var(--cp-neon-cyan));
+  color: var(--ch-accent, var(--cp-neon-cyan));
+}
+
+/* Volume Slider */
+.cp-volume-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+}
+
+.cp-vol-label {
+  font-family: var(--cp-font-display);
+  font-size: 0.5em;
+  color: var(--cp-text-dim);
+  letter-spacing: 0.15em;
+  flex-shrink: 0;
+}
+
+.cp-volume-slider {
+  flex: 1;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--cp-border);
+  outline: none;
+  cursor: pointer;
+}
+
+.cp-volume-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--ch-accent, var(--cp-neon-cyan));
+  box-shadow: 0 0 6px var(--ch-accent, var(--cp-neon-cyan));
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.cp-volume-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.3);
+}
+
+.cp-vol-value {
+  font-family: var(--cp-font-mono);
+  font-size: 0.7em;
+  color: var(--cp-text-dim);
+  width: 28px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+/* ── GM Config Button ──────────────────────────────────── */
+.cp-gm-bar {
+  padding: 6px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid var(--cp-border);
+  background: #020406;
+}
+
+.cp-gm-status {
+  font-family: var(--cp-font-mono);
+  font-size: 0.6em;
+  color: var(--cp-text-dim);
+  letter-spacing: 0.1em;
+}
+
+.cp-gm-status.playing {
+  color: var(--cp-neon-green);
+  text-shadow: var(--cp-glow-green);
+  animation: statusBlink 2s ease-in-out infinite;
+}
+
+@keyframes statusBlink {
+  0%, 90%, 100% { opacity: 1; }
+  95%            { opacity: 0.4; }
+}
+
+.cp-config-btn {
+  font-family: var(--cp-font-display);
+  font-size: 0.55em;
+  letter-spacing: 0.15em;
+  padding: 4px 10px;
+  border: 1px solid var(--cp-neon-pink);
+  border-radius: 2px;
+  background: transparent;
+  color: var(--cp-neon-pink);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-transform: uppercase;
+}
+
+.cp-config-btn:hover {
+  background: var(--cp-neon-pink);
+  color: #000;
+  box-shadow: var(--cp-glow-pink);
+}
+
+/* ── Station Description ───────────────────────────────── */
+.cp-station-desc {
+  padding: 8px 20px;
+  border-top: 1px solid var(--cp-border);
+  background: rgba(0,0,0,0.4);
+}
+
+.cp-desc-text {
+  font-family: var(--cp-font-body);
+  font-size: 0.72em;
+  color: var(--cp-text-dim);
+  line-height: 1.5;
+  font-weight: 300;
+  letter-spacing: 0.05em;
+}
+
+/* ── Config Dialog ─────────────────────────────────────── */
+#cyberpunk-radio-config {
+  font-family: var(--cp-font-mono);
+  background: #06090f;
+  border: 1px solid var(--cp-neon-pink);
+  box-shadow: var(--cp-glow-pink);
+}
+
+#cyberpunk-radio-config .window-header {
+  background: #06090f;
+  border-bottom: 1px solid var(--cp-neon-pink);
+}
+
+#cyberpunk-radio-config .window-title {
+  font-family: var(--cp-font-display);
+  font-size: 0.65em;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  color: var(--cp-neon-pink);
+  text-shadow: var(--cp-glow-pink);
+  text-transform: uppercase;
+}
+
+#cyberpunk-radio-config .window-content {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 0;
+}
+
+.cp-config-root {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+
+.cp-config-body {
+  padding: 16px;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--cp-neon-pink) #050810;
+}
+
+.cp-config-channels {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.cp-config-channel {
+  border: 1px solid var(--cp-border);
+  border-radius: 3px;
+  padding: 12px;
+  background: rgba(255,0,110,0.03);
+  transition: border-color 0.15s;
+}
+
+.cp-config-channel:hover {
+  border-color: var(--cp-neon-pink);
+}
+
+.cp-config-channel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--cp-border);
+}
+
+.cp-config-ch-num {
+  font-family: var(--cp-font-display);
+  font-size: 0.7em;
+  font-weight: 700;
+  color: var(--cp-neon-pink);
+  letter-spacing: 0.15em;
+}
+
+.cp-config-remove-btn {
+  font-family: var(--cp-font-display);
+  font-size: 0.55em;
+  padding: 3px 8px;
+  border: 1px solid #3a1020;
+  border-radius: 2px;
+  background: transparent;
+  color: #5a2030;
+  cursor: pointer;
+  letter-spacing: 0.1em;
+  transition: all 0.15s;
+}
+
+.cp-config-remove-btn:hover {
+  border-color: var(--cp-neon-pink);
+  color: var(--cp-neon-pink);
+  background: rgba(255,0,110,0.1);
+}
+
+.cp-config-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.cp-config-grid.full {
+  grid-template-columns: 1fr;
+}
+
+.cp-config-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.cp-config-label {
+  font-family: var(--cp-font-display);
+  font-size: 0.52em;
+  color: var(--cp-text-dim);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.cp-config-input,
+.cp-config-select,
+.cp-config-textarea {
+  font-family: var(--cp-font-mono);
+  font-size: 0.75em;
+  background: #030608;
+  border: 1px solid var(--cp-border);
+  border-radius: 2px;
+  color: var(--cp-text);
+  padding: 5px 8px;
+  outline: none;
+  transition: border-color 0.15s;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.cp-config-input:focus,
+.cp-config-select:focus,
+.cp-config-textarea:focus {
+  border-color: var(--cp-neon-pink);
+  box-shadow: 0 0 6px rgba(255,0,110,0.2);
+}
+
+.cp-config-textarea {
+  resize: vertical;
+  min-height: 52px;
+  line-height: 1.4;
+}
+
+.cp-config-select option {
+  background: #06090f;
+}
+
+.cp-color-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.cp-config-color {
+  width: 32px;
+  height: 28px;
+  border: 1px solid var(--cp-border);
+  border-radius: 2px;
+  background: none;
+  cursor: pointer;
+  padding: 2px;
+  flex-shrink: 0;
+}
+
+/* Add Channel Button */
+.cp-add-channel-btn {
+  font-family: var(--cp-font-display);
+  font-size: 0.65em;
+  letter-spacing: 0.2em;
+  padding: 8px 16px;
+  border: 1px dashed var(--cp-neon-cyan);
+  border-radius: 3px;
+  background: transparent;
+  color: var(--cp-neon-cyan);
+  cursor: pointer;
+  width: 100%;
+  text-transform: uppercase;
+  transition: all 0.15s;
+  margin-top: 4px;
+}
+
+.cp-add-channel-btn:hover {
+  background: rgba(0,245,255,0.06);
+  box-shadow: var(--cp-glow-cyan);
+}
+
+.cp-config-footer {
+  padding: 12px 16px;
+  border-top: 1px solid var(--cp-border);
+  display: flex;
+  justify-content: flex-end;
+}
+
+.cp-save-btn {
+  font-family: var(--cp-font-display);
+  font-size: 0.65em;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  padding: 8px 20px;
+  border: 1px solid var(--cp-neon-cyan);
+  border-radius: 2px;
+  background: transparent;
+  color: var(--cp-neon-cyan);
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: all 0.15s;
+}
+
+.cp-save-btn:hover {
+  background: var(--cp-neon-cyan);
+  color: #000;
+  box-shadow: var(--cp-glow-cyan);
+}
+
+/* ── Player UI Button ──────────────────────────────────── */
+#cp-radio-player-btn {
+  font-size: 0.9em;
+  color: var(--cp-neon-cyan);
+  text-shadow: var(--cp-glow-cyan);
+  cursor: pointer;
+  padding: 2px 6px;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  transition: all 0.2s ease;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+#cp-radio-player-btn:hover {
+  border-color: var(--cp-neon-cyan);
+  box-shadow: var(--cp-glow-cyan);
+}
+
+/* ── Sidebar Button (Playlists Tab) ────────────────────── */
+.directory-header .header-actions button.cp-radio-sidebar-btn {
+  flex: 0 0 auto;
+  width: auto;
+  padding: 0 10px;
+  margin-left: 5px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--cp-neon-cyan);
+  color: var(--cp-neon-cyan);
+  text-shadow: var(--cp-glow-cyan);
+  font-family: var(--cp-font-display);
+  font-size: 0.75em;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  line-height: 24px;
+  height: 26px;
+}
+
+.directory-header .header-actions button.cp-radio-sidebar-btn:hover {
+  background: var(--cp-neon-cyan);
+  color: #000;
+  box-shadow: var(--cp-glow-cyan);
+}
+
+/* ── Utility ───────────────────────────────────────────── */
+.cp-hidden { display: none !important; }
+
+.cp-no-channels {
+  text-align: center;
+  padding: 32px 20px;
+  color: var(--cp-text-dim);
+  font-family: var(--cp-font-display);
+  font-size: 0.65em;
+  letter-spacing: 0.15em;
+}
+
+/* Scrollbar styling */
+.cp-config-body::-webkit-scrollbar { width: 6px; }
+.cp-config-body::-webkit-scrollbar-track { background: #030608; }
+.cp-config-body::-webkit-scrollbar-thumb { background: var(--cp-neon-pink); border-radius: 3px; }
+
+/* ============================================================
+   THEME SWITCHER ICON
+   ============================================================ */
+
+.cp-theme-icon {
+  cursor: pointer;
+  transition: transform 0.3s ease, opacity 0.2s ease;
+  user-select: none;
+  font-size: 1em;
+  padding: 2px 4px;
+  border-radius: 3px;
+}
+.cp-theme-icon:hover {
+  transform: scale(1.2) rotate(15deg);
+  opacity: 0.8;
+}
+
+/* ============================================================
+   FANTASY THEME — Dungeons & Dragons / Medieval Tavern Radio
+   Applied via: #cyberpunk-radio-app.theme-fantasy
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=MedievalSharp&family=Cinzel:wght@400;600;900&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap');
+
+/* Fantasy CSS token overrides */
+#cyberpunk-radio-app.theme-fantasy {
+  --cp-bg:           #1a1008;
+  --cp-panel:        #221508;
+  --cp-border:       #5a3a1a;
+  --cp-neon-cyan:    #d4a843;
+  --cp-neon-pink:    #8b1a1a;
+  --cp-neon-yellow:  #f0c040;
+  --cp-neon-green:   #4a7a2a;
+  --cp-text:         #e8d8b0;
+  --cp-text-dim:     #7a6040;
+  --cp-scan-line:    rgba(180, 140, 60, 0.04);
+  --cp-glow-cyan:    0 0 8px #d4a843, 0 0 20px rgba(212,168,67,0.3);
+  --cp-glow-pink:    0 0 8px #8b1a1a, 0 0 20px rgba(139,26,26,0.4);
+  --cp-glow-green:   0 0 8px #4a7a2a, 0 0 20px rgba(74,122,42,0.3);
+  --cp-font-display: 'Cinzel', serif;
+  --cp-font-mono:    'Crimson Text', serif;
+  --cp-font-body:    'Crimson Text', serif;
+}
+
+/* Fantasy window chrome */
+#cyberpunk-radio-app.theme-fantasy {
+  background: var(--cp-bg);
+  border: 2px solid #6a4010;
+  border-radius: 6px;
+  box-shadow:
+    0 0 0 1px #3a2008,
+    0 0 30px rgba(180,120,20,0.12),
+    inset 0 0 60px rgba(0,0,0,0.7);
+}
+
+#cyberpunk-radio-app.theme-fantasy .window-header {
+  background: linear-gradient(90deg, #0e0804, #1e1208, #0e0804);
+  border-bottom: 2px solid #6a4010;
+  box-shadow: 0 2px 8px rgba(140,90,10,0.4);
+}
+
+#cyberpunk-radio-app.theme-fantasy .window-title {
+  font-family: 'Cinzel', serif;
+  font-size: 0.75em;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  color: #d4a843;
+  text-shadow: 0 0 8px rgba(212,168,67,0.6), 0 1px 2px rgba(0,0,0,0.8);
+  text-transform: uppercase;
+}
+
+#cyberpunk-radio-app.theme-fantasy .window-header button:hover {
+  color: #c0392b;
+  text-shadow: 0 0 6px rgba(192,57,43,0.6);
+}
+
+/* Fantasy: replace CRT scanlines with a parchment grain */
+#cyberpunk-radio-app.theme-fantasy .cp-radio-body::before {
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 3px,
+    rgba(180, 140, 60, 0.04) 3px,
+    rgba(180, 140, 60, 0.04) 4px
+  );
+  animation: none;
+}
+
+/* Vignette overlay for fantasy */
+#cyberpunk-radio-app.theme-fantasy .cp-radio-body::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.5) 100%);
+  pointer-events: none;
+  z-index: 9;
+}
+
+/* Fantasy display panel */
+#cyberpunk-radio-app.theme-fantasy .cp-display {
+  background: var(--ch-bg, #1a1008);
+  border-bottom: 1px solid #5a3a1a;
+}
+
+#cyberpunk-radio-app.theme-fantasy .cp-display-bg-overlay {
+  background: linear-gradient(
+    135deg,
+    rgba(10,6,2,0.75) 0%,
+    rgba(10,6,2,0.25) 50%,
+    rgba(10,6,2,0.85) 100%
+  );
+}
+
+/* Fantasy: frequency bar becomes a scroll-banner */
+#cyberpunk-radio-app.theme-fantasy .cp-freq-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.5em;
+  letter-spacing: 0.2em;
+  color: #7a6040;
+}
+
+#cyberpunk-radio-app.theme-fantasy .cp-freq-value {
+  font-family: 'Cinzel', serif;
+  font-size: 1.1em;
+  font-weight: 600;
+  color: #d4a843;
+  text-shadow: 0 0 8px rgba(212,168,67,0.5);
+  animation: candleFlicker 4s ease-in-out infinite;
+}
+
+@keyframes candleFlicker {
+  0%, 100% { opacity: 1;   text-shadow: 0 0 8px rgba(212,168,67,0.5); }
+  25%       { opacity: 0.9; text-shadow: 0 0 12px rgba(212,168,67,0.7); }
+  50%       { opacity: 1;   text-shadow: 0 0 6px rgba(212,168,67,0.4); }
+  75%       { opacity: 0.85;text-shadow: 0 0 14px rgba(212,168,67,0.8); }
+}
+
+/* Fantasy signal bars — rune-style dots */
+#cyberpunk-radio-app.theme-fantasy .cp-signal-bar {
+  background: #d4a843;
+  border-radius: 0;
+  width: 5px;
+}
+#cyberpunk-radio-app.theme-fantasy .cp-signal-bar.active {
+  box-shadow: 0 0 4px #d4a843;
+}
+
+/* Fantasy station name */
+#cyberpunk-radio-app.theme-fantasy .cp-station-name {
+  font-family: 'Cinzel', serif;
+  font-size: 1.15em;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  color: #f0e8c8;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.9), 0 0 10px rgba(212,168,67,0.3);
+  text-transform: uppercase;
+}
+
+#cyberpunk-radio-app.theme-fantasy .cp-station-tagline {
+  font-family: 'Crimson Text', serif;
+  font-style: italic;
+  font-size: 0.85em;
+  font-weight: 400;
+  color: #d4a843;
+  letter-spacing: 0.1em;
+  text-transform: none;
+  opacity: 0.9;
+}
+
+/* Fantasy now-playing */
+#cyberpunk-radio-app.theme-fantasy .cp-now-playing-wrap {
+  border-top: 1px solid rgba(180,140,60,0.2);
+}
+
+#cyberpunk-radio-app.theme-fantasy .cp-np-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.48em;
+  color: #7a6040;
+  letter-spacing: 0.2em;
+}
+
+#cyberpunk-radio-app.theme-fantasy .cp-ticker-text {
+  font-family: 'Crimson Text', serif;
+  font-size: 0.9em;
+  color: #e8d8b0;
+  font-style: italic;
+}
+
+#cyberpunk-radio-app.theme-fantasy .cp-static-text {
+  font-family: 'Cinzel', serif;
+  color: #5a4020;
+  letter-spacing: 0.25em;
+  animation: candleFlicker 3s ease-in-out infinite alternate;
+}
+
+/* Fantasy tuner section */
+#cyberpunk-radio-app.theme-fantasy .cp-tuner-section {
+  background: #100a04;
+  border-color: #4a2a0a;
+}
+
+#cyberpunk-radio-app.theme-fantasy .cp-tuner-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.5em;
+  color: #6a4820;
+  letter-spacing: 0.2em;
+}
+
+#cyberpunk-radio-app.theme-fantasy .cp-channel-tab {
+  font-family: 'Cinzel', serif;
+  font-size: 0.58em;
+  border-color: #4a2a0a;
+  color: #6a4820;
+  border-radius: 3px;
+  letter-spacing: 0.08em;
+}
+
+#cyberpunk-radio-app.theme-fantasy .cp-channel-tab:hover {
+  border-color: #9a6830;
+  color: #c8a060;
+}
+
+#cyberpunk-radio-app.theme-fantasy .cp-channel-tab.active {
+  border-color: #d4a843;
+  color: #d4a843;
+  text-shadow: 0 0 6px rgba(212,168,67,0.5);
+  box-shadow: 0 0 6px rgba(212,168,67,0.1), inset 0 0 6px rgba(212,168,67,0.05);
+}
+
+#cyberpunk-radio-app.theme-fantasy .cp-channel-tab.off-air {
+  border-color: #2a1808;
+  color: #3a2010;
+}
+
+/* Fantasy controls */
+#cyberpunk-radio-app.theme-fantasy .cp-controls {
+  background: #100a04;
+  border-top: 1px solid #3a2008;
+}
+
+#cyberpunk-radio-app.theme-fantasy .cp-play-btn {
+  border-color: #d4a843;
+  color: #d4a843;
+  box-shadow: 0 0 8px rgba(212,168,67,0.15);
+  border-radius: 4px;
+}
+
+#cyberpunk-radio-app.theme-fantasy .cp-play-btn:hover {
+  background: #d4a843;
+  color: #1a1008;
+  box-shadow: 0 0 16px rgba(212,168,67,0.5);
+}
+
+#cyberpunk-radio-app.theme-fantasy .cp-skip-btn {
+  border-color: #4a2a0a;
+  color: #7a5020;
+  border-radius: 3px;
+}
+
+#cyberpunk-radio-app.theme-fantasy .cp-skip-btn:hover {
+  border-color: #d4a843;
+  color: #d4a843;
+}
+
+#cyberpunk-radio-app.theme-fantasy .cp-vol-label {
+  font-family: 'Cinzel', serif;
+  color: #6a4820;
+  font-size: 0.48em;
+}
+
+#cyberpunk-radio-app.theme-fantasy .cp-volume-slider {
+  background: #3a2008;
+}
+
+#cyberpunk-radio-app.theme-fantasy .cp-volume-slider::-webkit-slider-thumb {
+  background: #d4a843;
+  box-shadow: 0 0 4px rgba(212,168,67,0.6);
+  border-radius: 2px;
+}
+
+#cyberpunk-radio-app.theme-fantasy .cp-vol-value {
+  font-family: 'Crimson Text', serif;
+  color: #7a6040;
+}
+
+/* Fantasy GM bar */
+#cyberpunk-radio-app.theme-fantasy .cp-gm-bar {
+  background: #0c0804;
+  border-top: 1px solid #3a2008;
+}
+
+#cyberpunk-radio-app.theme-fantasy .cp-gm-status {
+  font-family: 'Crimson Text', serif;
+  font-style: italic;
+  color: #6a4820;
+}
+
+#cyberpunk-radio-app.theme-fantasy .cp-gm-status.playing {
+  color: #4a8a2a;
+  text-shadow: 0 0 6px rgba(74,138,42,0.5);
+  animation: candleFlicker 3s ease-in-out infinite;
+}
+
+#cyberpunk-radio-app.theme-fantasy .cp-config-btn {
+  font-family: 'Cinzel', serif;
+  font-size: 0.52em;
+  border-color: #8b1a1a;
+  color: #8b1a1a;
+  letter-spacing: 0.1em;
+}
+
+#cyberpunk-radio-app.theme-fantasy .cp-config-btn:hover {
+  background: #8b1a1a;
+  color: #f0e8c8;
+  box-shadow: 0 0 10px rgba(139,26,26,0.4);
+}
+
+/* Fantasy description */
+#cyberpunk-radio-app.theme-fantasy .cp-station-desc {
+  background: rgba(0,0,0,0.5);
+  border-top: 1px solid #3a2008;
+}
+
+#cyberpunk-radio-app.theme-fantasy .cp-desc-text {
+  font-family: 'Crimson Text', serif;
+  font-size: 0.8em;
+  color: #9a8060;
+  font-style: italic;
+  line-height: 1.6;
+  letter-spacing: 0.02em;
+}
+
+/* Fantasy no-channels */
+#cyberpunk-radio-app.theme-fantasy .cp-no-channels {
+  font-family: 'Cinzel', serif;
+  color: #5a3a1a;
+}
+
+/* Fantasy config dialog */
+#cyberpunk-radio-config.theme-fantasy {
+  background: #160e04;
+  border: 2px solid #6a4010;
+  box-shadow: 0 0 20px rgba(140,90,10,0.2);
+}
+
+#cyberpunk-radio-config.theme-fantasy .window-header {
+  background: #0e0804;
+  border-bottom: 2px solid #6a4010;
+}
+
+#cyberpunk-radio-config.theme-fantasy .window-title {
+  font-family: 'Cinzel', serif;
+  color: #d4a843;
+  text-shadow: 0 0 6px rgba(212,168,67,0.4);
+}
+
+/* ── Theme icon clickability ───────────────────────────── */
+/* Prevent the header icon from triggering window drag */
+#cyberpunk-radio-app .window-header i.cp-theme-icon {
+  pointer-events: all !important;
+  cursor: pointer !important;
+  z-index: 100;
+  position: relative;
+}
+
+/* Fantasy config dialog body */
+#cyberpunk-radio-config.theme-fantasy .cp-config-body {
+  scrollbar-color: #8b1a1a #160e04;
+}
+#cyberpunk-radio-config.theme-fantasy .cp-config-body::-webkit-scrollbar-thumb {
+  background: #8b1a1a;
+}
+#cyberpunk-radio-config.theme-fantasy .cp-config-channel {
+  border-color: #4a2a0a;
+  background: rgba(139,26,26,0.04);
+}
+#cyberpunk-radio-config.theme-fantasy .cp-config-channel:hover {
+  border-color: #9a5020;
+}
+#cyberpunk-radio-config.theme-fantasy .cp-config-ch-num {
+  font-family: 'Cinzel', serif;
+  color: #d4a843;
+}
+#cyberpunk-radio-config.theme-fantasy .cp-config-label {
+  font-family: 'Cinzel', serif;
+  color: #7a5020;
+}
+#cyberpunk-radio-config.theme-fantasy .cp-config-input,
+#cyberpunk-radio-config.theme-fantasy .cp-config-select,
+#cyberpunk-radio-config.theme-fantasy .cp-config-textarea {
+  font-family: 'Crimson Text', serif;
+  background: #0e0804;
+  border-color: #4a2a0a;
+  color: #e8d8b0;
+}
+#cyberpunk-radio-config.theme-fantasy .cp-config-input:focus,
+#cyberpunk-radio-config.theme-fantasy .cp-config-select:focus,
+#cyberpunk-radio-config.theme-fantasy .cp-config-textarea:focus {
+  border-color: #d4a843;
+  box-shadow: 0 0 6px rgba(212,168,67,0.2);
+}
+#cyberpunk-radio-config.theme-fantasy .cp-config-remove-btn {
+  border-color: #3a1a0a;
+  color: #5a2a10;
+}
+#cyberpunk-radio-config.theme-fantasy .cp-config-remove-btn:hover {
+  border-color: #8b1a1a;
+  color: #c03020;
+  background: rgba(139,26,26,0.1);
+}
+#cyberpunk-radio-config.theme-fantasy .cp-add-channel-btn {
+  font-family: 'Cinzel', serif;
+  border-color: #8a6020;
+  color: #a07830;
+}
+#cyberpunk-radio-config.theme-fantasy .cp-add-channel-btn:hover {
+  background: rgba(160,120,48,0.08);
+  box-shadow: 0 0 10px rgba(160,120,48,0.2);
+}
+#cyberpunk-radio-config.theme-fantasy .cp-save-btn {
+  font-family: 'Cinzel', serif;
+  border-color: #d4a843;
+  color: #d4a843;
+}
+#cyberpunk-radio-config.theme-fantasy .cp-save-btn:hover {
+  background: #d4a843;
+  color: #1a1008;
+  box-shadow: 0 0 12px rgba(212,168,67,0.4);
+}
+#cyberpunk-radio-config.theme-fantasy .cp-config-footer {
+  border-top-color: #3a2008;
+}
+
+/* ── Theme Toggle Button (in GM bar, next to OFF AIR) ── */
+.cp-gm-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cp-theme-toggle-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--cp-font-display);
+  font-size: 0.52em;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  padding: 3px 8px;
+  border: 1px solid var(--cp-text-dim);
+  border-radius: 2px;
+  background: transparent;
+  color: var(--cp-text-dim);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+}
+
+.cp-theme-toggle-btn:hover {
+  border-color: var(--cp-neon-yellow);
+  color: var(--cp-neon-yellow);
+  text-shadow: 0 0 6px var(--cp-neon-yellow);
+  box-shadow: 0 0 8px rgba(255,230,0,0.15);
+}
+
+/* Fantasy override for the toggle button */
+#cyberpunk-radio-app.theme-fantasy .cp-theme-toggle-btn {
+  font-family: 'Cinzel', serif;
+  border-color: #5a3a1a;
+  color: #7a5020;
+}
+
+#cyberpunk-radio-app.theme-fantasy .cp-theme-toggle-btn:hover {
+  border-color: #d4a843;
+  color: #d4a843;
+  text-shadow: 0 0 6px rgba(212,168,67,0.5);
+  box-shadow: 0 0 8px rgba(212,168,67,0.1);
+}
