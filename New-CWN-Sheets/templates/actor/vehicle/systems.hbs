@@ -1,0 +1,147 @@
+{{!-- ══════════════════════════════════════════════════════════════════════
+  CWN VEHICLE SHEET — systems.hbs
+  Tab: fittings, defenses, crew roster
+════════════════════════════════════════════════════════════════════════ --}}
+<div class="cwn-tab tab" data-tab="{{tab.id}}" data-group="{{tab.group}}">
+
+  {{!-- ── SHIP FITTINGS ────────────────────────────────────────────────── --}}
+  <div class="cwn-inventory-section">
+    <div class="cwn-section-toggle-header"
+         data-action="toggleSection"
+         data-section-key="veh-fittings">
+      <i class="fas fa-screwdriver-wrench"></i>
+      <span>Fittings ({{shipFittings.length}})</span>
+      {{#if editable}}
+      <a class="cwn-add-inline" data-action="createDoc" data-document-class="Item" data-type="shipFitting" title="Add Fitting">
+        <i class="fas fa-plus"></i>
+      </a>
+      {{/if}}
+      <i class="fas fa-chevron-down section-chevron"></i>
+    </div>
+    <div class="cwn-section-content" data-section-content="veh-fittings">
+      {{#if shipFittings}}
+      <ol class="cwn-items-list items-list">
+        <li class="cwn-items-header">
+          <span class="col-img"></span>
+          <span class="col-name">Name</span>
+          <span class="col-dmg">Power</span>
+          <span class="col-rng">Mass</span>
+          <span class="col-controls"></span>
+        </li>
+        {{#each shipFittings as |fitting|}}
+        <li class="cwn-item-row" data-item-id="{{fitting.id}}" data-document-class="Item" data-drag="true">
+          <img class="col-img cwn-item-img" src="{{fitting.img}}" alt="{{fitting.name}}" width="22" height="22" />
+          <span class="col-name cwn-item-name">
+            <a data-action="toggleItemDescription" title="Expand">{{fitting.name}}</a>
+          </span>
+          <span class="col-dmg">{{fitting.system.power}}</span>
+          <span class="col-rng">{{fitting.system.mass}}</span>
+          <div class="col-controls cwn-row-controls">
+            {{#if ../editable}}
+            <a data-action="viewDoc" title="Edit"><i class="fas fa-edit"></i></a>
+            <a data-action="deleteDoc" title="Delete"><i class="fas fa-trash"></i></a>
+            {{/if}}
+          </div>
+        </li>
+        {{#if fitting.system.enrichedDescription}}
+        <li class="item-description-row hidden" data-item-id="{{fitting.id}}">
+          <div class="cwn-item-desc">{{{fitting.system.enrichedDescription}}}</div>
+        </li>
+        {{/if}}
+        {{/each}}
+      </ol>
+      {{else}}
+      <p class="cwn-empty-hint">No fittings installed.</p>
+      {{/if}}
+    </div>
+  </div>
+
+  {{!-- ── DEFENSES ─────────────────────────────────────────────────────── --}}
+  <div class="cwn-inventory-section">
+    <div class="cwn-section-toggle-header"
+         data-action="toggleSection"
+         data-section-key="veh-defenses">
+      <i class="fas fa-shield-halved"></i>
+      <span>Defenses ({{shipDefenses.length}})</span>
+      {{#if editable}}
+      <a class="cwn-add-inline" data-action="createDoc" data-document-class="Item" data-type="shipDefense" title="Add Defense">
+        <i class="fas fa-plus"></i>
+      </a>
+      {{/if}}
+      <i class="fas fa-chevron-down section-chevron"></i>
+    </div>
+    <div class="cwn-section-content" data-section-content="veh-defenses">
+      {{#if shipDefenses}}
+      <ol class="cwn-items-list items-list">
+        <li class="cwn-items-header">
+          <span class="col-img"></span>
+          <span class="col-name">Name</span>
+          <span class="col-dmg">Power</span>
+          <span class="col-rng">Mass</span>
+          <span class="col-controls"></span>
+        </li>
+        {{#each shipDefenses as |def|}}
+        <li class="cwn-item-row" data-item-id="{{def.id}}" data-document-class="Item" data-drag="true">
+          <img class="col-img cwn-item-img" src="{{def.img}}" alt="{{def.name}}" width="22" height="22" />
+          <span class="col-name cwn-item-name">
+            <a data-action="toggleItemDescription" title="Expand">{{def.name}}</a>
+          </span>
+          <span class="col-dmg">{{def.system.power}}</span>
+          <span class="col-rng">{{def.system.mass}}</span>
+          <div class="col-controls cwn-row-controls">
+            {{#if ../editable}}
+            <a data-action="viewDoc" title="Edit"><i class="fas fa-edit"></i></a>
+            <a data-action="deleteDoc" title="Delete"><i class="fas fa-trash"></i></a>
+            {{/if}}
+          </div>
+        </li>
+        {{#if def.system.enrichedDescription}}
+        <li class="item-description-row hidden" data-item-id="{{def.id}}">
+          <div class="cwn-item-desc">{{{def.system.enrichedDescription}}}</div>
+        </li>
+        {{/if}}
+        {{/each}}
+      </ol>
+      {{else}}
+      <p class="cwn-empty-hint">No defenses installed.</p>
+      {{/if}}
+    </div>
+  </div>
+
+  {{!-- ── CREW ROSTER ──────────────────────────────────────────────────── --}}
+  <div class="cwn-inventory-section">
+    <div class="cwn-section-toggle-header"
+         data-action="toggleSection"
+         data-section-key="veh-crew">
+      <i class="fas fa-users"></i>
+      <span>Crew ({{crewActors.length}})</span>
+      {{#if editable}}
+      <a class="cwn-add-inline" data-action="addCrewMember" title="Drop actor to add crew">
+        <i class="fas fa-user-plus"></i>
+      </a>
+      {{/if}}
+      <i class="fas fa-chevron-down section-chevron"></i>
+    </div>
+    <div class="cwn-section-content" data-section-content="veh-crew">
+      {{#if crewActors.length}}
+      <ol class="cwn-items-list items-list cwn-crew-list">
+        {{#each crewActors as |crewActor|}}
+        <li class="cwn-item-row cwn-crew-row">
+          <img class="col-img cwn-item-img" src="{{crewActor.img}}" alt="{{crewActor.name}}" width="22" height="22" />
+          <span class="col-name cwn-item-name">{{crewActor.name}}</span>
+          <span class="cwn-crew-type">{{crewActor.type}}</span>
+          <div class="col-controls cwn-row-controls">
+            <a data-action="removeCrewMember" data-actor-id="{{crewActor.id}}" title="Remove from crew">
+              <i class="fas fa-user-minus"></i>
+            </a>
+          </div>
+        </li>
+        {{/each}}
+      </ol>
+      {{else}}
+      <p class="cwn-empty-hint">No crew assigned. Drop actors onto the sheet to add crew.</p>
+      {{/if}}
+    </div>
+  </div>
+
+</div>{{!-- /.cwn-tab --}}

@@ -1,0 +1,208 @@
+{{!-- ══════════════════════════════════════════════════════════════════════
+  CWN NPC SHEET — gear.hbs
+  Tab: weapons, armor, gear, consumables, powers
+════════════════════════════════════════════════════════════════════════ --}}
+<div class="cwn-tab tab" data-tab="{{tab.id}}" data-group="{{tab.group}}">
+
+  {{!-- ── WEAPONS ──────────────────────────────────────────────────────── --}}
+  <div class="cwn-inventory-section">
+    <div class="cwn-section-toggle-header"
+         data-action="toggleSection"
+         data-section-key="npc-weapons">
+      <i class="fas fa-crosshairs"></i>
+      <span>Weapons ({{weapons.length}})</span>
+      {{#if editable}}
+      <a class="cwn-add-inline" data-action="createDoc" data-document-class="Item" data-type="weapon" title="Add Weapon">
+        <i class="fas fa-plus"></i>
+      </a>
+      {{/if}}
+      <i class="fas fa-chevron-down section-chevron"></i>
+    </div>
+    <div class="cwn-section-content" data-section-content="npc-weapons">
+      {{#if weapons}}
+      <ol class="cwn-items-list items-list">
+        <li class="cwn-items-header">
+          <span class="col-img"></span>
+          <span class="col-name">Name</span>
+          <span class="col-dmg">Damage</span>
+          <span class="col-rng">Range</span>
+          <span class="col-ammo">Ammo</span>
+          <span class="col-controls"></span>
+        </li>
+        {{#each weapons as |weapon|}}
+        <li class="cwn-item-row" data-item-id="{{weapon.id}}" data-document-class="Item" data-drag="true">
+          <img class="col-img cwn-item-img" src="{{weapon.img}}" alt="{{weapon.name}}" width="22" height="22" />
+          <span class="col-name cwn-item-name">
+            <a data-action="roll" data-roll-type="item" title="Attack!">{{weapon.name}}</a>
+          </span>
+          <span class="col-dmg">{{weapon.system.damage}}</span>
+          <span class="col-rng">{{weapon.system.range}}</span>
+          <span class="col-ammo">
+            {{#if weapon.system.ammo}}{{weapon.system.ammo.value}}/{{weapon.system.ammo.max}}{{else}}—{{/if}}
+          </span>
+          <div class="col-controls cwn-row-controls">
+            {{#if ../editable}}
+            <a data-action="viewDoc" title="Edit"><i class="fas fa-edit"></i></a>
+            <a data-action="deleteDoc" title="Delete"><i class="fas fa-trash"></i></a>
+            {{/if}}
+          </div>
+        </li>
+        {{/each}}
+      </ol>
+      {{else}}
+      <p class="cwn-empty-hint">No weapons.</p>
+      {{/if}}
+    </div>
+  </div>
+
+  {{!-- ── ARMOR ────────────────────────────────────────────────────────── --}}
+  <div class="cwn-inventory-section">
+    <div class="cwn-section-toggle-header"
+         data-action="toggleSection"
+         data-section-key="npc-armor">
+      <i class="fas fa-shield-halved"></i>
+      <span>Armor ({{armor.length}})</span>
+      {{#if editable}}
+      <a class="cwn-add-inline" data-action="createDoc" data-document-class="Item" data-type="armor" title="Add Armor">
+        <i class="fas fa-plus"></i>
+      </a>
+      {{/if}}
+      <i class="fas fa-chevron-down section-chevron"></i>
+    </div>
+    <div class="cwn-section-content" data-section-content="npc-armor">
+      {{#if armor}}
+      <ol class="cwn-items-list items-list">
+        {{#each armor as |arm|}}
+        <li class="cwn-item-row" data-item-id="{{arm.id}}" data-document-class="Item" data-drag="true">
+          <img class="col-img cwn-item-img" src="{{arm.img}}" alt="{{arm.name}}" width="22" height="22" />
+          <span class="col-name cwn-item-name">{{arm.name}}</span>
+          <span class="col-dmg">AC {{arm.system.ac}}</span>
+          <div class="col-controls cwn-row-controls">
+            {{#if ../editable}}
+            <a data-action="viewDoc" title="Edit"><i class="fas fa-edit"></i></a>
+            <a data-action="deleteDoc" title="Delete"><i class="fas fa-trash"></i></a>
+            {{/if}}
+          </div>
+        </li>
+        {{/each}}
+      </ol>
+      {{else}}
+      <p class="cwn-empty-hint">No armor.</p>
+      {{/if}}
+    </div>
+  </div>
+
+  {{!-- ── GEAR ─────────────────────────────────────────────────────────── --}}
+  <div class="cwn-inventory-section">
+    <div class="cwn-section-toggle-header"
+         data-action="toggleSection"
+         data-section-key="npc-gear">
+      <i class="fas fa-box"></i>
+      <span>Gear ({{gear.length}})</span>
+      {{#if editable}}
+      <a class="cwn-add-inline" data-action="createDoc" data-document-class="Item" data-type="item" title="Add Gear">
+        <i class="fas fa-plus"></i>
+      </a>
+      {{/if}}
+      <i class="fas fa-chevron-down section-chevron"></i>
+    </div>
+    <div class="cwn-section-content" data-section-content="npc-gear">
+      {{#if gear}}
+      <ol class="cwn-items-list items-list">
+        {{#each gear as |item|}}
+        <li class="cwn-item-row" data-item-id="{{item.id}}" data-document-class="Item" data-drag="true">
+          <img class="col-img cwn-item-img" src="{{item.img}}" alt="{{item.name}}" width="22" height="22" />
+          <span class="col-name cwn-item-name">{{item.name}}</span>
+          <div class="col-controls cwn-row-controls">
+            {{#if ../editable}}
+            <a data-action="viewDoc" title="Edit"><i class="fas fa-edit"></i></a>
+            <a data-action="deleteDoc" title="Delete"><i class="fas fa-trash"></i></a>
+            {{/if}}
+          </div>
+        </li>
+        {{/each}}
+      </ol>
+      {{else}}
+      <p class="cwn-empty-hint">No gear.</p>
+      {{/if}}
+    </div>
+  </div>
+
+  {{!-- ── CONSUMABLES ──────────────────────────────────────────────────── --}}
+  {{#if consumables.length}}
+  <div class="cwn-inventory-section">
+    <div class="cwn-section-toggle-header"
+         data-action="toggleSection"
+         data-section-key="npc-consumables">
+      <i class="fas fa-flask"></i>
+      <span>Consumables ({{consumables.length}})</span>
+      <i class="fas fa-chevron-down section-chevron"></i>
+    </div>
+    <div class="cwn-section-content" data-section-content="npc-consumables">
+      <ol class="cwn-items-list items-list">
+        {{#each consumables as |item|}}
+        <li class="cwn-item-row" data-item-id="{{item.id}}" data-document-class="Item" data-drag="true">
+          <img class="col-img cwn-item-img" src="{{item.img}}" alt="{{item.name}}" width="22" height="22" />
+          <span class="col-name cwn-item-name">{{item.name}}</span>
+          <span class="col-dmg">{{item.system.uses.value}}/{{item.system.uses.max}}</span>
+          <div class="col-controls cwn-row-controls">
+            <a data-action="removeUse" title="Use one"><i class="fas fa-minus-circle"></i></a>
+            <a data-action="addUse" title="Restore one"><i class="fas fa-plus-circle"></i></a>
+            {{#if ../editable}}
+            <a data-action="viewDoc" title="Edit"><i class="fas fa-edit"></i></a>
+            <a data-action="deleteDoc" title="Delete"><i class="fas fa-trash"></i></a>
+            {{/if}}
+          </div>
+        </li>
+        {{/each}}
+      </ol>
+    </div>
+  </div>
+  {{/if}}
+
+  {{!-- ── POWERS ────────────────────────────────────────────────────────── --}}
+  {{#each powersByType as |levelMap subType|}}
+  <div class="cwn-inventory-section">
+    <div class="cwn-section-toggle-header"
+         data-action="toggleSection"
+         data-section-key="npc-powers-{{subType}}">
+      <i class="fas fa-bolt"></i>
+      <span>{{cwnCapitalize subType}} Powers</span>
+      {{#if ../editable}}
+      <a class="cwn-add-inline" data-action="createDoc" data-document-class="Item" data-type="power" title="Add Power">
+        <i class="fas fa-plus"></i>
+      </a>
+      {{/if}}
+      <i class="fas fa-chevron-down section-chevron"></i>
+    </div>
+    <div class="cwn-section-content" data-section-content="npc-powers-{{subType}}">
+      {{#each levelMap as |powers level|}}
+      <div class="cwn-power-level-group">
+        <div class="cwn-power-level-label">Level {{level}}</div>
+        <ol class="cwn-items-list items-list">
+          {{#each powers as |power|}}
+          <li class="cwn-item-row" data-item-id="{{power.id}}" data-document-class="Item" data-drag="true">
+            <img class="col-img cwn-item-img" src="{{power.img}}" alt="{{power.name}}" width="20" height="20" />
+            <span class="col-name cwn-item-name">
+              <a data-action="roll" data-roll-type="item" title="Use Power">{{power.name}}</a>
+            </span>
+            {{#if power.system.uses}}
+            <span class="col-ammo">{{power.system.uses.value}}/{{power.system.uses.max}}</span>
+            {{/if}}
+            <div class="col-controls cwn-row-controls">
+              {{#if ../../../../editable}}
+              <a data-action="resetPowerUses" title="Reset uses"><i class="fas fa-rotate-left"></i></a>
+              <a data-action="viewDoc" title="Edit"><i class="fas fa-edit"></i></a>
+              <a data-action="deleteDoc" title="Delete"><i class="fas fa-trash"></i></a>
+              {{/if}}
+            </div>
+          </li>
+          {{/each}}
+        </ol>
+      </div>
+      {{/each}}
+    </div>
+  </div>
+  {{/each}}
+
+</div>{{!-- /.cwn-tab --}}

@@ -1,0 +1,19 @@
+{
+  "id": "New-CWN-Sheets",
+  "title": "New CWN Sheets",
+  "description": "Standalone, fully custom character sheets for Cities Without Number built on Foundry V13 ApplicationV2. Replaces the default swnr sheet for CWN characters with a purpose-built, maintainable sheet that includes favorites, cyberware body-location grouping, inventory search, and a dark neon aesthetic.",
+  "version": "0.2.2",
+  "compatibility": {
+    "minimum": "13",
+    "verified": "13.348"
+  },
+  "authors": [{ "name": "FailingUp", "url": "https://www.patreon.com/cw/FailingUp" }],
+  "readme": "README.md",
+  "changelog": "CHANGELOG.md",
+  "license": "LICENSE.md",
+  "esmodules": ["scripts/cwn-sheets.mjs"],
+  "styles": ["styles/cwn-sheets.css"],
+  "languages": [{ "lang": "en", "name": "English", "path": "lang/en.json" }],
+  "systems": ["swnr"],
+  "socket": true
+}

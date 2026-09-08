@@ -1,0 +1,103 @@
+{{!-- ══════════════════════════════════════════════════════════════════════
+  CWN CHARACTER SHEET — biography.hbs
+  Tab: character background fields and enriched biography
+════════════════════════════════════════════════════════════════════════ --}}
+<div class="cwn-tab tab" data-tab="{{tab.id}}" data-group="{{tab.group}}">
+
+  <div class="cwn-bio-layout">
+
+    {{!-- ── Identity fields ───────────────────────────────────────────── --}}
+    <section class="cwn-bio-fields">
+      <h2 class="cwn-section-title"><i class="fas fa-id-card"></i> Identity</h2>
+
+      <div class="cwn-bio-field-grid">
+
+        <div class="cwn-field-row">
+          <label>Homeworld</label>
+          <input type="text" name="system.homeworld"
+                 value="{{system.homeworld}}" placeholder="—"
+                 {{#unless editable}}disabled{{/unless}} />
+        </div>
+
+        <div class="cwn-field-row">
+          <label>Employer / Faction</label>
+          <input type="text" name="system.employer"
+                 value="{{system.employer}}" placeholder="—"
+                 {{#unless editable}}disabled{{/unless}} />
+        </div>
+
+        <div class="cwn-field-row">
+          <label>Goals</label>
+          <input type="text" name="system.goals"
+                 value="{{system.goals}}" placeholder="—"
+                 {{#unless editable}}disabled{{/unless}} />
+        </div>
+
+        <div class="cwn-field-row">
+          <label>Species</label>
+          <input type="text" name="system.species"
+                 value="{{system.species}}" placeholder="Human"
+                 {{#unless editable}}disabled{{/unless}} />
+        </div>
+
+        <div class="cwn-field-row">
+          <label>Hit Die</label>
+          <input type="text" name="system.hitDie"
+                 value="{{system.hitDie}}" placeholder="d6"
+                 {{#unless editable}}disabled{{/unless}} />
+        </div>
+
+        <div class="cwn-field-row">
+          <label>XP</label>
+          <input type="number" name="system.level.exp"
+                 value="{{system.level.exp}}"
+                 {{#unless editable}}disabled{{/unless}} />
+          <span class="cwn-field-sep">/ {{system.level.expToLevel}}</span>
+        </div>
+
+      </div>
+
+      {{!-- Languages --}}
+      {{#if availableLanguages.length}}
+      <h3 class="cwn-subsection-title"><i class="fas fa-language"></i> Languages</h3>
+      <div class="cwn-languages">
+        {{#each system.languages as |lang|}}
+        <span class="cwn-language-chip">
+          {{lang}}
+          {{#if ../editable}}
+          <a class="cwn-lang-remove"
+             data-action="removeLanguage"
+             data-language="{{lang}}"
+             title="Remove language">
+            <i class="fas fa-times"></i>
+          </a>
+          {{/if}}
+        </span>
+        {{/each}}
+        {{#if editable}}
+        <a class="cwn-add-btn cwn-lang-add"
+           data-action="toggleLanguageAdd"
+           title="Add Language">
+          <i class="fas fa-plus"></i>
+        </a>
+        {{/if}}
+      </div>
+      {{/if}}
+
+    </section>
+
+    {{!-- ── Biography ─────────────────────────────────────────────────── --}}
+    <section class="cwn-bio-text">
+      <h2 class="cwn-section-title"><i class="fas fa-book-open"></i> Biography</h2>
+      {{#if editable}}
+      <textarea name="system.biography" class="cwn-bio-editor" rows="12">{{system.biography}}</textarea>
+      {{else}}
+      <div class="cwn-bio-rendered enriched-html">
+        {{{enrichedBiography}}}
+      </div>
+      {{/if}}
+    </section>
+
+  </div>{{!-- /.cwn-bio-layout --}}
+
+</div>{{!-- /.cwn-tab --}}

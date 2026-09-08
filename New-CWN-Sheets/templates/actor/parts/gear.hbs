@@ -1,0 +1,293 @@
+{{!-- ══════════════════════════════════════════════════════════════════════
+  CWN CHARACTER SHEET — gear.hbs
+  Tab: favorites bar, search, weapons, armor, gear, consumables
+════════════════════════════════════════════════════════════════════════ --}}
+<div class="cwn-tab tab" data-tab="{{tab.id}}" data-group="{{tab.group}}">
+
+  {{!-- ── Favorites Bar ────────────────────────────────────────────── --}}
+  {{#if hasFavorites}}
+  <div class="cwn-favorites-bar">
+    <div class="cwn-section-toggle-header"
+         data-action="toggleSection"
+         data-section-key="favorites">
+      <i class="fas fa-star cwn-star-gold"></i>
+      <span>Favorites ({{favorites.length}})</span>
+      <i class="fas fa-chevron-down section-chevron"></i>
+    </div>
+    <div class="cwn-section-content" data-section-content="favorites">
+      <ol class="cwn-fav-list items-list">
+        {{#each favorites as |item|}}
+        <li class="cwn-fav-row" data-item-id="{{item.id}}">
+          <img src="{{item.img}}" alt="{{item.name}}" width="20" height="20" class="cwn-fav-img" />
+          <span class="cwn-fav-name" data-item-name="{{item.name}}">{{item.name}}</span>
+          <span class="cwn-fav-type">{{cwnItemSubtitle item}}</span>
+          <a data-action="viewDoc" data-item-id="{{item.id}}" title="Open"><i class="fas fa-edit"></i></a>
+          <a data-action="toggleFavorite" data-item-id="{{item.id}}" title="Remove from favorites">
+            <i class="fas fa-star cwn-star-active"></i>
+          </a>
+        </li>
+        {{/each}}
+      </ol>
+    </div>
+  </div>
+  {{/if}}
+
+  {{!-- ── Search Bar ────────────────────────────────────────────────── --}}
+  <div class="cwn-search-bar">
+    <i class="fas fa-search cwn-search-icon"></i>
+    <input type="text"
+           class="cwn-search-input"
+           placeholder="Search inventory..."
+           value="{{searchText}}" />
+    <a class="cwn-search-clear" title="Clear search">
+      <i class="fas fa-times"></i>
+    </a>
+  </div>
+
+  {{!-- ── WEAPONS ────────────────────────────────────────────────────── --}}
+  <div class="cwn-inventory-section">
+    <div class="cwn-section-toggle-header"
+         data-action="toggleSection"
+         data-section-key="gear-weapons">
+      <i class="fas fa-crosshairs"></i>
+      <span>Weapons ({{weapons.length}})</span>
+      {{#if editable}}
+      <a class="cwn-add-inline"
+         data-action="createDoc"
+         data-document-class="Item"
+         data-type="weapon"
+         title="Add Weapon">
+        <i class="fas fa-plus"></i>
+      </a>
+      {{/if}}
+      <i class="fas fa-chevron-down section-chevron"></i>
+    </div>
+    <div class="cwn-section-content" data-section-content="gear-weapons">
+      {{#if weapons}}
+      <ol class="cwn-items-list items-list">
+        <li class="cwn-items-header">
+          <span class="col-img"></span>
+          <span class="col-name">Name</span>
+          <span class="col-loc">Location</span>
+          <span class="col-dmg">Damage</span>
+          <span class="col-rng">Range</span>
+          <span class="col-ammo">Ammo</span>
+          <span class="col-controls"></span>
+        </li>
+        {{#each weapons as |weapon|}}
+        <li class="cwn-item-row" data-item-id="{{weapon.id}}" data-document-class="Item" data-searchable-row>
+          <img class="col-img cwn-item-img" src="{{weapon.img}}" alt="{{weapon.name}}" width="22" height="22" />
+          <span class="col-name cwn-item-name" data-item-name="{{weapon.name}}">
+            <a data-action="roll" data-roll-type="item" title="Attack!">{{weapon.name}}</a>
+          </span>
+          <span class="col-loc">
+            <select class="location-selector" data-item-id="{{weapon.id}}"
+                    {{#unless ../editable}}disabled{{/unless}}>
+              <option value="readied" {{cwnSelected weapon.system.location "readied"}}>Readied</option>
+              <option value="stowed"  {{cwnSelected weapon.system.location "stowed"}}>Stowed</option>
+              <option value="other"   {{cwnSelected weapon.system.location "other"}}>Other</option>
+            </select>
+          </span>
+          <span class="col-dmg">{{weapon.system.damage}}</span>
+          <span class="col-rng">{{weapon.system.range}}</span>
+          <span class="col-ammo">
+            {{#if weapon.system.ammo}}
+              {{weapon.system.ammo.value}}/{{weapon.system.ammo.max}}
+            {{else}}—{{/if}}
+          </span>
+          <div class="col-controls cwn-row-controls">
+            <a data-action="toggleFavorite" data-item-id="{{weapon.id}}"
+               title="{{#if weapon.isFavorite}}Remove from favorites{{else}}Add to favorites{{/if}}">
+              <i class="{{#if weapon.isFavorite}}fas{{else}}far{{/if}} fa-star"></i>
+            </a>
+            {{#if weapon.system.ammo}}
+            <a data-action="reload" title="Reload">
+              <i class="fas fa-rotate-right"></i>
+            </a>
+            {{/if}}
+            {{#if ../editable}}
+            <a data-action="viewDoc" title="Edit">
+              <i class="fas fa-edit"></i>
+            </a>
+            <a data-action="deleteDoc" title="Delete">
+              <i class="fas fa-trash"></i>
+            </a>
+            {{/if}}
+          </div>
+        </li>
+        {{/each}}
+      </ol>
+      {{else}}
+      <p class="cwn-empty-hint">No weapons.</p>
+      {{/if}}
+    </div>
+  </div>
+
+  {{!-- ── ARMOR ─────────────────────────────────────────────────────── --}}
+  <div class="cwn-inventory-section">
+    <div class="cwn-section-toggle-header"
+         data-action="toggleSection"
+         data-section-key="gear-armor">
+      <i class="fas fa-shield-halved"></i>
+      <span>Armor ({{armor.length}})</span>
+      {{#if editable}}
+      <a class="cwn-add-inline"
+         data-action="createDoc"
+         data-document-class="Item"
+         data-type="armor"
+         title="Add Armor">
+        <i class="fas fa-plus"></i>
+      </a>
+      {{/if}}
+      <i class="fas fa-chevron-down section-chevron"></i>
+    </div>
+    <div class="cwn-section-content" data-section-content="gear-armor">
+      {{#if armor}}
+      <ol class="cwn-items-list items-list">
+        <li class="cwn-items-header">
+          <span class="col-img"></span>
+          <span class="col-name">Name</span>
+          <span class="col-loc">Location</span>
+          <span class="col-dmg">AC</span>
+          <span class="col-controls"></span>
+        </li>
+        {{#each armor as |arm|}}
+        <li class="cwn-item-row" data-item-id="{{arm.id}}" data-document-class="Item" data-searchable-row>
+          <img class="col-img cwn-item-img" src="{{arm.img}}" alt="{{arm.name}}" width="22" height="22" />
+          <span class="col-name cwn-item-name" data-item-name="{{arm.name}}">{{arm.name}}</span>
+          <span class="col-loc">
+            <select class="location-selector" data-item-id="{{arm.id}}"
+                    {{#unless ../editable}}disabled{{/unless}}>
+              <option value="readied" {{cwnSelected arm.system.location "readied"}}>Readied</option>
+              <option value="stowed"  {{cwnSelected arm.system.location "stowed"}}>Stowed</option>
+            </select>
+          </span>
+          <span class="col-dmg">
+            <input type="text" class="cwn-armor-ac-input" 
+                   data-item-id="{{arm.id}}" 
+                   value="{{arm.system.acDisplay}}"
+                   {{#unless ../editable}}disabled{{/unless}} />
+          </span>
+          <div class="col-controls cwn-row-controls">
+            <a data-action="toggleArmor" data-item-id="{{arm.id}}" title="{{#if arm.system.use}}Equipped{{else}}Not equipped{{/if}}">
+              <i class="{{#if arm.system.use}}fas{{else}}far{{/if}} fa-shield{{#if arm.system.use}}-halved{{/if}}"></i>
+            </a>
+            {{#if ../editable}}
+            <a data-action="viewDoc" title="Edit"><i class="fas fa-edit"></i></a>
+            <a data-action="deleteDoc" title="Delete"><i class="fas fa-trash"></i></a>
+            {{/if}}
+          </div>
+        </li>
+        {{/each}}
+      </ol>
+      {{else}}
+      <p class="cwn-empty-hint">No armor.</p>
+      {{/if}}
+    </div>
+  </div>
+
+  {{!-- ── GEAR ─────────────────────────────────────────────────────── --}}
+  <div class="cwn-inventory-section">
+    <div class="cwn-section-toggle-header"
+         data-action="toggleSection"
+         data-section-key="gear-items">
+      <i class="fas fa-box"></i>
+      <span>Gear ({{gear.length}})</span>
+      {{#if editable}}
+      <a class="cwn-add-inline"
+         data-action="createDoc"
+         data-document-class="Item"
+         data-type="item"
+         title="Add Gear">
+        <i class="fas fa-plus"></i>
+      </a>
+      {{/if}}
+      <i class="fas fa-chevron-down section-chevron"></i>
+    </div>
+    <div class="cwn-section-content" data-section-content="gear-items">
+      {{#if gear}}
+      <ol class="cwn-items-list items-list">
+        {{#each gear as |item|}}
+        <li class="cwn-item-row" data-item-id="{{item.id}}" data-document-class="Item" data-searchable-row>
+          <img class="col-img cwn-item-img" src="{{item.img}}" alt="{{item.name}}" width="22" height="22" />
+          <span class="col-name cwn-item-name" data-item-name="{{item.name}}">{{item.name}}</span>
+          <span class="col-loc">
+            <select class="location-selector" data-item-id="{{item.id}}"
+                    {{#unless ../editable}}disabled{{/unless}}>
+              <option value="readied" {{cwnSelected item.system.location "readied"}}>Readied</option>
+              <option value="stowed"  {{cwnSelected item.system.location "stowed"}}>Stowed</option>
+            </select>
+          </span>
+          <span class="col-rng">Enc: {{item.system.encumbrance}}</span>
+          <div class="col-controls cwn-row-controls">
+            <a data-action="toggleFavorite" data-item-id="{{item.id}}"
+               title="Favorite">
+              <i class="{{#if item.isFavorite}}fas{{else}}far{{/if}} fa-star"></i>
+            </a>
+            {{#if ../editable}}
+            <a data-action="viewDoc" title="Edit"><i class="fas fa-edit"></i></a>
+            <a data-action="deleteDoc" title="Delete"><i class="fas fa-trash"></i></a>
+            {{/if}}
+          </div>
+        </li>
+        {{/each}}
+      </ol>
+      {{else}}
+      <p class="cwn-empty-hint">No gear.</p>
+      {{/if}}
+    </div>
+  </div>
+
+  {{!-- ── CONSUMABLES ────────────────────────────────────────────────── --}}
+  {{#if consumables}}
+  <div class="cwn-inventory-section">
+    <div class="cwn-section-toggle-header"
+         data-action="toggleSection"
+         data-section-key="gear-consumables">
+      <i class="fas fa-flask"></i>
+      <span>Consumables ({{consumables.length}})</span>
+      <i class="fas fa-chevron-down section-chevron"></i>
+    </div>
+    <div class="cwn-section-content" data-section-content="gear-consumables">
+      <ol class="cwn-items-list items-list">
+        {{#each consumables as |item|}}
+        <li class="cwn-item-row" data-item-id="{{item.id}}" data-document-class="Item" data-searchable-row>
+          <img class="col-img cwn-item-img" src="{{item.img}}" alt="{{item.name}}" width="22" height="22" />
+          <span class="col-name cwn-item-name" data-item-name="{{item.name}}">{{item.name}}</span>
+          <span class="col-dmg">
+            {{item.system.uses.value}}/{{item.system.uses.max}}
+          </span>
+          <div class="col-controls cwn-row-controls">
+            <a data-action="removeUse" title="Use one">
+              <i class="fas fa-minus-circle"></i>
+            </a>
+            <a data-action="addUse" title="Add one">
+              <i class="fas fa-plus-circle"></i>
+            </a>
+            {{#if ../editable}}
+            <a data-action="viewDoc" title="Edit"><i class="fas fa-edit"></i></a>
+            <a data-action="deleteDoc" title="Delete"><i class="fas fa-trash"></i></a>
+            {{/if}}
+          </div>
+        </li>
+        {{/each}}
+      </ol>
+    </div>
+  </div>
+  {{/if}}
+
+  {{!-- ── CREDITS ─────────────────────────────────────────────────────── --}}
+  <div class="cwn-credits-bar">
+    <i class="fas fa-coins"></i>
+    <span class="cwn-credits-label">Credits:</span>
+    <span class="cwn-credits-value">{{system.credits.carriedBase}}</span>
+    {{#if editable}}
+    <a data-action="creditChange"
+       data-currency-type="base"
+       title="Adjust credits">
+      <i class="fas fa-plus-minus"></i>
+    </a>
+    {{/if}}
+  </div>
+
+</div>{{!-- /.cwn-tab --}}

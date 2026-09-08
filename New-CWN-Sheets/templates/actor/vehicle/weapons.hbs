@@ -1,0 +1,108 @@
+{{!-- ══════════════════════════════════════════════════════════════════════
+  CWN VEHICLE SHEET — weapons.hbs
+  Tab: ship weapons + personal weapons
+════════════════════════════════════════════════════════════════════════ --}}
+<div class="cwn-tab tab" data-tab="{{tab.id}}" data-group="{{tab.group}}">
+
+  {{!-- ── SHIP WEAPONS ──────────────────────────────────────────────────── --}}
+  <div class="cwn-inventory-section">
+    <div class="cwn-section-toggle-header"
+         data-action="toggleSection"
+         data-section-key="veh-shipweapons">
+      <i class="fas fa-gun"></i>
+      <span>Mounted Weapons ({{shipWeapons.length}})</span>
+      {{#if editable}}
+      <a class="cwn-add-inline" data-action="createDoc" data-document-class="Item" data-type="shipWeapon" title="Add Ship Weapon">
+        <i class="fas fa-plus"></i>
+      </a>
+      {{/if}}
+      <i class="fas fa-chevron-down section-chevron"></i>
+    </div>
+    <div class="cwn-section-content" data-section-content="veh-shipweapons">
+      {{#if shipWeapons}}
+      <ol class="cwn-items-list items-list">
+        <li class="cwn-items-header">
+          <span class="col-img"></span>
+          <span class="col-name">Name</span>
+          <span class="col-dmg">Damage</span>
+          <span class="col-rng">Range</span>
+          <span class="col-dmg">Power</span>
+          <span class="col-ammo">Mass</span>
+          <span class="col-controls"></span>
+        </li>
+        {{#each shipWeapons as |weapon|}}
+        <li class="cwn-item-row" data-item-id="{{weapon.id}}" data-document-class="Item" data-drag="true">
+          <img class="col-img cwn-item-img" src="{{weapon.img}}" alt="{{weapon.name}}" width="22" height="22" />
+          <span class="col-name cwn-item-name">
+            <a data-action="roll" data-roll-type="item" title="Fire!">{{weapon.name}}</a>
+          </span>
+          <span class="col-dmg">{{weapon.system.damage}}</span>
+          <span class="col-rng">{{weapon.system.range}}</span>
+          <span class="col-dmg">{{weapon.system.power}}</span>
+          <span class="col-ammo">{{weapon.system.mass}}</span>
+          <div class="col-controls cwn-row-controls">
+            {{#if ../editable}}
+            <a data-action="viewDoc" title="Edit"><i class="fas fa-edit"></i></a>
+            <a data-action="deleteDoc" title="Delete"><i class="fas fa-trash"></i></a>
+            {{/if}}
+          </div>
+        </li>
+        {{#if weapon.system.enrichedDescription}}
+        <li class="item-description-row hidden" data-item-id="{{weapon.id}}">
+          <div class="cwn-item-desc">{{{weapon.system.enrichedDescription}}}</div>
+        </li>
+        {{/if}}
+        {{/each}}
+      </ol>
+      {{else}}
+      <p class="cwn-empty-hint">No mounted weapons.</p>
+      {{/if}}
+    </div>
+  </div>
+
+  {{!-- ── PERSONAL WEAPONS ─────────────────────────────────────────────── --}}
+  {{#if weapons.length}}
+  <div class="cwn-inventory-section">
+    <div class="cwn-section-toggle-header"
+         data-action="toggleSection"
+         data-section-key="veh-weapons">
+      <i class="fas fa-crosshairs"></i>
+      <span>Weapons ({{weapons.length}})</span>
+      {{#if editable}}
+      <a class="cwn-add-inline" data-action="createDoc" data-document-class="Item" data-type="weapon" title="Add Weapon">
+        <i class="fas fa-plus"></i>
+      </a>
+      {{/if}}
+      <i class="fas fa-chevron-down section-chevron"></i>
+    </div>
+    <div class="cwn-section-content" data-section-content="veh-weapons">
+      <ol class="cwn-items-list items-list">
+        <li class="cwn-items-header">
+          <span class="col-img"></span>
+          <span class="col-name">Name</span>
+          <span class="col-dmg">Damage</span>
+          <span class="col-rng">Range</span>
+          <span class="col-controls"></span>
+        </li>
+        {{#each weapons as |weapon|}}
+        <li class="cwn-item-row" data-item-id="{{weapon.id}}" data-document-class="Item" data-drag="true">
+          <img class="col-img cwn-item-img" src="{{weapon.img}}" alt="{{weapon.name}}" width="22" height="22" />
+          <span class="col-name cwn-item-name">
+            <a data-action="roll" data-roll-type="item" title="Attack!">{{weapon.name}}</a>
+          </span>
+          <span class="col-dmg">{{weapon.system.damage}}</span>
+          <span class="col-rng">{{weapon.system.range}}</span>
+          <div class="col-controls cwn-row-controls">
+            {{#if ../editable}}
+            <a data-action="viewDoc" title="Edit"><i class="fas fa-edit"></i></a>
+            <a data-action="deleteDoc" title="Delete"><i class="fas fa-trash"></i></a>
+            {{/if}}
+          </div>
+        </li>
+        {{/each}}
+      </ol>
+    </div>
+  </div>
+  {{/if}}
+
+</div>{{!-- /.cwn-tab --}}

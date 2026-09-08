@@ -1,0 +1,36 @@
+{{!-- ══════════════════════════════════════════════════════════════════════
+  Fragment: item-row.hbs
+  A generic inventory item row used in gear and cyberware tabs.
+════════════════════════════════════════════════════════════════════════ --}}
+<li class="cwn-item-row" data-item-id="{{item.id}}" data-document-class="Item" data-searchable-row>
+  <img class="col-img cwn-item-img" src="{{item.img}}" alt="{{item.name}}" width="22" height="22" title="{{item.name}}" />
+  
+  <div class="col-name">
+    <span class="cwn-item-name" data-item-name="{{item.name}}">{{item.name}}</span>
+    {{#if item.system.description}}
+    <a data-action="toggleItemDescription" title="Show/Hide Description">
+      <i class="fas fa-info-circle"></i>
+    </a>
+    {{/if}}
+  </div>
+
+  {{#if (cwnEq item.type "cyberware")}}
+    <span class="col-dmg cwn-strain-badge">⚡ {{item.system.strain}}</span>
+  {{else if (cwnEq item.type "weapon")}}
+    <span class="col-dmg">{{item.system.damage}}</span>
+  {{else}}
+    <span class="col-loc">{{item.system.location}}</span>
+  {{/if}}
+
+  <div class="col-controls cwn-row-controls">
+    {{#if editable}}
+    <a data-action="viewDoc" title="Edit"><i class="fas fa-edit"></i></a>
+    <a data-action="deleteDoc" title="Delete"><i class="fas fa-trash"></i></a>
+    {{/if}}
+  </div>
+
+  {{!-- Expandable description holder --}}
+  <div class="item-description-row hidden">
+    {{{item.system.enrichedDescription}}}
+  </div>
+</li>

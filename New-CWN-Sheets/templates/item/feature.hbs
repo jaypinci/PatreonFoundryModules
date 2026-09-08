@@ -1,0 +1,103 @@
+{{!-- ══════════════════════════════════════════════════════════════════════
+  CWN ITEM SHEET — feature.hbs
+════════════════════════════════════════════════════════════════════════ --}}
+<div class="cwn-item-body">
+
+  <header class="cwn-item-header">
+    <img class="cwn-item-portrait"
+         src="{{item.img}}" alt="{{item.name}}"
+         data-edit="img" data-action="onEditImage" />
+    <div class="cwn-item-header-fields">
+      <input class="cwn-item-name-input" type="text"
+             name="name" value="{{item.name}}"
+             {{#unless editable}}disabled{{/unless}} />
+      <div class="cwn-item-meta-row">
+        <span class="cwn-meta-label">Type</span>
+        <select name="system.type" {{#unless editable}}disabled{{/unless}}>
+          {{#each featureTypes as |label key|}}
+          <option value="{{key}}" {{#if (cwnEq ../system.type key)}}selected{{/if}}>{{label}}</option>
+          {{/each}}
+        </select>
+        <span class="cwn-meta-label">Level</span>
+        <input type="number" name="system.level" value="{{system.level}}"
+               min="0" style="width:52px" {{#unless editable}}disabled{{/unless}} />
+      </div>
+    </div>
+  </header>
+
+  {{!-- ── Pools Granted ───────────────────────────────────────────────────── --}}
+  <section class="cwn-item-section">
+    <h3 class="cwn-section-title">
+      <i class="fas fa-battery-three-quarters"></i> Pools Granted
+      {{#if editable}}
+      <a class="cwn-add-inline" data-action="addPool" title="Add pool grant">
+        <i class="fas fa-plus"></i>
+      </a>
+      {{/if}}
+    </h3>
+
+    {{#if indexedConsumptions.length}}{{/if}}
+
+    {{#if system.poolsGranted.length}}
+    <div class="cwn-pools-granted-list">
+      {{#each system.poolsGranted as |pool index|}}
+      <div class="cwn-pool-grant-row">
+        <div class="cwn-form-grid cwn-form-grid-3" style="flex:1">
+          <div class="cwn-form-field">
+            <label>Resource</label>
+            <select name="system.poolsGranted.{{index}}.resourceName"
+                    {{#unless ../editable}}disabled{{/unless}}>
+              {{#each ../poolResources as |label key|}}
+              <option value="{{key}}" {{#if (cwnEq ../../pool.resourceName key)}}selected{{/if}}>{{label}}</option>
+              {{/each}}
+            </select>
+          </div>
+          <div class="cwn-form-field">
+            <label>Sub-Resource</label>
+            <input type="text" name="system.poolsGranted.{{index}}.subResource"
+                   value="{{pool.subResource}}" placeholder="e.g. Psychic"
+                   {{#unless ../editable}}disabled{{/unless}} />
+          </div>
+          <div class="cwn-form-field">
+            <label>Cadence</label>
+            <select name="system.poolsGranted.{{index}}.cadence"
+                    {{#unless ../editable}}disabled{{/unless}}>
+              {{#each ../poolCadences as |label key|}}
+              <option value="{{key}}" {{#if (cwnEq ../../pool.cadence key)}}selected{{/if}}>{{label}}</option>
+              {{/each}}
+            </select>
+          </div>
+          <div class="cwn-form-field">
+            <label>Formula</label>
+            <input type="text" name="system.poolsGranted.{{index}}.formula"
+                   value="{{pool.formula}}" placeholder="1"
+                   {{#unless ../editable}}disabled{{/unless}} />
+          </div>
+          <div class="cwn-form-field" style="grid-column:span 2">
+            <label>Condition (optional)</label>
+            <input type="text" name="system.poolsGranted.{{index}}.condition"
+                   value="{{pool.condition}}" placeholder="e.g. @level >= 3"
+                   {{#unless ../editable}}disabled{{/unless}} />
+          </div>
+        </div>
+        {{#if ../editable}}
+        <a class="cwn-remove-btn" data-action="removePool" data-pool-index="{{index}}" title="Remove">
+          <i class="fas fa-trash"></i>
+        </a>
+        {{/if}}
+      </div>
+      {{/each}}
+    </div>
+    {{else}}
+    <p class="cwn-empty-hint">No pools granted. Click <i class="fas fa-plus"></i> to add one.</p>
+    {{/if}}
+  </section>
+
+  <section class="cwn-item-section cwn-item-description">
+    <h3 class="cwn-section-title"><i class="fas fa-book-open"></i> Description</h3>
+    <div class="cwn-editor-wrap">
+      <div class="cwn-desc-editor" data-field="system.description">{{{enrichedDescription}}}</div>
+    </div>
+  </section>
+
+</div>

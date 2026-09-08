@@ -1,0 +1,77 @@
+{{!-- ══════════════════════════════════════════════════════════════════════
+  CWN CHARACTER SHEET — powers.hbs
+  Tab: powers grouped by subType and level
+════════════════════════════════════════════════════════════════════════ --}}
+<div class="cwn-tab tab" data-tab="{{tab.id}}" data-group="{{tab.group}}">
+
+  <div class="cwn-tab-header">
+    <h2 class="cwn-section-title"><i class="fas fa-bolt"></i> Powers</h2>
+    {{#if editable}}
+    <a class="cwn-add-btn"
+       data-action="createDoc"
+       data-document-class="Item"
+       data-type="power"
+       title="Add Power">
+      <i class="fas fa-plus"></i> Add
+    </a>
+    {{/if}}
+  </div>
+
+  {{!-- Pools (quick reference) --}}
+  {{#if hasAnyPools}}
+  <div class="cwn-pools-compact">
+    {{#each poolGroups as |group|}}
+    {{#each group.pools as |pool|}}
+    <div class="cwn-pool-chip {{#if pool.isEmpty}}empty{{/if}} {{#if pool.isLow}}low{{/if}}">
+      <span class="cwn-pool-chip-name">{{group.resourceName}}{{#if (cwnNeq pool.subResource "Default")}}:{{pool.subResource}}{{/if}}</span>
+      <span class="cwn-pool-chip-val">{{pool.current}}/{{pool.max}}</span>
+    </div>
+    {{/each}}
+    {{/each}}
+  </div>
+  {{/if}}
+
+  {{!-- Iterate subType groups --}}
+  {{#each powersByType as |levelGroups subType|}}
+  {{!-- Check if this subType has any powers --}}
+  {{#if (cwnGt (lookup levelGroups "flat" levelGroups) 0)}}
+  {{/if}}
+
+  <div class="cwn-power-type-section">
+    <div class="cwn-section-toggle-header"
+         data-action="toggleSection"
+         data-section-key="powers-{{subType}}">
+      <i class="fas fa-bolt"></i>
+      <span class="cwn-power-type-label">{{cwnCapitalize subType}} Powers</span>
+      <i class="fas fa-chevron-down section-chevron"></i>
+    </div>
+
+    <div class="cwn-section-content" data-section-content="powers-{{subType}}">
+
+      {{!-- Level sub-groups --}}
+      {{#each levelGroups as |powersAtLevel level|}}
+      {{#if (cwnNeq level "flat")}}
+      <div class="cwn-power-level-group">
+        <div class="cwn-power-level-label">Level {{level}}</div>
+        <ol class="cwn-items-list cwn-powers-list items-list">
+          {{#each powersAtLevel as |power|}}
+          {{> "modules/New-CWN-Sheets/templates/actor/fragments/power-row.hbs" power=power editable=../../editable}}
+          {{/each}}
+        </ol>
+      </div>
+      {{else}}
+      {{!-- Flat list (arts, mutations) --}}
+      <ol class="cwn-items-list cwn-powers-list items-list">
+        {{#each powersAtLevel as |power|}}
+        {{> "modules/New-CWN-Sheets/templates/actor/fragments/power-row.hbs" power=power editable=../../editable}}
+        {{/each}}
+      </ol>
+      {{/if}}
+      {{/each}}
+
+    </div>
+  </div>
+
+  {{/each}}
+
+</div>{{!-- /.cwn-tab --}}

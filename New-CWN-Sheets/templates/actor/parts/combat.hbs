@@ -1,0 +1,169 @@
+{{!-- ══════════════════════════════════════════════════════════════════════
+  CWN CHARACTER SHEET — combat.hbs
+  Tab: stats, saves, pools, readied weapons/armor
+════════════════════════════════════════════════════════════════════════ --}}
+<div class="cwn-tab tab" data-tab="{{tab.id}}" data-group="{{tab.group}}">
+
+  <div class="cwn-combat-layout">
+
+    {{!-- ── LEFT: Core Attributes ─────────────────────────────────────── --}}
+    <section class="cwn-panel cwn-stats-panel">
+      <header class="cwn-panel-header">
+        <i class="fas fa-dna"></i> Attributes
+      </header>
+      <div class="cwn-stats-grid">
+        {{#each system.stats as |stat key|}}
+        <div class="cwn-stat-block">
+          <div class="cwn-stat-abbr">{{stat.label}}</div>
+          <div class="cwn-stat-score">
+            <input type="number"
+                   name="system.stats.{{key}}.base"
+                   value="{{stat.base}}"
+                   class="cwn-stat-input"
+                   {{#unless ../editable}}disabled{{/unless}} />
+          </div>
+          <div class="cwn-stat-mod
+            {{#if (cwnGt stat.mod 0)}}positive{{else}}{{#if (cwnLt stat.mod 0)}}negative{{/if}}{{/if}}">
+            {{cwnMod stat.mod}}
+          </div>
+        </div>
+        {{/each}}
+      </div>
+    </section>
+
+    {{!-- ── MIDDLE: Saves & Encumbrance ───────────────────────────────── --}}
+    <section class="cwn-panel cwn-saves-panel">
+      <header class="cwn-panel-header">
+        <i class="fas fa-shield-halved"></i> Saves
+      </header>
+      <div class="cwn-saves-list">
+        {{#each (array "physical" "evasion" "mental") as |saveKey|}}
+        <div class="cwn-save-row">
+          <button type="button"
+                  class="cwn-save-btn"
+                  data-action="rollSave"
+                  data-save-type="{{saveKey}}"
+                  title="Roll {{saveKey}} save">
+            <i class="fas fa-dice-d20"></i>
+            <span class="cwn-save-label">{{cwnCapitalize saveKey}}</span>
+            <span class="cwn-save-target">{{lookup ../system.save saveKey}}</span>
+          </button>
+        </div>
+        {{/each}}
+        {{!-- Luck save — only shown if the property exists --}}
+        {{#if system.save.luck}}
+        <div class="cwn-save-row">
+          <button type="button"
+                  class="cwn-save-btn"
+                  data-action="rollSave"
+                  data-save-type="luck"
+                  title="Roll luck save">
+            <i class="fas fa-dice-d20"></i>
+            <span class="cwn-save-label">Luck</span>
+            <span class="cwn-save-target">{{system.save.luck}}</span>
+          </button>
+        </div>
+        {{/if}}
+      </div>
+
+      {{!-- Encumbrance --}}
+      {{#if system.encumbrance}}
+      <header class="cwn-panel-header" style="margin-top:12px">
+        <i class="fas fa-weight-hanging"></i> Encumbrance
+      </header>
+      {{#if system.encumbrance.ready}}
+      <div class="cwn-enc-row">
+        <span class="cwn-enc-label">Readied</span>
+        <div class="cwn-resource-bar" style="flex:1; margin:0 8px">
+          <div class="cwn-resource-bar-fill"
+               style="width:{{cwnPercent system.encumbrance.ready.value system.encumbrance.ready.max}}%"></div>
+        </div>
+        <span class="cwn-enc-val">{{system.encumbrance.ready.value}}/{{system.encumbrance.ready.max}}</span>
+      </div>
+      {{/if}}
+      {{#if system.encumbrance.stowed}}
+      <div class="cwn-enc-row">
+        <span class="cwn-enc-label">Stowed</span>
+        <div class="cwn-resource-bar" style="flex:1; margin:0 8px">
+          <div class="cwn-resource-bar-fill"
+               style="width:{{cwnPercent system.encumbrance.stowed.value system.encumbrance.stowed.max}}%"></div>
+        </div>
+        <span class="cwn-enc-val">{{system.encumbrance.stowed.value}}/{{system.encumbrance.stowed.max}}</span>
+      </div>
+      {{/if}}
+      {{/if}}
+
+    </section>
+
+    {{!-- ── RIGHT: Pools & Readied Gear ───────────────────────────────── --}}
+    <section class="cwn-panel cwn-right-panel">
+
+      {{#if hasAnyPools}}
+      <header class="cwn-panel-header">
+        <i class="fas fa-battery-three-quarters"></i> Resource Pools
+      </header>
+      <div class="cwn-pools-list">
+        {{#each poolGroups as |group|}}
+        <div class="cwn-pool-group">
+          <div class="cwn-pool-group-name">{{group.resourceName}}</div>
+          {{#each group.pools as |pool|}}
+          <div class="cwn-pool-row {{#if pool.isEmpty}}empty{{/if}} {{#if pool.isLow}}low{{/if}}">
+            <span class="cwn-pool-sub">{{pool.subResource}}</span>
+            <div class="cwn-pool-track">
+              <div class="cwn-pool-fill" style="width:{{pool.percentage}}%"></div>
+            </div>
+            <span class="cwn-pool-val">{{pool.current}}/{{pool.max}}</span>
+          </div>
+          {{/each}}
+        </div>
+        {{/each}}
+      </div>
+      {{/if}}
+
+      {{!-- Readied weapons --}}
+      {{#if readiedWeapons.length}}
+      <header class="cwn-panel-header" style="margin-top:12px">
+        <i class="fas fa-crosshairs"></i> Readied Weapons
+      </header>
+      <ol class="cwn-readied-list items-list">
+        {{#each readiedWeapons as |weapon|}}
+        <li class="cwn-readied-row" data-item-id="{{weapon.id}}" data-document-class="Item" data-drag="true">
+          <img class="cwn-readied-img" src="{{weapon.img}}" alt="{{weapon.name}}" width="20" height="20" />
+          <span class="cwn-readied-name">{{weapon.name}}</span>
+          <span class="cwn-readied-stat">{{weapon.system.damage}}</span>
+          <div class="cwn-readied-controls">
+            <a data-action="roll" data-roll-type="item" title="Attack!">
+              <i class="fas fa-dice-d20"></i>
+            </a>
+            {{#if weapon.system.ammo}}
+            <a data-action="reload" title="Reload">
+              <i class="fas fa-rotate-right"></i>
+            </a>
+            {{/if}}
+          </div>
+        </li>
+        {{/each}}
+      </ol>
+      {{/if}}
+
+      {{!-- Readied armor --}}
+      {{#if readiedArmor.length}}
+      <header class="cwn-panel-header" style="margin-top:8px">
+        <i class="fas fa-shield-halved"></i> Readied Armor
+      </header>
+      <ol class="cwn-readied-list items-list">
+        {{#each readiedArmor as |arm|}}
+        <li class="cwn-readied-row" data-item-id="{{arm.id}}" data-document-class="Item" data-drag="true">
+          <img class="cwn-readied-img" src="{{arm.img}}" alt="{{arm.name}}" width="20" height="20" />
+          <span class="cwn-readied-name">{{arm.name}}</span>
+          <span class="cwn-readied-stat">AC {{arm.system.ac}}</span>
+        </li>
+        {{/each}}
+      </ol>
+      {{/if}}
+
+    </section>
+
+  </div>{{!-- /.cwn-combat-layout --}}
+
+</div>{{!-- /.cwn-tab --}}

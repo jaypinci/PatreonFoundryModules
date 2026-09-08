@@ -1,0 +1,259 @@
+{{!-- ══════════════════════════════════════════════════════════════════════
+  CWN CHARACTER SHEET — main.hbs
+  Tab: Combined combat, skills, favorites (formerly separate tabs)
+════════════════════════════════════════════════════════════════════════ --}}
+<div class="cwn-tab tab" data-tab="{{tab.id}}" data-group="{{tab.group}}">
+
+  <div class="cwn-main-layout">
+
+    {{!-- ── LEFT COLUMN: Attributes, Saves, Encumbrance ─────────────────── --}}
+    <div class="cwn-main-left">
+
+      {{!-- Attributes --}}
+      <section class="cwn-panel cwn-stats-panel">
+        <header class="cwn-panel-header">
+          <i class="fas fa-dna"></i> Attributes
+        </header>
+        <div class="cwn-stats-grid">
+          {{#each system.stats as |stat key|}}
+          <div class="cwn-stat-block" data-action="rollStats" data-stat="{{key}}">
+            <div class="cwn-stat-abbr">{{stat.label}}</div>
+            <div class="cwn-stat-score">
+              <input type="number"
+                     name="system.stats.{{key}}.base"
+                     value="{{stat.base}}"
+                     class="cwn-stat-input"
+                     {{#unless ../editable}}disabled{{/unless}} />
+            </div>
+            <div class="cwn-stat-mod
+              {{#if (cwnGt stat.mod 0)}}positive{{else}}{{#if (cwnLt stat.mod 0)}}negative{{/if}}{{/if}}">
+              {{cwnMod stat.mod}}
+            </div>
+          </div>
+          {{/each}}
+        </div>
+      </section>
+
+      {{!-- Saves --}}
+      <section class="cwn-panel cwn-saves-panel">
+        <header class="cwn-panel-header">
+          <i class="fas fa-shield-halved"></i> Saves
+        </header>
+        <div class="cwn-saves-list">
+          {{#each (array "physical" "evasion" "mental") as |saveKey|}}
+          <div class="cwn-save-row">
+            <button type="button"
+                    class="cwn-save-btn"
+                    data-action="rollSave"
+                    data-save-type="{{saveKey}}"
+                    title="Roll {{saveKey}} save">
+              <i class="fas fa-dice-d20"></i>
+              <span class="cwn-save-label">{{cwnCapitalize saveKey}}</span>
+              <span class="cwn-save-target">{{lookup ../system.save saveKey}}</span>
+            </button>
+          </div>
+          {{/each}}
+          {{#if system.save.luck}}
+          <div class="cwn-save-row">
+            <button type="button"
+                    class="cwn-save-btn cwn-luck-btn"
+                    data-action="rollLuck"
+                    title="Roll luck save">
+              <i class="fas fa-dice-d20"></i>
+              <span class="cwn-save-label">Luck</span>
+              <span class="cwn-save-target">{{system.save.luck}}</span>
+            </button>
+          </div>
+          {{/if}}
+        </div>
+
+        {{!-- Encumbrance --}}
+        {{#if system.encumbrance}}
+        <header class="cwn-panel-header" style="margin-top:12px">
+          <i class="fas fa-weight-hanging"></i> Encumbrance
+        </header>
+        {{#if system.encumbrance.ready}}
+        <div class="cwn-enc-row">
+          <span class="cwn-enc-label">Readied</span>
+          <div class="cwn-resource-bar" style="flex:1; margin:0 8px">
+            <div class="cwn-resource-bar-fill"
+                 style="width:{{cwnPercent system.encumbrance.ready.value system.encumbrance.ready.max}}%"></div>
+          </div>
+          <span class="cwn-enc-val">{{system.encumbrance.ready.value}}/{{system.encumbrance.ready.max}}</span>
+        </div>
+        {{/if}}
+        {{#if system.encumbrance.stowed}}
+        <div class="cwn-enc-row">
+          <span class="cwn-enc-label">Stowed</span>
+          <div class="cwn-resource-bar" style="flex:1; margin:0 8px">
+            <div class="cwn-resource-bar-fill"
+                 style="width:{{cwnPercent system.encumbrance.stowed.value system.encumbrance.stowed.max}}%"></div>
+          </div>
+          <span class="cwn-enc-val">{{system.encumbrance.stowed.value}}/{{system.encumbrance.stowed.max}}</span>
+        </div>
+        {{/if}}
+        {{/if}}
+      </section>
+
+    </div>{{!-- /.cwn-main-left --}}
+
+    {{!-- ── MIDDLE COLUMN: Skills ─────────────────────────────────────────── --}}
+    <div class="cwn-main-middle">
+      <section class="cwn-panel cwn-skills-panel">
+        <header class="cwn-panel-header">
+          <i class="fas fa-graduation-cap"></i> Skills
+          {{#if editable}}
+          <a class="cwn-add-btn-inline"
+             data-action="createDoc"
+             data-document-class="Item"
+             data-type="skill"
+             title="Add Skill">
+            <i class="fas fa-plus"></i>
+          </a>
+          {{/if}}
+        </header>
+
+        {{#if skills}}
+        <ol class="cwn-skills-list items-list">
+          {{#each skills as |skill|}}
+          <li class="cwn-skill-row {{#if (cwnGt skill.system.rank 1)}}expert{{else if (cwnGt skill.system.rank 0)}}trained{{/if}}"
+              data-item-id="{{skill.id}}"
+              data-document-class="Item">
+
+            <button type="button"
+                    class="cwn-skill-btn"
+                    data-action="rollSkill"
+                    data-item-id="{{skill.id}}"
+                    title="Roll {{skill.name}}">
+              <span class="cwn-skill-name">{{skill.name}}</span>
+              <span class="cwn-rank-badge rank-{{skill.system.rank}}">
+                {{#if (cwnGt skill.system.rank -1)}}+{{skill.system.rank}}{{else}}–1{{/if}}
+              </span>
+            </button>
+
+            <span class="cwn-skill-source">{{skill.system.source}}</span>
+
+            {{#if editable}}
+            <div class="cwn-row-controls">
+              <a data-action="skillUp" data-item-id="{{skill.id}}" title="Increase rank">
+                <i class="fas fa-arrow-up"></i>
+              </a>
+              <a data-action="viewDoc" data-item-id="{{skill.id}}" title="Open sheet">
+                <i class="fas fa-edit"></i>
+              </a>
+              <a data-action="deleteDoc" data-item-id="{{skill.id}}" title="Delete">
+                <i class="fas fa-trash"></i>
+              </a>
+            </div>
+            {{/if}}
+          </li>
+          {{/each}}
+        </ol>
+        {{else}}
+        <p class="cwn-empty-hint">No skills yet. Add skills from the compendium.</p>
+        {{/if}}
+
+        {{#if system.unspentSkillPoints}}
+        <div class="cwn-notice">
+          <i class="fas fa-info-circle"></i>
+          Unspent: <strong>{{system.unspentSkillPoints}}</strong>
+        </div>
+        {{/if}}
+      </section>
+    </div>{{!-- /.cwn-main-middle --}}
+
+    {{!-- ── RIGHT COLUMN: Pools & Readied Gear ──────────────────────────── --}}
+    <div class="cwn-main-right">
+      <section class="cwn-panel cwn-right-panel">
+
+        {{#if hasAnyPools}}
+        <header class="cwn-panel-header">
+          <i class="fas fa-battery-three-quarters"></i> Resource Pools
+        </header>
+        <div class="cwn-pools-list">
+          {{#each poolGroups as |group|}}
+          <div class="cwn-pool-group">
+            <div class="cwn-pool-group-name">{{group.resourceName}}</div>
+            {{#each group.pools as |pool|}}
+            <div class="cwn-pool-row {{#if pool.isEmpty}}empty{{/if}} {{#if pool.isLow}}low{{/if}}">
+              <span class="cwn-pool-sub">{{pool.subResource}}</span>
+              <div class="cwn-pool-track">
+                <div class="cwn-pool-fill" style="width:{{pool.percentage}}%"></div>
+              </div>
+              <span class="cwn-pool-val">{{pool.current}}/{{pool.max}}</span>
+            </div>
+            {{/each}}
+          </div>
+          {{/each}}
+        </div>
+        {{/if}}
+
+        {{!-- Readied weapons --}}
+        {{#if readiedWeapons.length}}
+        <header class="cwn-panel-header" style="margin-top:12px">
+          <i class="fas fa-crosshairs"></i> Readied Weapons
+        </header>
+        <ol class="cwn-readied-list items-list">
+          {{#each readiedWeapons as |weapon|}}
+          <li class="cwn-readied-row" data-item-id="{{weapon.id}}" data-document-class="Item" data-drag="true">
+            <img class="cwn-readied-img" src="{{weapon.img}}" alt="{{weapon.name}}" width="20" height="20" />
+            <span class="cwn-readied-name">{{weapon.name}}</span>
+            <span class="cwn-readied-stat">{{weapon.system.damage}}</span>
+            <div class="cwn-readied-controls">
+              <a data-action="roll" data-roll-type="item" title="Attack!"><i class="fas fa-dice-d20"></i></a>
+              <a data-action="postToChat" data-item-id="{{weapon.id}}" title="Post to chat"><i class="fas fa-comment"></i></a>
+              {{#if weapon.system.ammo}}
+              <a data-action="reload" title="Reload"><i class="fas fa-rotate-right"></i></a>
+              {{/if}}
+            </div>
+          </li>
+          {{/each}}
+        </ol>
+        {{/if}}
+
+        {{!-- Readied armor --}}
+        {{#if readiedArmor.length}}
+        <header class="cwn-panel-header" style="margin-top:8px">
+          <i class="fas fa-shield-halved"></i> Readied Armor
+        </header>
+        <ol class="cwn-readied-list items-list">
+          {{#each readiedArmor as |arm|}}
+          <li class="cwn-readied-row" data-item-id="{{arm.id}}" data-document-class="Item" data-drag="true">
+            <img class="cwn-readied-img" src="{{arm.img}}" alt="{{arm.name}}" width="20" height="20" />
+            <span class="cwn-readied-name">{{arm.name}}</span>
+            <span class="cwn-readied-stat">AC {{arm.system.ac}}</span>
+            <a data-action="postToChat" data-item-id="{{arm.id}}" title="Post to chat"><i class="fas fa-comment"></i></a>
+          </li>
+          {{/each}}
+        </ol>
+        {{/if}}
+
+        {{!-- Favorites Bar --}}
+        {{#if hasFavorites}}
+        <header class="cwn-panel-header" style="margin-top:12px">
+          <i class="fas fa-star"></i> Favorites ({{favorites.length}})
+        </header>
+        <ol class="cwn-readied-list items-list">
+          {{#each favorites as |item|}}
+          <li class="cwn-readied-row" data-item-id="{{item.id}}" data-document-class="Item">
+            <img class="cwn-readied-img" src="{{item.img}}" alt="{{item.name}}" width="20" height="20" />
+            <span class="cwn-readied-name">{{item.name}}</span>
+            <span class="cwn-readied-stat">{{cwnItemSubtitle item}}</span>
+            <div class="cwn-readied-controls">
+              <a data-action="postToChat" data-item-id="{{item.id}}" title="Post to chat"><i class="fas fa-comment"></i></a>
+              <a data-action="viewDoc" data-item-id="{{item.id}}" title="Open"><i class="fas fa-edit"></i></a>
+              <a data-action="toggleFavorite" data-item-id="{{item.id}}" title="Remove from favorites">
+                <i class="fas fa-star cwn-star-active"></i>
+              </a>
+            </div>
+          </li>
+          {{/each}}
+        </ol>
+        {{/if}}
+
+      </section>
+    </div>{{!-- /.cwn-main-right --}}
+
+  </div>{{!-- /.cwn-main-layout --}}
+
+</div>{{!-- /.cwn-tab --}}

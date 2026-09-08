@@ -1,0 +1,191 @@
+{{!-- ══════════════════════════════════════════════════════════════════════
+  CWN CHARACTER SHEET — header.hbs
+  Vendit-family aesthetic: ambient glows, ticker tape
+════════════════════════════════════════════════════════════════════════ --}}
+
+<div class="cwn-header-root">
+{{!-- Ambient glow blobs (rendered behind everything) --}}
+<div class="cwn-glow-blob-l"></div>
+<div class="cwn-glow-blob-r"></div>
+
+<div class="cwn-header sheet-header">
+
+  {{!-- Avatar + Ghost toggle --}}
+  <div class="cwn-avatar-wrap">
+    <img class="cwn-avatar"
+         src="{{actor.img}}"
+         alt="{{actor.name}}"
+         data-edit="img"
+         data-action="onEditImage"
+         title="Click to change portrait" />
+    <div class="cwn-avatar-overlay">
+      <i class="fas fa-camera"></i>
+    </div>
+    {{!-- Ghost button: toggles cyberdeck mode --}}
+    <button type="button"
+            class="cwn-ghost-btn {{#if flags.New-CWN-Sheets.cyberdeckModeActive}}active{{/if}}"
+            data-action="toggleCyberdeck"
+            title="Toggle Cyberdeck Mode">
+      <svg class="cwn-ghost-svg" viewBox="0 0 20 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M10 0C4.477 0 0 4.477 0 10v14l3-3 3 3 3-3 3 3 3-3 3 3V10C18 4.477 13.523 0 10 0z" fill="currentColor"/>
+        <circle cx="7" cy="9" r="2" fill="#020509"/>
+        <circle cx="13" cy="9" r="2" fill="#020509"/>
+      </svg>
+    </button>
+  </div>
+
+  {{!-- Identity block --}}
+  <div class="cwn-identity">
+    <input class="cwn-name-input"
+           type="text"
+           name="name"
+           value="{{actor.name}}"
+           placeholder="DESIGNATION"
+           {{#unless editable}}disabled{{/unless}} />
+
+    <div class="cwn-identity-row">
+      <label class="cwn-field-label">Class</label>
+      <input type="text" name="system.class"
+             value="{{system.class}}"
+             placeholder="Class/Role"
+             {{#unless editable}}disabled{{/unless}} />
+
+      <label class="cwn-field-label">Lvl</label>
+      <input type="number" name="system.level.value"
+             value="{{system.level.value}}"
+             min="1" max="20"
+             {{#unless editable}}disabled{{/unless}} />
+
+      <label class="cwn-field-label">Background</label>
+      <input type="text" name="system.background"
+             value="{{system.background}}"
+             placeholder="Background"
+             {{#unless editable}}disabled{{/unless}} />
+    </div>
+
+    {{!-- HP / Strain / AC / Attack / Speed vitals row --}}
+    <div class="cwn-vitals">
+
+      {{!-- HP --}}
+      <div class="cwn-vital-group">
+        <div class="cwn-vital-label">HP</div>
+        <div class="cwn-resource-box">
+          <input type="number" name="system.health.value"
+                 value="{{system.health.value}}"
+                 class="cwn-resource-val"
+                 {{#unless editable}}disabled{{/unless}} />
+          <span class="cwn-resource-sep">/</span>
+          <input type="number" name="system.health.max"
+                 value="{{system.health.max}}"
+                 class="cwn-resource-max"
+                 {{#unless editable}}disabled{{/unless}} />
+        </div>
+        <div class="cwn-resource-bar">
+          <div class="cwn-resource-bar-fill hp-fill"
+               style="width:{{cwnPercent system.health.value system.health.max}}%"></div>
+        </div>
+      </div>
+
+      {{!-- System Strain --}}
+      <div class="cwn-vital-group cwn-strain-group">
+        <div class="cwn-vital-label">Strain</div>
+        <div class="cwn-resource-box">
+          <input type="number" name="system.systemStrain.value"
+                 value="{{system.systemStrain.value}}"
+                 class="cwn-resource-val"
+                 {{#unless editable}}disabled{{/unless}} />
+          <span class="cwn-resource-sep">/</span>
+          <span class="cwn-resource-max">{{system.systemStrain.max}}</span>
+        </div>
+        <div class="cwn-resource-bar">
+          <div class="cwn-resource-bar-fill strain-fill"
+               style="width:{{cwnPercent system.systemStrain.value system.systemStrain.max}}%"></div>
+        </div>
+      </div>
+
+      {{!-- AC --}}
+      <div class="cwn-vital-group cwn-ac-group">
+        <div class="cwn-vital-label">AC</div>
+        <div class="cwn-ac-value">{{system.ac}}</div>
+        {{#if system.meleeAc}}
+        <div class="cwn-vital-label" style="margin-top:2px">Melee</div>
+        <div class="cwn-ac-value cwn-melee-ac">{{system.meleeAc}}</div>
+        {{/if}}
+        {{#if system.soak}}
+        <div class="cwn-vital-label" style="margin-top:2px">Soak</div>
+        <div class="cwn-resource-box" style="margin-top:2px">
+          <input type="number" data-soak-field="value"
+                 value="{{system.soak.value}}"
+                 class="cwn-resource-val cwn-soak-input"
+                 {{#unless editable}}disabled{{/unless}} />
+          <span class="cwn-resource-sep">/</span>
+          <input type="number" data-soak-field="max"
+                 value="{{system.soak.max}}"
+                 class="cwn-resource-max cwn-soak-input"
+                 {{#unless editable}}disabled{{/unless}} />
+        </div>
+        <div class="cwn-resource-bar">
+          <div class="cwn-resource-bar-fill soak-fill"
+               style="width:{{cwnPercent system.soak.value system.soak.max}}%;background:{{cwnSoakColor system.soak.value system.soak.max}};box-shadow:0 0 6px {{cwnSoakColor system.soak.value system.soak.max}}"></div>
+        </div>
+        {{/if}}
+      </div>
+
+      {{!-- Attack Bonus --}}
+      <div class="cwn-vital-group">
+        <div class="cwn-vital-label">Attack</div>
+        <div class="cwn-stat-badge">{{cwnMod system.ab}}</div>
+      </div>
+
+      {{!-- Speed --}}
+      <div class="cwn-vital-group">
+        <div class="cwn-vital-label">Speed</div>
+        <div class="cwn-stat-badge">{{system.speed}}m</div>
+      </div>
+
+    </div>{{!-- /.cwn-vitals --}}
+
+    {{!-- Action buttons --}}
+    <div class="cwn-header-actions">
+      <button type="button" data-action="rest" title="Rest for Night">
+        <i class="fas fa-moon"></i> Rest
+      </button>
+      <button type="button" data-action="scene" title="End of Scene">
+        <i class="fas fa-hourglass-end"></i> Scene
+      </button>
+      <button type="button" data-action="hitDice" title="Roll HP">
+        <i class="fas fa-dice-d6"></i> Roll HP
+      </button>
+      <button type="button" data-action="rollStats" title="Roll Stats">
+        <i class="fas fa-dice"></i> Stats
+      </button>
+      <button type="button" data-action="toggleLock" class="cwn-lock-btn" title="Toggle Edit Lock">
+        <i class="fas fa-lock lock-indicator"></i>
+      </button>
+      <button type="button" data-action="frisk" title="Frisk Cyberware (target a token first)">
+        <i class="fas fa-satellite-dish"></i> Frisk
+      </button>
+    </div>
+
+  </div>{{!-- /.cwn-identity --}}
+
+  {{!-- Ticker tape — content doubled for seamless loop --}}
+  <div class="cwn-header-ticker-outer">
+    <div class="cwn-header-ticker">
+      <span>OPERATIVE DATAFILE LOADED</span>
+      <span>CITY WITHOUT NUMBER — SURVIVAL RATING: UNKNOWN</span>
+      <span>CYBERWARE DIAGNOSTICS NOMINAL</span>
+      <span>FACTION STANDING UNVERIFIED</span>
+      <span>ALL CONTRACTS ARE BINDING UNDER CITY AUTHORITY</span>
+      <span>STAY ALERT — THE CITY DOES NOT SLEEP</span>
+      <span>OPERATIVE DATAFILE LOADED</span>
+      <span>CITY WITHOUT NUMBER — SURVIVAL RATING: UNKNOWN</span>
+      <span>CYBERWARE DIAGNOSTICS NOMINAL</span>
+      <span>FACTION STANDING UNVERIFIED</span>
+      <span>ALL CONTRACTS ARE BINDING UNDER CITY AUTHORITY</span>
+      <span>STAY ALERT — THE CITY DOES NOT SLEEP</span>
+    </div>
+  </div>
+
+</div>{{!-- /.cwn-header --}}
+</div>{{!-- /.cwn-header-root --}}

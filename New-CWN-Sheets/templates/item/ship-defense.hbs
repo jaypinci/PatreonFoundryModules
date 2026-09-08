@@ -1,0 +1,96 @@
+{{!-- ══════════════════════════════════════════════════════════════════════
+  CWN ITEM SHEET — ship-defense.hbs
+════════════════════════════════════════════════════════════════════════ --}}
+<div class="cwn-item-body">
+
+  <header class="cwn-item-header">
+    <img class="cwn-item-portrait"
+         src="{{item.img}}" alt="{{item.name}}"
+         data-edit="img" data-action="onEditImage" />
+    <div class="cwn-item-header-fields">
+      <input class="cwn-item-name-input" type="text"
+             name="name" value="{{item.name}}"
+             {{#unless editable}}disabled{{/unless}} />
+      <div class="cwn-item-meta-row">
+        <span class="cwn-meta-label">Min Class</span>
+        <select name="system.minClass" {{#unless editable}}disabled{{/unless}}>
+          {{#each vehicleClasses as |label key|}}
+          <option value="{{key}}" {{#if (cwnEq ../system.minClass key)}}selected{{/if}}>{{label}}</option>
+          {{/each}}
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <section class="cwn-item-section">
+    <h3 class="cwn-section-title"><i class="fas fa-shield-halved"></i> Defense System</h3>
+    <div class="cwn-form-grid cwn-form-grid-3">
+      <div class="cwn-form-field">
+        <label>Power</label>
+        <input type="number" name="system.power" value="{{system.power}}"
+               {{#unless editable}}disabled{{/unless}} />
+      </div>
+      <div class="cwn-form-field">
+        <label>Mass</label>
+        <input type="number" name="system.mass" value="{{system.mass}}"
+               {{#unless editable}}disabled{{/unless}} />
+      </div>
+      <div class="cwn-form-field">
+        <label>Cost (cr)</label>
+        <input type="number" name="system.cost" value="{{system.cost}}"
+               min="0" {{#unless editable}}disabled{{/unless}} />
+      </div>
+      <div class="cwn-form-field">
+        <label>Tech Level</label>
+        <input type="number" name="system.tl" value="{{system.tl}}"
+               min="0" max="5" {{#unless editable}}disabled{{/unless}} />
+      </div>
+      <div class="cwn-form-field" style="grid-column:span 2">
+        <label>Effect</label>
+        <input type="text" name="system.effect" value="{{system.effect}}"
+               placeholder="What does this defense system do?"
+               {{#unless editable}}disabled{{/unless}} />
+      </div>
+    </div>
+    <div class="cwn-flags-row">
+      <label class="cwn-checkbox-label">
+        <input type="checkbox" name="system.broken" {{#if system.broken}}checked{{/if}}
+               {{#unless editable}}disabled{{/unless}} />
+        Broken
+      </label>
+      <label class="cwn-checkbox-label">
+        <input type="checkbox" name="system.destroyed" {{#if system.destroyed}}checked{{/if}}
+               {{#unless editable}}disabled{{/unless}} />
+        Destroyed
+      </label>
+      <label class="cwn-checkbox-label">
+        <input type="checkbox" name="system.juryRigged" {{#if system.juryRigged}}checked{{/if}}
+               {{#unless editable}}disabled{{/unless}} />
+        Jury-Rigged
+      </label>
+      <label class="cwn-checkbox-label">
+        <input type="checkbox" name="system.costMultiplier" {{#if system.costMultiplier}}checked{{/if}}
+               {{#unless editable}}disabled{{/unless}} />
+        Cost ×
+      </label>
+      <label class="cwn-checkbox-label">
+        <input type="checkbox" name="system.powerMultiplier" {{#if system.powerMultiplier}}checked{{/if}}
+               {{#unless editable}}disabled{{/unless}} />
+        Power ×
+      </label>
+      <label class="cwn-checkbox-label">
+        <input type="checkbox" name="system.massMultiplier" {{#if system.massMultiplier}}checked{{/if}}
+               {{#unless editable}}disabled{{/unless}} />
+        Mass ×
+      </label>
+    </div>
+  </section>
+
+  <section class="cwn-item-section cwn-item-description">
+    <h3 class="cwn-section-title"><i class="fas fa-book-open"></i> Description</h3>
+    <div class="cwn-editor-wrap">
+      <div class="cwn-desc-editor" data-field="system.description">{{{enrichedDescription}}}</div>
+    </div>
+  </section>
+
+</div>

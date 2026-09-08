@@ -1,0 +1,55 @@
+{{!-- ══════════════════════════════════════════════════════════════════════
+  CWN FRISK RESULT CARD — frisk-result.hbs
+  Whispered to GMs. Shows roll, DC, outcome, and cyberware list.
+════════════════════════════════════════════════════════════════════════ --}}
+<div class="cwn-frisk-card">
+
+  {{!-- Header: who frisked whom --}}
+  <div class="cwn-frisk-header">
+    <div class="cwn-frisk-icon"><i class="fas fa-satellite-dish"></i></div>
+    <div class="cwn-frisk-title">Frisk Result</div>
+    <div class="cwn-frisk-target">{{friskerName}} → {{targetName}}</div>
+  </div>
+
+  {{!-- Roll row --}}
+  <div class="cwn-frisk-roll-row">
+    <span class="cwn-frisk-roll-label">Roll</span>
+    <span class="cwn-frisk-roll-val">{{roll}}</span>
+    {{#if noticeRank}}
+    <span class="cwn-frisk-sep">+{{noticeRank}}</span>
+    {{/if}}
+    <span class="cwn-frisk-sep">=</span>
+    <span class="cwn-frisk-roll-val">{{total}}</span>
+    <span class="cwn-frisk-sep">vs</span>
+    <span class="cwn-frisk-dc-label">DC</span>
+    <span class="cwn-frisk-dc-val">{{dc}}</span>
+    <span class="cwn-frisk-outcome {{#if success}}cwn-frisk-success{{else}}cwn-frisk-failure{{/if}}">
+      {{#if success}}SUCCESS{{else}}FAILURE{{/if}}
+    </span>
+  </div>
+
+  {{!-- Implants (always shown to GM) --}}
+  <div class="cwn-frisk-implants">
+    <div class="cwn-frisk-implants-label">
+      {{#if success}}Detected Cyberware{{else}}Cyberware (GM Only — Roll Failed){{/if}}
+    </div>
+
+    {{#if gmImplants.length}}
+      {{#each gmImplants}}
+      <div class="cwn-frisk-implant-row">
+        <img class="cwn-frisk-implant-img" src="{{this.img}}" width="20" height="20" />
+        <div class="cwn-frisk-implant-info">
+          <span class="cwn-frisk-implant-name">{{this.name}}</span>
+          <span class="cwn-frisk-implant-loc">{{this.type}}</span>
+        </div>
+        {{#if this.strain}}
+        <span class="cwn-frisk-implant-strain">+{{this.strain}} strain</span>
+        {{/if}}
+      </div>
+      {{/each}}
+    {{else}}
+      <div class="cwn-frisk-no-implants">No cyberware detected on this actor.</div>
+    {{/if}}
+  </div>
+
+</div>

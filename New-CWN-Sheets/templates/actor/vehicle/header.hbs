@@ -1,0 +1,196 @@
+{{!-- ══════════════════════════════════════════════════════════════════════
+  CWN VEHICLE SHEET — header.hbs
+  Vendit-family aesthetic: power/mass/hardpoint resource bars
+════════════════════════════════════════════════════════════════════════ --}}
+
+<div class="cwn-header-root cwn-vehicle-header-root">
+<div class="cwn-glow-blob-l"></div>
+<div class="cwn-glow-blob-r"></div>
+
+<div class="cwn-header sheet-header">
+
+  {{!-- Avatar --}}
+  <div class="cwn-avatar-wrap">
+    <img class="cwn-avatar"
+         src="{{actor.img}}"
+         alt="{{actor.name}}"
+         data-edit="img"
+         data-action="onEditImage"
+         title="Click to change portrait" />
+    <div class="cwn-avatar-overlay"><i class="fas fa-camera"></i></div>
+  </div>
+
+  {{!-- Identity --}}
+  <div class="cwn-identity">
+    <input class="cwn-name-input"
+           type="text"
+           name="name"
+           value="{{actor.name}}"
+           placeholder="VEHICLE DESIGNATION"
+           {{#unless editable}}disabled{{/unless}} />
+
+    <div class="cwn-identity-row">
+      <label class="cwn-field-label">Class</label>
+      <input type="text" name="system.vehicleClass"
+             value="{{system.vehicleClass}}"
+             placeholder="Ground, Air, Space…"
+             {{#unless editable}}disabled{{/unless}} />
+
+      <label class="cwn-field-label">TL</label>
+      <input type="number" name="system.techLevel"
+             value="{{system.techLevel}}"
+             min="0" max="6"
+             {{#unless editable}}disabled{{/unless}} />
+
+      <label class="cwn-field-label">Speed</label>
+      <input type="text" name="system.speed"
+             value="{{system.speed}}"
+             placeholder="10"
+             {{#unless editable}}disabled{{/unless}} />
+    </div>
+
+    {{!-- Primary vitals row --}}
+    <div class="cwn-vitals">
+
+      {{!-- HP --}}
+      <div class="cwn-vital-group">
+        <div class="cwn-vital-label">HP</div>
+        <div class="cwn-resource-box">
+          <input type="number" name="system.health.value"
+                 value="{{system.health.value}}"
+                 class="cwn-resource-val"
+                 {{#unless editable}}disabled{{/unless}} />
+          <span class="cwn-resource-sep">/</span>
+          <input type="number" name="system.health.max"
+                 value="{{system.health.max}}"
+                 class="cwn-resource-max"
+                 {{#unless editable}}disabled{{/unless}} />
+        </div>
+        <div class="cwn-resource-bar">
+          <div class="cwn-resource-bar-fill hp-fill"
+               style="width:{{cwnPercent system.health.value system.health.max}}%"></div>
+        </div>
+      </div>
+
+      {{!-- AC --}}
+      <div class="cwn-vital-group cwn-ac-group">
+        <div class="cwn-vital-label">AC</div>
+        <input type="number" name="system.ac"
+               value="{{system.ac}}"
+               class="cwn-ac-value cwn-npc-stat-input"
+               {{#unless editable}}disabled{{/unless}} />
+      </div>
+
+      {{!-- Armor --}}
+      <div class="cwn-vital-group">
+        <div class="cwn-vital-label">Armor</div>
+        <input type="number" name="system.armor"
+               value="{{system.armor}}"
+               class="cwn-stat-badge cwn-npc-stat-input"
+               {{#unless editable}}disabled{{/unless}} />
+      </div>
+
+      {{!-- Crew --}}
+      <div class="cwn-vital-group">
+        <div class="cwn-vital-label">Crew</div>
+        <input type="text" name="system.crewMin"
+               value="{{system.crewMin}}"
+               class="cwn-stat-badge cwn-npc-stat-input"
+               placeholder="1"
+               {{#unless editable}}disabled{{/unless}} />
+      </div>
+
+    </div>{{!-- /.cwn-vitals --}}
+
+    {{!-- Power / Mass / Hardpoint bars --}}
+    <div class="cwn-vehicle-resource-bars">
+
+      <div class="cwn-veh-res-row">
+        <span class="cwn-veh-res-label"><i class="fas fa-bolt"></i> Power</span>
+        <div class="cwn-resource-bar cwn-veh-res-bar">
+          <div class="cwn-resource-bar-fill cwn-power-fill"
+               style="width:{{cwnPercent system.power.used system.power.max}}%"></div>
+        </div>
+        <div class="cwn-veh-res-values">
+          <input type="number" name="system.power.used"
+                 value="{{system.power.used}}"
+                 class="cwn-veh-res-input"
+                 {{#unless editable}}disabled{{/unless}} />
+          <span class="cwn-resource-sep">/</span>
+          <input type="number" name="system.power.max"
+                 value="{{system.power.max}}"
+                 class="cwn-veh-res-input"
+                 {{#unless editable}}disabled{{/unless}} />
+        </div>
+      </div>
+
+      <div class="cwn-veh-res-row">
+        <span class="cwn-veh-res-label"><i class="fas fa-weight-hanging"></i> Mass</span>
+        <div class="cwn-resource-bar cwn-veh-res-bar">
+          <div class="cwn-resource-bar-fill cwn-mass-fill"
+               style="width:{{cwnPercent system.mass.used system.mass.max}}%"></div>
+        </div>
+        <div class="cwn-veh-res-values">
+          <input type="number" name="system.mass.used"
+                 value="{{system.mass.used}}"
+                 class="cwn-veh-res-input"
+                 {{#unless editable}}disabled{{/unless}} />
+          <span class="cwn-resource-sep">/</span>
+          <input type="number" name="system.mass.max"
+                 value="{{system.mass.max}}"
+                 class="cwn-veh-res-input"
+                 {{#unless editable}}disabled{{/unless}} />
+        </div>
+      </div>
+
+      <div class="cwn-veh-res-row">
+        <span class="cwn-veh-res-label"><i class="fas fa-gun"></i> Hardpoints</span>
+        <div class="cwn-resource-bar cwn-veh-res-bar">
+          <div class="cwn-resource-bar-fill cwn-hardpoint-fill"
+               style="width:{{cwnPercent system.hardpoints.used system.hardpoints.max}}%"></div>
+        </div>
+        <div class="cwn-veh-res-values">
+          <input type="number" name="system.hardpoints.used"
+                 value="{{system.hardpoints.used}}"
+                 class="cwn-veh-res-input"
+                 {{#unless editable}}disabled{{/unless}} />
+          <span class="cwn-resource-sep">/</span>
+          <input type="number" name="system.hardpoints.max"
+                 value="{{system.hardpoints.max}}"
+                 class="cwn-veh-res-input"
+                 {{#unless editable}}disabled{{/unless}} />
+        </div>
+      </div>
+
+    </div>{{!-- /.cwn-vehicle-resource-bars --}}
+
+    {{!-- Action buttons --}}
+    <div class="cwn-header-actions">
+      <button type="button" data-action="addCrewMember" title="Add Crew (drop actor)">
+        <i class="fas fa-user-plus"></i> Crew
+      </button>
+      <button type="button" data-action="toggleLock" class="cwn-lock-btn" title="Toggle Edit Lock">
+        <i class="fas fa-lock lock-indicator"></i>
+      </button>
+    </div>
+
+  </div>{{!-- /.cwn-identity --}}
+
+  {{!-- Vehicle system ticker --}}
+  <div class="cwn-header-ticker-outer">
+    <div class="cwn-header-ticker">
+      <span>VEHICLE SYSTEMS ONLINE</span>
+      <span>POWER PLANT NOMINAL</span>
+      <span>HARDPOINTS: {{system.hardpoints.used}}/{{system.hardpoints.max}} ALLOCATED</span>
+      <span>MASS BUDGET: {{system.mass.used}}/{{system.mass.max}} USED</span>
+      <span>NAVIGATION SYSTEMS ACTIVE</span>
+      <span>VEHICLE SYSTEMS ONLINE</span>
+      <span>POWER PLANT NOMINAL</span>
+      <span>HARDPOINTS: {{system.hardpoints.used}}/{{system.hardpoints.max}} ALLOCATED</span>
+      <span>MASS BUDGET: {{system.mass.used}}/{{system.mass.max}} USED</span>
+      <span>NAVIGATION SYSTEMS ACTIVE</span>
+    </div>
+  </div>
+
+</div>{{!-- /.cwn-header --}}
+</div>{{!-- /.cwn-header-root --}}

@@ -1,0 +1,69 @@
+{{!-- ══════════════════════════════════════════════════════════════════════
+  CWN VEHICLE SHEET — cargo.hbs
+  Tab: gear and stowage
+════════════════════════════════════════════════════════════════════════ --}}
+<div class="cwn-tab tab" data-tab="{{tab.id}}" data-group="{{tab.group}}">
+
+  <div class="cwn-inventory-section">
+    <div class="cwn-section-toggle-header"
+         data-action="toggleSection"
+         data-section-key="veh-cargo">
+      <i class="fas fa-boxes-stacked"></i>
+      <span>Cargo &amp; Gear ({{gear.length}})</span>
+      {{#if editable}}
+      <a class="cwn-add-inline" data-action="createDoc" data-document-class="Item" data-type="item" title="Add Item">
+        <i class="fas fa-plus"></i>
+      </a>
+      {{/if}}
+      <i class="fas fa-chevron-down section-chevron"></i>
+    </div>
+    <div class="cwn-section-content" data-section-content="veh-cargo">
+      {{#if gear}}
+      <ol class="cwn-items-list items-list">
+        <li class="cwn-items-header">
+          <span class="col-img"></span>
+          <span class="col-name">Name</span>
+          <span class="col-rng">Enc</span>
+          <span class="col-controls"></span>
+        </li>
+        {{#each gear as |item|}}
+        <li class="cwn-item-row" data-item-id="{{item.id}}" data-document-class="Item" data-drag="true">
+          <img class="col-img cwn-item-img" src="{{item.img}}" alt="{{item.name}}" width="22" height="22" />
+          <span class="col-name cwn-item-name">
+            <a data-action="toggleItemDescription" title="Expand">{{item.name}}</a>
+          </span>
+          <span class="col-rng">{{item.system.encumbrance}}</span>
+          <div class="col-controls cwn-row-controls">
+            {{#if ../editable}}
+            <a data-action="viewDoc" title="Edit"><i class="fas fa-edit"></i></a>
+            <a data-action="deleteDoc" title="Delete"><i class="fas fa-trash"></i></a>
+            {{/if}}
+          </div>
+        </li>
+        {{#if item.system.enrichedDescription}}
+        <li class="item-description-row hidden" data-item-id="{{item.id}}">
+          <div class="cwn-item-desc">{{{item.system.enrichedDescription}}}</div>
+        </li>
+        {{/if}}
+        {{/each}}
+      </ol>
+      {{else}}
+      <p class="cwn-empty-hint">No cargo.</p>
+      {{/if}}
+    </div>
+  </div>
+
+  {{!-- Cargo capacity --}}
+  {{#if system.cargo}}
+  <div class="cwn-veh-cargo-info">
+    <i class="fas fa-box"></i>
+    <span class="cwn-veh-res-label">Cargo Capacity</span>
+    <div class="cwn-resource-bar" style="flex:1; margin:0 8px">
+      <div class="cwn-resource-bar-fill"
+           style="width:{{cwnPercent system.cargo.used system.cargo.max}}%"></div>
+    </div>
+    <span class="cwn-enc-val">{{system.cargo.used}}/{{system.cargo.max}} tons</span>
+  </div>
+  {{/if}}
+
+</div>{{!-- /.cwn-tab --}}

@@ -1,0 +1,98 @@
+{{!-- ══════════════════════════════════════════════════════════════════════
+  CWN NPC SHEET — notes.hbs
+  Tab: biography + left/right/public notes panels
+════════════════════════════════════════════════════════════════════════ --}}
+<div class="cwn-tab tab" data-tab="{{tab.id}}" data-group="{{tab.group}}">
+
+  {{!-- Biography / Main Description --}}
+  <div class="cwn-notes-section">
+    <div class="cwn-section-toggle-header"
+         data-action="toggleSection"
+         data-section-key="npc-biography">
+      <i class="fas fa-id-card"></i>
+      <span>Biography</span>
+      <i class="fas fa-chevron-down section-chevron"></i>
+    </div>
+    <div class="cwn-section-content" data-section-content="npc-biography">
+      <div class="cwn-editor-wrap">
+        {{#if editable}}
+        <textarea name="system.biography" class="cwn-bio-editor" rows="6">{{system.biography}}</textarea>
+        {{else}}
+        <div class="cwn-bio-rendered enriched-html">
+          {{{enrichedBiography}}}
+        </div>
+        {{/if}}
+      </div>
+    </div>
+  </div>
+
+  {{!-- Notes two-column layout --}}
+  <div class="cwn-notes-columns">
+
+    <div class="cwn-notes-section">
+      <div class="cwn-section-toggle-header"
+           data-action="toggleSection"
+           data-section-key="npc-notes-left">
+        <i class="fas fa-book-open"></i>
+        <span>GM Notes</span>
+        <i class="fas fa-chevron-down section-chevron"></i>
+      </div>
+      <div class="cwn-section-content" data-section-content="npc-notes-left">
+      <div class="cwn-editor-wrap">
+        {{#if editable}}
+        <textarea name="system.notes.left.contents" class="cwn-bio-editor" rows="6">{{system.notes.left.contents}}</textarea>
+        {{else}}
+        <div class="cwn-bio-rendered enriched-html">
+          {{{enrichedNotesLeft}}}
+        </div>
+        {{/if}}
+      </div>
+    </div>
+    </div>
+
+    <div class="cwn-notes-section">
+      <div class="cwn-section-toggle-header"
+           data-action="toggleSection"
+           data-section-key="npc-notes-right">
+        <i class="fas fa-scroll"></i>
+        <span>Tactics / Notes</span>
+        <i class="fas fa-chevron-down section-chevron"></i>
+      </div>
+      <div class="cwn-section-content" data-section-content="npc-notes-right">
+      <div class="cwn-editor-wrap">
+        {{#if editable}}
+        <textarea name="system.notes.right.contents" class="cwn-bio-editor" rows="6">{{system.notes.right.contents}}</textarea>
+        {{else}}
+        <div class="cwn-bio-rendered enriched-html">
+          {{{enrichedNotesRight}}}
+        </div>
+        {{/if}}
+      </div>
+    </div>
+    </div>
+
+  </div>{{!-- /.cwn-notes-columns --}}
+
+  {{!-- Public notes --}}
+  <div class="cwn-notes-section">
+    <div class="cwn-section-toggle-header"
+         data-action="toggleSection"
+         data-section-key="npc-notes-public">
+      <i class="fas fa-eye"></i>
+      <span>Public Info</span>
+      <i class="fas fa-chevron-down section-chevron"></i>
+    </div>
+    <div class="cwn-section-content" data-section-content="npc-notes-public">
+      <div class="cwn-editor-wrap">
+        {{#if editable}}
+        <textarea name="system.notes.public.contents" class="cwn-bio-editor" rows="6">{{system.notes.public.contents}}</textarea>
+        {{else}}
+        <div class="cwn-bio-rendered enriched-html">
+          {{{enrichedNotesPublic}}}
+        </div>
+        {{/if}}
+      </div>
+    </div>
+  </div>
+
+</div>{{!-- /.cwn-tab --}}

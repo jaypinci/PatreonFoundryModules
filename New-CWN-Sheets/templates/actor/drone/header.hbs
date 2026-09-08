@@ -1,0 +1,210 @@
+{{!-- ══════════════════════════════════════════════════════════════════════
+  CWN DRONE SHEET — header.hbs
+  Vendit-family aesthetic: model badge, pilot link, power/mass bars
+════════════════════════════════════════════════════════════════════════ --}}
+
+<div class="cwn-header-root cwn-drone-header-root">
+<div class="cwn-glow-blob-l"></div>
+<div class="cwn-glow-blob-r"></div>
+
+<div class="cwn-header sheet-header">
+
+  {{!-- Avatar --}}
+  <div class="cwn-avatar-wrap">
+    <img class="cwn-avatar"
+         src="{{actor.img}}"
+         alt="{{actor.name}}"
+         data-edit="img"
+         data-action="onEditImage"
+         title="Click to change portrait" />
+    <div class="cwn-avatar-overlay"><i class="fas fa-camera"></i></div>
+    {{!-- Model badge overlaid on avatar --}}
+    <div class="cwn-drone-model-badge" title="Drone Model: {{modelDisplay}}">
+      <i class="fas fa-microchip"></i>
+      <span>{{modelDisplay}}</span>
+    </div>
+  </div>
+
+  {{!-- Identity --}}
+  <div class="cwn-identity">
+    <input class="cwn-name-input"
+           type="text"
+           name="name"
+           value="{{actor.name}}"
+           placeholder="DRONE DESIGNATION"
+           {{#unless editable}}disabled{{/unless}} />
+
+    <div class="cwn-identity-row">
+      {{!-- Model selector --}}
+      <label class="cwn-field-label">Model</label>
+      <select name="system.model" {{#unless editable}}disabled{{/unless}}>
+        {{#each modelChoices as |label key|}}
+        <option value="{{key}}" {{cwnSelected ../system.model key}}>{{label}}</option>
+        {{/each}}
+      </select>
+
+      {{!-- Custom model name — only visible when model === 'custom' --}}
+      {{#if (cwnEq system.model "custom")}}
+      <label class="cwn-field-label">Name</label>
+      <input type="text" name="system.customModel"
+             value="{{system.customModel}}"
+             placeholder="Custom model name"
+             {{#unless editable}}disabled{{/unless}} />
+      {{/if}}
+
+      <label class="cwn-field-label">Move</label>
+      <select name="system.moveType" {{#unless editable}}disabled{{/unless}}>
+        <option value="ground"  {{cwnSelected system.moveType "ground"}}>Ground</option>
+        <option value="fly"     {{cwnSelected system.moveType "fly"}}>Fly</option>
+        <option value="aquatic" {{cwnSelected system.moveType "aquatic"}}>Aquatic</option>
+        <option value="space"   {{cwnSelected system.moveType "space"}}>Space</option>
+      </select>
+    </div>
+
+    {{!-- Vitals --}}
+    <div class="cwn-vitals">
+
+      {{!-- HP --}}
+      <div class="cwn-vital-group">
+        <div class="cwn-vital-label">HP</div>
+        <div class="cwn-resource-box">
+          <input type="number" name="system.health.value"
+                 value="{{system.health.value}}"
+                 class="cwn-resource-val"
+                 {{#unless editable}}disabled{{/unless}} />
+          <span class="cwn-resource-sep">/</span>
+          <input type="number" name="system.health.max"
+                 value="{{system.health.max}}"
+                 class="cwn-resource-max"
+                 {{#unless editable}}disabled{{/unless}} />
+        </div>
+        <div class="cwn-resource-bar">
+          <div class="cwn-resource-bar-fill hp-fill"
+               style="width:{{cwnPercent system.health.value system.health.max}}%"></div>
+        </div>
+      </div>
+
+      {{!-- AC --}}
+      <div class="cwn-vital-group cwn-ac-group">
+        <div class="cwn-vital-label">AC</div>
+        <input type="number" name="system.ac"
+               value="{{system.ac}}"
+               class="cwn-ac-value cwn-npc-stat-input"
+               {{#unless editable}}disabled{{/unless}} />
+      </div>
+
+      {{!-- Speed --}}
+      <div class="cwn-vital-group">
+        <div class="cwn-vital-label">Speed</div>
+        <input type="text" name="system.speed"
+               value="{{system.speed}}"
+               class="cwn-stat-badge cwn-npc-stat-input"
+               placeholder="10m"
+               {{#unless editable}}disabled{{/unless}} />
+      </div>
+
+      {{!-- Range --}}
+      <div class="cwn-vital-group">
+        <div class="cwn-vital-label">Range</div>
+        <input type="text" name="system.range"
+               value="{{system.range}}"
+               class="cwn-stat-badge cwn-npc-stat-input"
+               placeholder="100m"
+               {{#unless editable}}disabled{{/unless}} />
+      </div>
+
+    </div>{{!-- /.cwn-vitals --}}
+
+    {{!-- Power / Mass bars --}}
+    <div class="cwn-vehicle-resource-bars">
+
+      <div class="cwn-veh-res-row">
+        <span class="cwn-veh-res-label"><i class="fas fa-bolt"></i> Power</span>
+        <div class="cwn-resource-bar cwn-veh-res-bar">
+          <div class="cwn-resource-bar-fill cwn-power-fill"
+               style="width:{{cwnPercent system.power.used system.power.max}}%"></div>
+        </div>
+        <div class="cwn-veh-res-values">
+          <input type="number" name="system.power.used"
+                 value="{{system.power.used}}"
+                 class="cwn-veh-res-input"
+                 {{#unless editable}}disabled{{/unless}} />
+          <span class="cwn-resource-sep">/</span>
+          <input type="number" name="system.power.max"
+                 value="{{system.power.max}}"
+                 class="cwn-veh-res-input"
+                 {{#unless editable}}disabled{{/unless}} />
+        </div>
+      </div>
+
+      <div class="cwn-veh-res-row">
+        <span class="cwn-veh-res-label"><i class="fas fa-weight-hanging"></i> Mass</span>
+        <div class="cwn-resource-bar cwn-veh-res-bar">
+          <div class="cwn-resource-bar-fill cwn-mass-fill"
+               style="width:{{cwnPercent system.mass.used system.mass.max}}%"></div>
+        </div>
+        <div class="cwn-veh-res-values">
+          <input type="number" name="system.mass.used"
+                 value="{{system.mass.used}}"
+                 class="cwn-veh-res-input"
+                 {{#unless editable}}disabled{{/unless}} />
+          <span class="cwn-resource-sep">/</span>
+          <input type="number" name="system.mass.max"
+                 value="{{system.mass.max}}"
+                 class="cwn-veh-res-input"
+                 {{#unless editable}}disabled{{/unless}} />
+        </div>
+      </div>
+
+    </div>{{!-- /.cwn-vehicle-resource-bars --}}
+
+    {{!-- Pilot link --}}
+    <div class="cwn-drone-pilot-bar">
+      <i class="fas fa-user-astronaut"></i>
+      <span class="cwn-drone-pilot-label">Pilot:</span>
+      {{#if pilot}}
+      <img class="cwn-drone-pilot-img" src="{{pilot.img}}" alt="{{pilot.name}}" width="18" height="18" />
+      <a class="cwn-drone-pilot-name" data-action="openPilot" title="Open pilot sheet">{{pilot.name}}</a>
+      {{#if editable}}
+      <a class="cwn-drone-pilot-remove" data-action="removePilot" title="Unassign pilot">
+        <i class="fas fa-times"></i>
+      </a>
+      {{/if}}
+      {{else}}
+      <span class="cwn-empty-hint" style="margin:0">
+        None
+        {{#if editable}}— drop a Character/NPC to assign{{/if}}
+      </span>
+      {{/if}}
+    </div>
+
+    {{!-- Action buttons --}}
+    <div class="cwn-header-actions">
+      <button type="button" data-action="assignPilot" title="Assign pilot (drop actor)">
+        <i class="fas fa-user-astronaut"></i> Pilot
+      </button>
+      <button type="button" data-action="toggleLock" class="cwn-lock-btn" title="Toggle Edit Lock">
+        <i class="fas fa-lock lock-indicator"></i>
+      </button>
+    </div>
+
+  </div>{{!-- /.cwn-identity --}}
+
+  {{!-- Drone ticker --}}
+  <div class="cwn-header-ticker-outer">
+    <div class="cwn-header-ticker">
+      <span>DRONE UNIT ONLINE</span>
+      <span>MODEL: {{modelDisplay}}</span>
+      <span>AUTONOMOUS SYSTEMS NOMINAL</span>
+      <span>PILOT LINK: {{#if pilot}}{{pilot.name}}{{else}}UNLINKED{{/if}}</span>
+      <span>TELEMETRY ACTIVE</span>
+      <span>DRONE UNIT ONLINE</span>
+      <span>MODEL: {{modelDisplay}}</span>
+      <span>AUTONOMOUS SYSTEMS NOMINAL</span>
+      <span>PILOT LINK: {{#if pilot}}{{pilot.name}}{{else}}UNLINKED{{/if}}</span>
+      <span>TELEMETRY ACTIVE</span>
+    </div>
+  </div>
+
+</div>{{!-- /.cwn-header --}}
+</div>{{!-- /.cwn-header-root --}}

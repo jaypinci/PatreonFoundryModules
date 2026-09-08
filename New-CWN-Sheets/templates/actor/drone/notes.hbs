@@ -1,0 +1,49 @@
+{{!-- ══════════════════════════════════════════════════════════════════════
+  CWN DRONE SHEET — notes.hbs
+  Tab: description + mods
+════════════════════════════════════════════════════════════════════════ --}}
+<div class="cwn-tab tab" data-tab="{{tab.id}}" data-group="{{tab.group}}">
+
+  <div class="cwn-notes-section">
+    <div class="cwn-section-toggle-header"
+         data-action="toggleSection"
+         data-section-key="drone-description">
+      <i class="fas fa-book-open"></i>
+      <span>Description</span>
+      <i class="fas fa-chevron-down section-chevron"></i>
+    </div>
+    <div class="cwn-section-content" data-section-content="drone-description">
+      <div class="cwn-editor-wrap">
+        {{#if editable}}
+        <textarea name="system.description" class="cwn-bio-editor" rows="6">{{system.description}}</textarea>
+        {{else}}
+        <div class="cwn-bio-rendered enriched-html">
+          {{{enrichedDescription}}}
+        </div>
+        {{/if}}
+      </div>
+    </div>
+  </div>
+
+  <div class="cwn-notes-section">
+    <div class="cwn-section-toggle-header"
+         data-action="toggleSection"
+         data-section-key="drone-mods">
+      <i class="fas fa-screwdriver-wrench"></i>
+      <span>Modifications &amp; Notes</span>
+      <i class="fas fa-chevron-down section-chevron"></i>
+    </div>
+    <div class="cwn-section-content" data-section-content="drone-mods">
+      <div class="cwn-editor-wrap">
+        {{#if editable}}
+        <textarea name="system.mods" class="cwn-bio-editor" rows="6">{{system.mods}}</textarea>
+        {{else}}
+        <div class="cwn-bio-rendered enriched-html">
+          {{{enrichedMods}}}
+        </div>
+        {{/if}}
+      </div>
+    </div>
+  </div>
+
+</div>{{!-- /.cwn-tab --}}

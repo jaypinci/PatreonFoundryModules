@@ -1,0 +1,9 @@
+{{!-- ══════════════════════════════════════════════════════════════════════
+  Fragment: pool-badge.hbs
+  A small, circular or pill-shaped badge showing a pool value/percentage.
+════════════════════════════════════════════════════════════════════════ --}}
+<div class="cwn-pool-badge {{#if pool.isEmpty}}empty{{/if}} {{#if pool.isLow}}low{{/if}}"
+     title="{{group.resourceName}}: {{pool.subResource}} ({{pool.current}}/{{pool.max}})">
+  <div class="cwn-pool-badge-ring" style="--pool-pct: {{pool.percentage}}%"></div>
+  <span class="cwn-pool-badge-val">{{pool.current}}</span>
+</div>

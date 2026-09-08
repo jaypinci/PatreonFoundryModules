@@ -1,0 +1,94 @@
+{{!-- ══════════════════════════════════════════════════════════════════════
+  CWN CHARACTER SHEET — skills.hbs
+  Tab: skill list with rank badges and roll buttons
+════════════════════════════════════════════════════════════════════════ --}}
+<div class="cwn-tab tab" data-tab="{{tab.id}}" data-group="{{tab.group}}">
+
+  <div class="cwn-tab-header">
+    <h2 class="cwn-section-title"><i class="fas fa-graduation-cap"></i> Skills</h2>
+    {{#if editable}}
+    <div class="cwn-tab-controls">
+      <a class="cwn-add-btn"
+         data-action="addDefaultSkills"
+         title="Add all default CWN skills">
+        <i class="fas fa-list"></i> Add Defaults
+      </a>
+      <a class="cwn-add-btn"
+         data-action="createDoc"
+         data-document-class="Item"
+         data-type="skill"
+         title="Add Skill">
+        <i class="fas fa-plus"></i> Add Skill
+      </a>
+    </div>
+    {{/if}}
+  </div>
+
+  {{#if skills}}
+  <ol class="cwn-skills-list items-list">
+
+    {{!-- Unskilled Check (always available) --}}
+    <li class="cwn-skill-row cwn-unskilled-row" data-document-class="Item">
+      <button type="button"
+              class="cwn-skill-btn"
+              data-action="rollUnskilled"
+              title="Roll Unskilled (2d6-1)">
+        <span class="cwn-skill-name" style="font-style:italic; opacity:0.7;">Unskilled</span>
+        <span class="cwn-rank-badge rank--1">–1</span>
+      </button>
+      <span class="cwn-skill-source" style="opacity:0.5;">Basic</span>
+      {{#if ../editable}}
+      <div class="cwn-row-controls"></div>
+      {{/if}}
+    </li>
+    {{#each skills as |skill|}}
+    <li class="cwn-skill-row {{#if (cwnGt skill.system.rank 1)}}expert{{else if (cwnGt skill.system.rank 0)}}trained{{/if}}"
+        data-item-id="{{skill.id}}"
+        data-document-class="Item">
+
+      <button type="button"
+              class="cwn-skill-btn"
+              data-action="rollSkill"
+              data-item-id="{{skill.id}}"
+              title="Roll {{skill.name}}">
+        <span class="cwn-skill-name">{{skill.name}}</span>
+        <span class="cwn-rank-badge rank-{{skill.system.rank}}">
+          {{#if (cwnGt skill.system.rank -1)}}+{{skill.system.rank}}{{else}}–1{{/if}}
+        </span>
+      </button>
+
+      <span class="cwn-skill-source">{{skill.system.source}}</span>
+
+      {{#if ../editable}}
+      <div class="cwn-row-controls">
+        <a data-action="skillDown" data-item-id="{{skill.id}}" title="Decrease rank">
+          <i class="fas fa-arrow-down"></i>
+        </a>
+        <a data-action="skillUp" data-item-id="{{skill.id}}" title="Increase rank">
+          <i class="fas fa-arrow-up"></i>
+        </a>
+        <a data-action="viewDoc" data-item-id="{{skill.id}}" title="Edit">
+          <i class="fas fa-edit"></i>
+        </a>
+        <a data-action="deleteDoc" data-item-id="{{skill.id}}" title="Delete">
+          <i class="fas fa-trash"></i>
+        </a>
+      </div>
+      {{/if}}
+
+    </li>
+    {{/each}}
+  </ol>
+  {{else}}
+  <p class="cwn-empty-hint">No skills yet. Add skills from the compendium or click + Add Skill.</p>
+  {{/if}}
+
+  {{!-- Unspent skill points reminder --}}
+  {{#if system.unspentSkillPoints}}
+  <div class="cwn-notice">
+    <i class="fas fa-info-circle"></i>
+    Unspent Skill Points: <strong>{{system.unspentSkillPoints}}</strong>
+  </div>
+  {{/if}}
+
+</div>

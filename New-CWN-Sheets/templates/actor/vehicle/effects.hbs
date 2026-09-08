@@ -1,0 +1,87 @@
+{{!-- ══════════════════════════════════════════════════════════════════════
+  CWN VEHICLE SHEET — effects.hbs
+  Tab: active effects + status bar
+════════════════════════════════════════════════════════════════════════ --}}
+<div class="cwn-effects-root">
+<div class="cwn-tab tab" data-tab="{{tab.id}}" data-group="{{tab.group}}">
+
+  <div class="cwn-tab-header">
+    <h2 class="cwn-section-title"><i class="fas fa-star-half-stroke"></i> Active Effects</h2>
+    {{#if editable}}
+    <a class="cwn-add-btn" data-action="createEffect" title="Create Active Effect">
+      <i class="fas fa-plus"></i> Add Effect
+    </a>
+    {{/if}}
+  </div>
+
+  <div class="cwn-effects-section">
+    <div class="cwn-effects-category-header"><i class="fas fa-clock"></i> Temporary Effects</div>
+    <ol class="cwn-effects-list items-list">
+      {{#each effects.temporary as |effect|}}
+      <li class="cwn-effect-row {{#if effect.disabled}}disabled{{/if}}" data-effect-id="{{effect.id}}">
+        <img class="cwn-effect-icon" src="{{effect.img}}" alt="{{effect.name}}" width="20" height="20" />
+        <span class="cwn-effect-name">{{effect.name}}</span>
+        <span class="cwn-effect-src">{{effect.sourceName}}</span>
+        <div class="cwn-row-controls">
+          {{#if ../editable}}
+          <a data-action="toggleEffect" title="Toggle"><i class="fas {{#if effect.disabled}}fa-toggle-off{{else}}fa-toggle-on{{/if}}"></i></a>
+          <a data-action="viewEffect" title="Edit"><i class="fas fa-edit"></i></a>
+          <a data-action="deleteEffect" title="Delete"><i class="fas fa-trash"></i></a>
+          {{/if}}
+        </div>
+      </li>
+      {{else}}<li class="cwn-empty-hint">None</li>{{/each}}
+    </ol>
+  </div>
+
+  <div class="cwn-effects-section">
+    <div class="cwn-effects-category-header"><i class="fas fa-infinity"></i> Passive Effects</div>
+    <ol class="cwn-effects-list items-list">
+      {{#each effects.passive as |effect|}}
+      <li class="cwn-effect-row" data-effect-id="{{effect.id}}">
+        <img class="cwn-effect-icon" src="{{effect.img}}" alt="{{effect.name}}" width="20" height="20" />
+        <span class="cwn-effect-name">{{effect.name}}</span>
+        <span class="cwn-effect-src">{{effect.sourceName}}</span>
+        <div class="cwn-row-controls">
+          {{#if ../editable}}
+          <a data-action="viewEffect" title="Edit"><i class="fas fa-edit"></i></a>
+          <a data-action="deleteEffect" title="Delete"><i class="fas fa-trash"></i></a>
+          {{/if}}
+        </div>
+      </li>
+      {{else}}<li class="cwn-empty-hint">None</li>{{/each}}
+    </ol>
+  </div>
+
+  <div class="cwn-effects-section">
+    <div class="cwn-effects-category-header"><i class="fas fa-ban"></i> Inactive Effects</div>
+    <ol class="cwn-effects-list items-list">
+      {{#each effects.inactive as |effect|}}
+      <li class="cwn-effect-row disabled" data-effect-id="{{effect.id}}">
+        <img class="cwn-effect-icon" src="{{effect.img}}" alt="{{effect.name}}" width="20" height="20" />
+        <span class="cwn-effect-name">{{effect.name}}</span>
+        <span class="cwn-effect-src">{{effect.sourceName}}</span>
+        <div class="cwn-row-controls">
+          {{#if ../editable}}
+          <a data-action="toggleEffect" title="Enable"><i class="fas fa-toggle-off"></i></a>
+          <a data-action="viewEffect" title="Edit"><i class="fas fa-edit"></i></a>
+          <a data-action="deleteEffect" title="Delete"><i class="fas fa-trash"></i></a>
+          {{/if}}
+        </div>
+      </li>
+      {{else}}<li class="cwn-empty-hint">None</li>{{/each}}
+    </ol>
+  </div>
+
+</div>{{!-- /.cwn-tab --}}
+
+<div class="cwn-status-bar">
+  <span class="cwn-status-left">
+    <span class="cwn-status-dot"></span>
+    <span>VEHICLE SYSTEMS — ONLINE</span>
+  </span>
+  <span class="cwn-status-right">
+    {{system.vehicleClass}} · TL{{system.techLevel}}
+  </span>
+</div>
+</div>{{!-- /.cwn-effects-root --}}

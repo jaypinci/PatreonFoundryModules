@@ -1,0 +1,105 @@
+{{!-- ══════════════════════════════════════════════════════════════════════
+  CWN CHARACTER SHEET — features.hbs
+  Tab: features and edges (foci, edges, class features)
+════════════════════════════════════════════════════════════════════════ --}}
+<div class="cwn-tab tab" data-tab="{{tab.id}}" data-group="{{tab.group}}">
+
+  <div class="cwn-tab-header">
+    <h2 class="cwn-section-title"><i class="fas fa-star"></i> Features & Edges</h2>
+    {{#if editable}}
+    <a class="cwn-add-btn"
+       data-action="createDoc"
+       data-document-type="Item"
+       data-type="feature"
+       title="Create Feature">
+      <i class="fas fa-plus"></i> Add Feature
+    </a>
+    {{/if}}
+  </div>
+
+  {{!-- Favorites Bar --}}
+  {{#if hasFavorites}}
+  <div class="cwn-favorites-bar">
+    <div class="cwn-section-header cwn-collapsible" data-section="favorites">
+      <i class="fas fa-star cwn-star-icon"></i>
+      <span>Favorites</span>
+      <span class="cwn-collapse-indicator">▼</span>
+    </div>
+    <div class="cwn-favorites-content">
+      <ol class="cwn-items-list cwn-fav-list">
+        {{#each favorites as |item|}}
+        <li class="cwn-item-row cwn-fav-row" data-item-id="{{item.id}}">
+          <img class="col-img cwn-item-img" src="{{item.img}}" alt="{{item.name}}" width="22" height="22" />
+          <span class="col-name cwn-item-name" data-item-name="{{item.name}}">{{item.name}}</span>
+          <span class="cwn-item-type">{{item.type}}</span>
+          <div class="cwn-row-controls">
+            <a data-action="viewDoc" data-item-id="{{item.id}}" title="View">
+              <i class="fas fa-edit"></i>
+            </a>
+            <a class="cwn-star-btn cwn-star-active"
+               data-action="toggleFavorite"
+               data-item-id="{{item.id}}"
+               title="Remove from favorites">
+              <i class="fas fa-star"></i>
+            </a>
+          </div>
+        </li>
+        {{/each}}
+      </ol>
+    </div>
+  </div>
+  {{/if}}
+
+  {{!-- Features List --}}
+  <div class="cwn-features-section">
+    <ol class="cwn-items-list">
+      {{#each features as |feature|}}
+      <li class="cwn-item-row" data-item-id="{{feature.id}}" data-document-class="Item">
+        <img class="col-img cwn-item-img" src="{{feature.img}}" alt="{{feature.name}}" width="22" height="22" />
+        <div class="col-name">
+          <span class="cwn-item-name" data-item-name="{{feature.name}}" style="cursor:pointer" data-action="toggleItemDescription">{{feature.name}}</span>
+          {{#if feature.system.description}}
+          <a data-action="toggleItemDescription" title="Show/Hide Description">
+            <i class="fas fa-info-circle"></i>
+          </a>
+          {{/if}}
+        </div>
+        {{#if feature.system.source}}
+        <span class="cwn-item-source">{{feature.system.source}}</span>
+        {{/if}}
+        <div class="cwn-row-controls">
+          <a data-action="postToChat" data-item-id="{{feature.id}}" title="Post to chat">
+            <i class="fas fa-comment"></i>
+          </a>
+          {{#if ../editable}}
+          <a class="cwn-star-btn {{#if feature.isFavorite}}cwn-star-active{{/if}}"
+             data-action="toggleFavorite"
+             data-item-id="{{feature.id}}"
+             title="{{#if feature.isFavorite}}Remove from{{else}}Add to{{/if}} favorites">
+            <i class="fas {{#if feature.isFavorite}}fa-star{{else}}fa-regular fa-star{{/if}}"></i>
+          </a>
+          {{/if}}
+          <a data-action="viewDoc" data-item-id="{{feature.id}}" title="View/Edit">
+            <i class="fas fa-edit"></i>
+          </a>
+          {{#if ../editable}}
+          <a data-action="deleteDoc" data-item-id="{{feature.id}}" title="Delete">
+            <i class="fas fa-trash"></i>
+          </a>
+          {{/if}}
+        </div>
+      </li>
+      {{#if feature.system.description}}
+      <li class="item-description-row hidden" data-item-id="{{feature.id}}">
+        {{{feature.system.enrichedDescription}}}
+      </li>
+      {{/if}}
+      {{else}}
+      <li class="cwn-empty-hint">
+        <i class="fas fa-info-circle"></i> No features or edges. Click "Add Feature" to create class abilities, foci, or edges.
+      </li>
+      {{/each}}
+    </ol>
+  </div>
+
+</div>

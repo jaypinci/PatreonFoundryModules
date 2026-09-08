@@ -1,0 +1,177 @@
+{{!-- ══════════════════════════════════════════════════════════════════════
+  CWN ITEM SHEET — asset.hbs  (Faction asset)
+════════════════════════════════════════════════════════════════════════ --}}
+<div class="cwn-item-body">
+
+  <header class="cwn-item-header">
+    <img class="cwn-item-portrait"
+         src="{{item.img}}" alt="{{item.name}}"
+         data-edit="img" data-action="onEditImage" />
+    <div class="cwn-item-header-fields">
+      <input class="cwn-item-name-input" type="text"
+             name="name" value="{{item.name}}"
+             {{#unless editable}}disabled{{/unless}} />
+      <div class="cwn-item-meta-row">
+        <span class="cwn-meta-label">Category</span>
+        <select name="system.category" {{#unless editable}}disabled{{/unless}}>
+          {{#each assetCategories as |label key|}}
+          <option value="{{key}}" {{#if (cwnEq ../system.category key)}}selected{{/if}}>{{label}}</option>
+          {{/each}}
+        </select>
+        <span class="cwn-meta-label">Type</span>
+        <input type="text" name="system.type" value="{{system.type}}"
+               placeholder="e.g. Facility" style="width:100px"
+               {{#unless editable}}disabled{{/unless}} />
+      </div>
+    </div>
+  </header>
+
+  {{!-- ── Stats ─────────────────────────────────────────────────────────────── --}}
+  <section class="cwn-item-section">
+    <h3 class="cwn-section-title"><i class="fas fa-chart-bar"></i> Stats</h3>
+    <div class="cwn-form-grid cwn-form-grid-3">
+      <div class="cwn-form-field">
+        <label>Rating</label>
+        <input type="number" name="system.rating" value="{{system.rating}}"
+               min="1" {{#unless editable}}disabled{{/unless}} />
+      </div>
+      <div class="cwn-form-field">
+        <label>HP (current)</label>
+        <input type="number" name="system.health.value" value="{{system.health.value}}"
+               min="0" {{#unless editable}}disabled{{/unless}} />
+      </div>
+      <div class="cwn-form-field">
+        <label>HP (max)</label>
+        <input type="number" name="system.health.max" value="{{system.health.max}}"
+               min="0" {{#unless editable}}disabled{{/unless}} />
+      </div>
+      <div class="cwn-form-field">
+        <label>Tech Level</label>
+        <input type="number" name="system.tl" value="{{system.tl}}"
+               min="0" max="5" {{#unless editable}}disabled{{/unless}} />
+      </div>
+      <div class="cwn-form-field">
+        <label>Cost (FacCred)</label>
+        <input type="number" name="system.cost" value="{{system.cost}}"
+               min="0" {{#unless editable}}disabled{{/unless}} />
+      </div>
+      <div class="cwn-form-field">
+        <label>Income</label>
+        <input type="number" name="system.income" value="{{system.income}}"
+               {{#unless editable}}disabled{{/unless}} />
+      </div>
+      <div class="cwn-form-field">
+        <label>Maintenance</label>
+        <input type="number" name="system.maintenance" value="{{system.maintenance}}"
+               {{#unless editable}}disabled{{/unless}} />
+      </div>
+    </div>
+    <div class="cwn-flags-row">
+      <label class="cwn-checkbox-label">
+        <input type="checkbox" name="system.baseOfInfluence" {{#if system.baseOfInfluence}}checked{{/if}}
+               {{#unless editable}}disabled{{/unless}} />
+        Base of Influence
+      </label>
+      <label class="cwn-checkbox-label">
+        <input type="checkbox" name="system.stealthed" {{#if system.stealthed}}checked{{/if}}
+               {{#unless editable}}disabled{{/unless}} />
+        Stealthed
+      </label>
+      <label class="cwn-checkbox-label">
+        <input type="checkbox" name="system.unusable" {{#if system.unusable}}checked{{/if}}
+               {{#unless editable}}disabled{{/unless}} />
+        Unusable
+      </label>
+      <label class="cwn-checkbox-label">
+        <input type="checkbox" name="system.qualities.permission" {{#if system.qualities.permission}}checked{{/if}}
+               {{#unless editable}}disabled{{/unless}} />
+        Permission (P)
+      </label>
+      <label class="cwn-checkbox-label">
+        <input type="checkbox" name="system.qualities.action" {{#if system.qualities.action}}checked{{/if}}
+               {{#unless editable}}disabled{{/unless}} />
+        Action (A)
+      </label>
+      <label class="cwn-checkbox-label">
+        <input type="checkbox" name="system.qualities.special" {{#if system.qualities.special}}checked{{/if}}
+               {{#unless editable}}disabled{{/unless}} />
+        Special (S)
+      </label>
+    </div>
+  </section>
+
+  {{!-- ── Attack ───────────────────────────────────────────────────────────── --}}
+  <section class="cwn-item-section">
+    <h3 class="cwn-section-title"><i class="fas fa-crosshairs"></i> Attack</h3>
+    <div class="cwn-form-grid cwn-form-grid-3">
+      <div class="cwn-form-field">
+        <label>Attack Source</label>
+        <select name="system.attackSource" {{#unless editable}}disabled{{/unless}}>
+          <option value="" {{#unless system.attackSource}}selected{{/unless}}>—</option>
+          {{#each assetCategories as |label key|}}
+          <option value="{{key}}" {{#if (cwnEq ../system.attackSource key)}}selected{{/if}}>{{label}}</option>
+          {{/each}}
+        </select>
+      </div>
+      <div class="cwn-form-field">
+        <label>Attack Target</label>
+        <select name="system.attackTarget" {{#unless editable}}disabled{{/unless}}>
+          <option value="" {{#unless system.attackTarget}}selected{{/unless}}>—</option>
+          {{#each assetCategories as |label key|}}
+          <option value="{{key}}" {{#if (cwnEq ../system.attackTarget key)}}selected{{/if}}>{{label}}</option>
+          {{/each}}
+        </select>
+      </div>
+      <div class="cwn-form-field">
+        <label>Attack Damage</label>
+        <input type="text" name="system.attackDamage" value="{{system.attackDamage}}"
+               placeholder="e.g. 1d6" {{#unless editable}}disabled{{/unless}} />
+      </div>
+      <div class="cwn-form-field" style="grid-column:span 3">
+        <label>Attack Special</label>
+        <input type="text" name="system.attackSpecial" value="{{system.attackSpecial}}"
+               placeholder="Special effect on attack…"
+               {{#unless editable}}disabled{{/unless}} />
+      </div>
+      <div class="cwn-form-field" style="grid-column:span 3">
+        <label>Counter</label>
+        <input type="text" name="system.counter" value="{{system.counter}}"
+               placeholder="Counter ability…"
+               {{#unless editable}}disabled{{/unless}} />
+      </div>
+    </div>
+  </section>
+
+  {{!-- ── Rolls ────────────────────────────────────────────────────────────── --}}
+  <section class="cwn-item-section">
+    <h3 class="cwn-section-title"><i class="fas fa-dice"></i> Rolls</h3>
+    <div class="cwn-form-grid cwn-form-grid-2">
+      <div class="cwn-form-field">
+        <label>Turn Roll</label>
+        <input type="text" name="system.turnRoll" value="{{system.turnRoll}}"
+               placeholder="Roll each turn…"
+               {{#unless editable}}disabled{{/unless}} />
+      </div>
+      <div class="cwn-form-field">
+        <label>Location Roll</label>
+        <input type="text" name="system.locationRoll" value="{{system.locationRoll}}"
+               placeholder="Roll for location…"
+               {{#unless editable}}disabled{{/unless}} />
+      </div>
+      <div class="cwn-form-field" style="grid-column:span 2">
+        <label>Location</label>
+        <input type="text" name="system.location" value="{{system.location}}"
+               placeholder="Current location…"
+               {{#unless editable}}disabled{{/unless}} />
+      </div>
+    </div>
+  </section>
+
+  <section class="cwn-item-section cwn-item-description">
+    <h3 class="cwn-section-title"><i class="fas fa-book-open"></i> Description</h3>
+    <div class="cwn-editor-wrap">
+      <div class="cwn-desc-editor" data-field="system.description">{{{enrichedDescription}}}</div>
+    </div>
+  </section>
+
+</div>

@@ -1,0 +1,136 @@
+{{!-- ══════════════════════════════════════════════════════════════════════
+  CWN ITEM SHEET — armor.hbs
+════════════════════════════════════════════════════════════════════════ --}}
+<div class="cwn-item-body">
+
+  <header class="cwn-item-header">
+    <img class="cwn-item-portrait"
+         src="{{item.img}}" alt="{{item.name}}"
+         data-edit="img" data-action="onEditImage" />
+    <div class="cwn-item-header-fields">
+      <input class="cwn-item-name-input" type="text"
+             name="name" value="{{item.name}}"
+             {{#unless editable}}disabled{{/unless}} />
+      <div class="cwn-item-meta-row">
+        <span class="cwn-meta-label">Location</span>
+        <select name="system.location" {{#unless editable}}disabled{{/unless}}>
+          {{#each locations as |label key|}}
+          <option value="{{key}}" {{#if (cwnEq ../system.location key)}}selected{{/if}}>{{label}}</option>
+          {{/each}}
+        </select>
+        <span class="cwn-meta-label">Qty</span>
+        <input type="number" name="system.quantity" value="{{system.quantity}}" min="0"
+               style="width:52px" {{#unless editable}}disabled{{/unless}} />
+        <span class="cwn-meta-label">Enc</span>
+        <input type="number" name="system.encumbrance" value="{{system.encumbrance}}" min="0"
+               style="width:52px" {{#unless editable}}disabled{{/unless}} />
+      </div>
+    </div>
+  </header>
+
+  {{!-- ── AC block ────────────────────────────────────────────────────────── --}}
+  <section class="cwn-item-section">
+    <h3 class="cwn-section-title"><i class="fas fa-shield-halved"></i> Defense</h3>
+    <div class="cwn-form-grid cwn-form-grid-3">
+      <div class="cwn-form-field">
+        <label>AC</label>
+        <input type="number" name="system.ac" value="{{system.ac}}"
+               {{#unless editable}}disabled{{/unless}} />
+      </div>
+      <div class="cwn-form-field">
+        <label>Melee AC</label>
+        <input type="number" name="system.meleeAc" value="{{system.meleeAc}}"
+               placeholder="—" {{#unless editable}}disabled{{/unless}} />
+      </div>
+      <div class="cwn-form-field">
+        <label>Damage Reduction</label>
+        <input type="number" name="system.dr" value="{{system.dr}}"
+               min="0" {{#unless editable}}disabled{{/unless}} />
+      </div>
+      <div class="cwn-form-field">
+        <label>Soak (value)</label>
+        <input type="number" name="system.soak.value" value="{{system.soak.value}}"
+               min="0" {{#unless editable}}disabled{{/unless}} />
+      </div>
+      <div class="cwn-form-field">
+        <label>Soak (max)</label>
+        <input type="number" name="system.soak.max" value="{{system.soak.max}}"
+               min="0" {{#unless editable}}disabled{{/unless}} />
+      </div>
+      <div class="cwn-form-field">
+        <label>Trauma Penalty</label>
+        <input type="number" name="system.traumaDiePenalty" value="{{system.traumaDiePenalty}}"
+               {{#unless editable}}disabled{{/unless}} />
+      </div>
+    </div>
+
+    {{!-- Shield bonus fields --}}
+    <div class="cwn-form-grid cwn-form-grid-2">
+      <div class="cwn-form-field">
+        <label>Shield AC Bonus</label>
+        <input type="number" name="system.shieldACBonus" value="{{system.shieldACBonus}}"
+               placeholder="—" {{#unless editable}}disabled{{/unless}} />
+      </div>
+      <div class="cwn-form-field">
+        <label>Shield Melee AC Bonus</label>
+        <input type="number" name="system.shieldMeleeACBonus" value="{{system.shieldMeleeACBonus}}"
+               placeholder="—" {{#unless editable}}disabled{{/unless}} />
+      </div>
+    </div>
+
+    <div class="cwn-flags-row">
+      <label class="cwn-checkbox-label">
+        <input type="checkbox" name="system.shield" {{#if system.shield}}checked{{/if}}
+               {{#unless editable}}disabled{{/unless}} />
+        Shield
+      </label>
+      <label class="cwn-checkbox-label">
+        <input type="checkbox" name="system.use" {{#if system.use}}checked{{/if}}
+               {{#unless editable}}disabled{{/unless}} />
+        Equipped
+      </label>
+      <label class="cwn-checkbox-label">
+        <input type="checkbox" name="system.isSubtle" {{#if system.isSubtle}}checked{{/if}}
+               {{#unless editable}}disabled{{/unless}} />
+        Subtle
+      </label>
+      <label class="cwn-checkbox-label">
+        <input type="checkbox" name="system.isHeavy" {{#if system.isHeavy}}checked{{/if}}
+               {{#unless editable}}disabled{{/unless}} />
+        Heavy
+      </label>
+    </div>
+  </section>
+
+  {{!-- ── Cost / TL ──────────────────────────────────────────────────────── --}}
+  <section class="cwn-item-section">
+    <div class="cwn-form-grid cwn-form-grid-3">
+      <div class="cwn-form-field">
+        <label>Cost (cr)</label>
+        <input type="number" name="system.cost" value="{{system.cost}}"
+               min="0" {{#unless editable}}disabled{{/unless}} />
+      </div>
+      <div class="cwn-form-field">
+        <label>Tech Level</label>
+        <input type="number" name="system.tl" value="{{system.tl}}"
+               min="0" max="5" {{#unless editable}}disabled{{/unless}} />
+      </div>
+      <div class="cwn-form-field">
+        <label>Condition</label>
+        <select name="system.condition" {{#unless editable}}disabled{{/unless}}>
+          {{#each conditions as |label key|}}
+          <option value="{{key}}" {{#if (cwnEq ../system.condition key)}}selected{{/if}}>{{label}}</option>
+          {{/each}}
+        </select>
+      </div>
+    </div>
+  </section>
+
+  <section class="cwn-item-section cwn-item-description">
+    <h3 class="cwn-section-title"><i class="fas fa-book-open"></i> Description</h3>
+    <div class="cwn-editor-wrap">
+      <div class="cwn-desc-editor" data-field="system.description">{{{enrichedDescription}}}</div>
+    </div>
+  </section>
+
+</div>

@@ -1,0 +1,48 @@
+{{!-- ══════════════════════════════════════════════════════════════════════
+  Fragment: power-row.hbs
+  Used by powers.hbs via {{> partial}}
+  Context: power (item), editable (bool)
+════════════════════════════════════════════════════════════════════════ --}}
+<li class="cwn-item-row cwn-power-row"
+    data-item-id="{{power.id}}"
+    data-document-class="Item">
+
+  <img class="col-img cwn-item-img" src="{{power.img}}" alt="{{power.name}}" width="22" height="22" />
+
+  <div class="col-name">
+    <span class="cwn-item-name">{{power.name}}</span>
+    {{#if power.system.description}}
+    <a data-action="toggleItemDescription" data-item-id="{{power.id}}" title="Description">
+      <i class="fas fa-info-circle"></i>
+    </a>
+    {{/if}}
+  </div>
+
+  {{!-- Uses --}}
+  {{#if power.system.uses}}
+  <div class="cwn-power-uses">
+    <a data-action="removeUse" data-item-id="{{power.id}}" title="Use power">
+      <i class="fas fa-minus-circle"></i>
+    </a>
+    <span>{{power.system.uses.value}}/{{power.system.uses.max}}</span>
+    <a data-action="resetPowerUses" data-item-id="{{power.id}}" title="Reset uses">
+      <i class="fas fa-rotate-left"></i>
+    </a>
+  </div>
+  {{/if}}
+
+  <div class="col-controls cwn-row-controls">
+    <a data-action="roll" data-roll-type="item" data-item-id="{{power.id}}" title="Use {{power.name}}">
+      <i class="fas fa-bolt"></i>
+    </a>
+    {{#if editable}}
+    <a data-action="viewDoc" data-item-id="{{power.id}}" title="Edit">
+      <i class="fas fa-edit"></i>
+    </a>
+    <a data-action="deleteDoc" data-item-id="{{power.id}}" title="Delete">
+      <i class="fas fa-trash"></i>
+    </a>
+    {{/if}}
+  </div>
+
+</li>

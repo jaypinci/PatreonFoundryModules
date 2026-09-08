@@ -1,0 +1,75 @@
+{{!-- ══════════════════════════════════════════════════════════════════════
+  CWN ITEM SHEET — skill.hbs
+════════════════════════════════════════════════════════════════════════ --}}
+<div class="cwn-item-body">
+
+  <header class="cwn-item-header">
+    <img class="cwn-item-portrait"
+         src="{{item.img}}" alt="{{item.name}}"
+         data-edit="img" data-action="onEditImage" />
+    <div class="cwn-item-header-fields">
+      <input class="cwn-item-name-input" type="text"
+             name="name" value="{{item.name}}"
+             {{#unless editable}}disabled{{/unless}} />
+      <div class="cwn-item-meta-row">
+        <span class="cwn-meta-label">Source</span>
+        <input type="text" name="system.source" value="{{system.source}}"
+               placeholder="e.g. CWN Core" style="flex:1"
+               {{#unless editable}}disabled{{/unless}} />
+      </div>
+    </div>
+  </header>
+
+  <section class="cwn-item-section">
+    <h3 class="cwn-section-title"><i class="fas fa-graduation-cap"></i> Skill</h3>
+    <div class="cwn-form-grid cwn-form-grid-3">
+
+      <div class="cwn-form-field">
+        <label>Rank</label>
+        <input type="number" name="system.rank" value="{{system.rank}}"
+               min="-1" max="4" {{#unless editable}}disabled{{/unless}} />
+      </div>
+
+      <div class="cwn-form-field">
+        <label>Default Stat</label>
+        <select name="system.defaultStat" {{#unless editable}}disabled{{/unless}}>
+          <option value="ask" {{#if (cwnEq system.defaultStat "ask")}}selected{{/if}}>Ask</option>
+          {{#each stats as |label key|}}
+          <option value="{{key}}" {{#if (cwnEq ../system.defaultStat key)}}selected{{/if}}>{{label}}</option>
+          {{/each}}
+        </select>
+      </div>
+
+      <div class="cwn-form-field">
+        <label>Dice Pool</label>
+        <select name="system.pool" {{#unless editable}}disabled{{/unless}}>
+          {{#each poolOpts as |label key|}}
+          <option value="{{key}}" {{#if (cwnEq ../system.pool key)}}selected{{/if}}>{{label}}</option>
+          {{/each}}
+        </select>
+      </div>
+
+    </div>
+
+    <div class="cwn-flags-row">
+      <label class="cwn-checkbox-label">
+        <input type="checkbox" name="system.remember.use" {{#if system.remember.use}}checked{{/if}}
+               {{#unless editable}}disabled{{/unless}} />
+        Quick Roll (remember settings)
+      </label>
+      {{#if system.remember.use}}
+      <span class="cwn-meta-label" style="margin-left:12px">Saved Modifier</span>
+      <input type="number" name="system.remember.modifier" value="{{system.remember.modifier}}"
+             style="width:52px" {{#unless editable}}disabled{{/unless}} />
+      {{/if}}
+    </div>
+  </section>
+
+  <section class="cwn-item-section cwn-item-description">
+    <h3 class="cwn-section-title"><i class="fas fa-book-open"></i> Description</h3>
+    <div class="cwn-editor-wrap">
+      <div class="cwn-desc-editor" data-field="system.description">{{{enrichedDescription}}}</div>
+    </div>
+  </section>
+
+</div>

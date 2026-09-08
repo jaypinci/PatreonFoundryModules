@@ -1,0 +1,78 @@
+{{!-- ══════════════════════════════════════════════════════════════════════
+  CWN ITEM SHEET — program.hbs
+════════════════════════════════════════════════════════════════════════ --}}
+<div class="cwn-item-body">
+
+  <header class="cwn-item-header">
+    <img class="cwn-item-portrait"
+         src="{{item.img}}" alt="{{item.name}}"
+         data-edit="img" data-action="onEditImage" />
+    <div class="cwn-item-header-fields">
+      <input class="cwn-item-name-input" type="text"
+             name="name" value="{{item.name}}"
+             {{#unless editable}}disabled{{/unless}} />
+      <div class="cwn-item-meta-row">
+        <span class="cwn-meta-label">Type</span>
+        <select name="system.type" {{#unless editable}}disabled{{/unless}}>
+          {{#each programTypes as |label key|}}
+          <option value="{{key}}" {{#if (cwnEq ../system.type key)}}selected{{/if}}>{{label}}</option>
+          {{/each}}
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <section class="cwn-item-section">
+    <h3 class="cwn-section-title"><i class="fas fa-terminal"></i> Program Stats</h3>
+    <div class="cwn-form-grid cwn-form-grid-3">
+
+      <div class="cwn-form-field">
+        <label>Access Cost</label>
+        <input type="number" name="system.accessCost" value="{{system.accessCost}}"
+               min="0" {{#unless editable}}disabled{{/unless}} />
+      </div>
+
+      <div class="cwn-form-field">
+        <label>Cost (cr)</label>
+        <input type="number" name="system.cost" value="{{system.cost}}"
+               min="0" {{#unless editable}}disabled{{/unless}} />
+      </div>
+
+      <div class="cwn-form-field">
+        <label>Skill Check Mod</label>
+        <input type="number" name="system.skillCheckMod" value="{{system.skillCheckMod}}"
+               {{#unless editable}}disabled{{/unless}} />
+      </div>
+
+      <div class="cwn-form-field" style="grid-column:span 3">
+        <label>Target</label>
+        <input type="text" name="system.target" value="{{system.target}}"
+               placeholder="e.g. Security system, Camera…"
+               {{#unless editable}}disabled{{/unless}} />
+      </div>
+
+      <div class="cwn-form-field" style="grid-column:span 3">
+        <label>Use Affects</label>
+        <input type="text" name="system.useAffects" value="{{system.useAffects}}"
+               placeholder="What does using this program affect?"
+               {{#unless editable}}disabled{{/unless}} />
+      </div>
+
+    </div>
+    <div class="cwn-flags-row">
+      <label class="cwn-checkbox-label">
+        <input type="checkbox" name="system.selfTerminating" {{#if system.selfTerminating}}checked{{/if}}
+               {{#unless editable}}disabled{{/unless}} />
+        Self-Terminating
+      </label>
+    </div>
+  </section>
+
+  <section class="cwn-item-section cwn-item-description">
+    <h3 class="cwn-section-title"><i class="fas fa-book-open"></i> Description</h3>
+    <div class="cwn-editor-wrap">
+      <div class="cwn-desc-editor" data-field="system.description">{{{enrichedDescription}}}</div>
+    </div>
+  </section>
+
+</div>

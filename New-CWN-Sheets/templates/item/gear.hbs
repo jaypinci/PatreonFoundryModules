@@ -1,0 +1,132 @@
+{{!-- ══════════════════════════════════════════════════════════════════════
+  CWN ITEM SHEET — gear.hbs  (item type = "item")
+════════════════════════════════════════════════════════════════════════ --}}
+<div class="cwn-item-body">
+
+  <header class="cwn-item-header">
+    <img class="cwn-item-portrait"
+         src="{{item.img}}" alt="{{item.name}}"
+         data-edit="img" data-action="onEditImage" />
+    <div class="cwn-item-header-fields">
+      <input class="cwn-item-name-input" type="text"
+             name="name" value="{{item.name}}"
+             {{#unless editable}}disabled{{/unless}} />
+      <div class="cwn-item-meta-row">
+        <span class="cwn-meta-label">Location</span>
+        <select name="system.location" {{#unless editable}}disabled{{/unless}}>
+          {{#each locations as |label key|}}
+          <option value="{{key}}" {{#if (cwnEq ../system.location key)}}selected{{/if}}>{{label}}</option>
+          {{/each}}
+        </select>
+        <span class="cwn-meta-label">Qty</span>
+        <input type="number" name="system.quantity" value="{{system.quantity}}" min="0"
+               style="width:52px" {{#unless editable}}disabled{{/unless}} />
+        <span class="cwn-meta-label">Enc</span>
+        <input type="number" name="system.encumbrance" value="{{system.encumbrance}}" min="0"
+               style="width:52px" {{#unless editable}}disabled{{/unless}} />
+      </div>
+    </div>
+  </header>
+
+  {{!-- ── Uses ─────────────────────────────────────────────────────────────── --}}
+  <section class="cwn-item-section">
+    <h3 class="cwn-section-title"><i class="fas fa-battery-half"></i> Uses</h3>
+    <div class="cwn-form-grid cwn-form-grid-3">
+      <div class="cwn-form-field">
+        <label>Consumable</label>
+        <select name="system.uses.consumable" {{#unless editable}}disabled{{/unless}}>
+          {{#each consumableTypes as |label key|}}
+          <option value="{{key}}" {{#if (cwnEq ../system.uses.consumable key)}}selected{{/if}}>{{label}}</option>
+          {{/each}}
+        </select>
+      </div>
+      <div class="cwn-form-field">
+        <label>Uses (current)</label>
+        <input type="number" name="system.uses.value" value="{{system.uses.value}}"
+               min="0" {{#unless editable}}disabled{{/unless}} />
+      </div>
+      <div class="cwn-form-field">
+        <label>Uses (max)</label>
+        <input type="number" name="system.uses.max" value="{{system.uses.max}}"
+               min="0" {{#unless editable}}disabled{{/unless}} />
+      </div>
+      <div class="cwn-form-field">
+        <label>Ammo Type</label>
+        <select name="system.uses.ammo" {{#unless editable}}disabled{{/unless}}>
+          {{#each ammoTypes as |label key|}}
+          <option value="{{key}}" {{#if (cwnEq ../system.uses.ammo key)}}selected{{/if}}>{{label}}</option>
+          {{/each}}
+        </select>
+      </div>
+      <div class="cwn-form-field">
+        <label>Empty Qty</label>
+        <input type="number" name="system.uses.emptyQuantity" value="{{system.uses.emptyQuantity}}"
+               min="0" {{#unless editable}}disabled{{/unless}} />
+      </div>
+    </div>
+    <div class="cwn-flags-row">
+      <label class="cwn-checkbox-label">
+        <input type="checkbox" name="system.uses.keepEmpty" {{#if system.uses.keepEmpty}}checked{{/if}}
+               {{#unless editable}}disabled{{/unless}} />
+        Keep Empty
+      </label>
+    </div>
+  </section>
+
+  {{!-- ── Roll formula ─────────────────────────────────────────────────────── --}}
+  <section class="cwn-item-section">
+    <h3 class="cwn-section-title"><i class="fas fa-dice"></i> Roll Formula</h3>
+    <div class="cwn-form-grid cwn-form-grid-3">
+      <div class="cwn-form-field">
+        <label># Dice</label>
+        <input type="number" name="system.roll.diceNum" value="{{system.roll.diceNum}}"
+               min="0" placeholder="—" {{#unless editable}}disabled{{/unless}} />
+      </div>
+      <div class="cwn-form-field">
+        <label>Die Size</label>
+        <input type="text" name="system.roll.diceSize" value="{{system.roll.diceSize}}"
+               placeholder="d20" {{#unless editable}}disabled{{/unless}} />
+      </div>
+      <div class="cwn-form-field">
+        <label>Bonus</label>
+        <input type="text" name="system.roll.diceBonus" value="{{system.roll.diceBonus}}"
+               placeholder="+0" {{#unless editable}}disabled{{/unless}} />
+      </div>
+    </div>
+    {{#if system.formula}}
+    <p class="cwn-derived-hint">Computed: <code>{{system.formula}}</code></p>
+    {{/if}}
+  </section>
+
+  {{!-- ── Cost / TL ──────────────────────────────────────────────────────── --}}
+  <section class="cwn-item-section">
+    <div class="cwn-form-grid cwn-form-grid-3">
+      <div class="cwn-form-field">
+        <label>Cost (cr)</label>
+        <input type="number" name="system.cost" value="{{system.cost}}"
+               min="0" {{#unless editable}}disabled{{/unless}} />
+      </div>
+      <div class="cwn-form-field">
+        <label>Tech Level</label>
+        <input type="number" name="system.tl" value="{{system.tl}}"
+               min="0" max="5" {{#unless editable}}disabled{{/unless}} />
+      </div>
+      <div class="cwn-form-field">
+        <label>Condition</label>
+        <select name="system.condition" {{#unless editable}}disabled{{/unless}}>
+          {{#each conditions as |label key|}}
+          <option value="{{key}}" {{#if (cwnEq ../system.condition key)}}selected{{/if}}>{{label}}</option>
+          {{/each}}
+        </select>
+      </div>
+    </div>
+  </section>
+
+  <section class="cwn-item-section cwn-item-description">
+    <h3 class="cwn-section-title"><i class="fas fa-book-open"></i> Description</h3>
+    <div class="cwn-editor-wrap">
+      <div class="cwn-desc-editor" data-field="system.description">{{{enrichedDescription}}}</div>
+    </div>
+  </section>
+
+</div>

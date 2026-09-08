@@ -1,0 +1,200 @@
+{{!-- ══════════════════════════════════════════════════════════════════════
+  CWN CHARACTER SHEET — cyberdeck.hbs
+  Alternate "cyberdeck mode" overlay — toggled by the ghost button.
+  Reads deck setup from actor flag: New-CWN-Sheets.cyberdeckSetup
+  All interactive logic is handled by cwn-character-sheet.mjs.
+════════════════════════════════════════════════════════════════════════ --}}
+
+<div class="cwn-cyberdeck-panel">
+
+  {{!-- ── TOP BAR ──────────────────────────────────────────────────────── --}}
+  <div class="cdp-topbar">
+    <span class="cdp-topbar-title">
+      <svg class="cdp-ghost-icon-sm" viewBox="0 0 20 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M10 0C4.477 0 0 4.477 0 10v14l3-3 3 3 3-3 3 3 3-3 3 3V10C18 4.477 13.523 0 10 0z" fill="currentColor"/>
+        <circle cx="7" cy="9" r="2" fill="#020509"/>
+        <circle cx="13" cy="9" r="2" fill="#020509"/>
+      </svg>
+      {{#if cdp.handle}}{{cdp.handle}}{{else}}CYBERDECK{{/if}}
+    </span>
+    <span class="cdp-topbar-deckname">{{cdp.deckName}}</span>
+    <span class="cdp-topbar-actor">[{{actor.name}}]</span>
+
+    {{!-- Matrix status pill --}}
+    {{#if cdp.matrixActive}}
+    <span class="cdp-matrix-pill active">⬡ MATRIX ACTIVE{{#if cdp.matrixAlerted}} · 🚨 ALERTED{{/if}}</span>
+    {{else}}
+    <span class="cdp-matrix-pill">⬡ OFFLINE</span>
+    {{/if}}
+  </div>
+
+  {{!-- ── DECK STATS ROW ──────────────────────────────────────────────── --}}
+  <div class="cdp-stats-row">
+    <div class="cdp-stat">
+      <div class="cdp-stat-label">ACCESS POOL</div>
+      <div class="cdp-stat-val">{{#if cdp.deckBonusAccess}}Int+Prog+{{cdp.deckBonusAccess}}{{else}}Int+Prog{{/if}}</div>
+    </div>
+    <div class="cdp-stat">
+      <div class="cdp-stat-label">MEMORY</div>
+      <div class="cdp-stat-val">{{cdp.deckMemory}}</div>
+    </div>
+    <div class="cdp-stat">
+      <div class="cdp-stat-label">SHIELD</div>
+      <div class="cdp-stat-val">{{cdp.deckShielding}}</div>
+    </div>
+    <div class="cdp-stat">
+      <div class="cdp-stat-label">CPU</div>
+      <div class="cdp-stat-val">{{cdp.effectiveCpu}}</div>
+    </div>
+    <div class="cdp-stat">
+      <div class="cdp-stat-label">INT</div>
+      <div class="cdp-stat-val">{{cdp.intVal}} <span class="cdp-mod">({{cdp.intModStr}})</span></div>
+    </div>
+    <div class="cdp-stat">
+      <div class="cdp-stat-label">PROG</div>
+      <div class="cdp-stat-val">{{cdp.programSkill}}</div>
+    </div>
+    <div class="cdp-stat">
+      <div class="cdp-stat-label">HP</div>
+      <div class="cdp-stat-val">{{system.health.value}}/{{system.health.max}}</div>
+    </div>
+  </div>
+
+  {{!-- Deck description --}}
+  <div class="cdp-deck-desc">{{cdp.deckDesc}}</div>
+
+  {{!-- ── ACCESS PIP TRACKER ───────────────────────────────────────────── --}}
+  <div class="cdp-access-row">
+    <span class="cdp-access-label">ACCESS</span>
+    <div class="cdp-pips" data-cdp-pips>
+      {{#each cdp.accessPips as |pip|}}
+      <div class="cdp-pip {{#if pip.filled}}filled{{/if}}"
+           data-pip-index="{{pip.index}}"
+           data-action="cyberdeckPipClick"
+           title="Click to toggle Access"></div>
+      {{/each}}
+    </div>
+    <button type="button" class="cdp-reset-btn" data-action="cyberdeckResetAccess" title="Restore all Access">⟳</button>
+    <span class="cdp-access-count">{{cdp.accessCur}}/{{cdp.accessMax}}</span>
+  </div>
+
+  {{!-- ── PROGRAMS TABLE ───────────────────────────────────────────────── --}}
+  <div class="cdp-section-header">
+    <i class="fas fa-code"></i> PROGRAMS
+    <span class="cdp-mem-note {{#if cdp.memOverflow}}overflow{{/if}}">
+      ⬡ Memory: {{cdp.memUsed}}/{{cdp.deckMemory}}{{#if cdp.halfMemory}} (½/prog — Expert L2){{/if}}
+    </span>
+  </div>
+
+  <div class="cdp-programs-list">
+    <div class="cdp-prog-hdr">
+      <span>VERB</span><span>SUBJECT</span><span>COST</span><span>ROLL</span><span>RUN</span>
+    </div>
+
+    {{#each cdp.programSlots as |slot|}}
+    <div class="cdp-prog-row {{#if slot.isEmpty}}empty{{/if}} {{#if slot.isExtra}}extra{{/if}}"
+         data-slot-index="{{slot.index}}">
+
+      {{#if slot.isEmpty}}
+        <span class="cdp-prog-empty">— CPU slot {{slot.slotNum}} empty —</span>
+        <span></span><span></span><span></span>
+        <button type="button" class="cdp-prog-add" data-action="cyberdeckAddProgram" data-slot="{{slot.index}}">+</button>
+      {{else}}
+        <select class="cdp-sel cdp-verb-sel" data-slot="{{slot.index}}">
+          {{#each ../cdp.verbNames as |vname|}}
+          <option value="{{vname}}" {{#if (eq vname ../slot.verb)}}selected{{/if}}>{{vname}}</option>
+          {{/each}}
+        </select>
+        <select class="cdp-sel cdp-subject-sel" data-slot="{{slot.index}}">
+          {{#each ../cdp.subjectNames as |sname|}}
+          <option value="{{sname}}" {{#if (eq sname ../slot.subject)}}selected{{/if}}>{{sname}}</option>
+          {{/each}}
+        </select>
+        <span class="cdp-cost {{#if slot.isFree}}free{{/if}}">{{#if slot.isFree}}FREE{{else}}{{slot.cost}}▲{{/if}}</span>
+        <button type="button" class="cdp-roll-btn" data-action="cyberdeckRollProgram" data-slot="{{slot.index}}" title="Roll Int + Program">🎲</button>
+        <button type="button" class="cdp-run-btn"  data-action="cyberdeckRunProgram"  data-slot="{{slot.index}}" title="Run to chat">▶</button>
+      {{/if}}
+
+    </div>
+    {{/each}}
+
+  </div>
+
+  {{#if cdp.hasPrograms}}
+  <button type="button" class="cdp-remove-prog-btn" data-action="cyberdeckRemoveLastProgram">
+    ✕ Remove Last Program
+  </button>
+  {{/if}}
+
+  {{!-- ── QUICK SPEND ──────────────────────────────────────────────────── --}}
+  <div class="cdp-quick-row">
+    <span class="cdp-ql">QUICK SPEND</span>
+    <button type="button" class="cdp-spend-btn" data-action="cyberdeckSpendAccess" data-amount="1">−1 Access</button>
+    <button type="button" class="cdp-spend-btn" data-action="cyberdeckSpendAccess" data-amount="2">−2 Access</button>
+    <button type="button" class="cdp-spend-btn" data-action="cyberdeckSpendAccess" data-amount="3">−3 Access</button>
+  </div>
+
+  {{!-- ── REFERENCE LOOKUP ────────────────────────────────────────────── --}}
+  {{!-- Verb and subject data is embedded as JSON for client-side search.  --}}
+  {{!-- The search bars and result panel are wired in _onRender with no    --}}
+  {{!-- re-render required — everything updates instantly in the DOM.      --}}
+  <div class="cdp-ref-lookup"
+       data-verbs="{{cdp.verbsJson}}"
+       data-subjects="{{cdp.subjectsJson}}">
+
+    <div class="cdp-ref-search-row">
+      {{!-- Verb search --}}
+      <div class="cdp-ref-search-group">
+        <label class="cdp-ref-search-label">VERB LOOKUP</label>
+        <div class="cdp-ref-search-wrap">
+          <input type="text"
+                 class="cdp-ref-search cdp-verb-search"
+                 placeholder="e.g. Hijack, Blind…"
+                 autocomplete="off"
+                 spellcheck="false" />
+          <button type="button" class="cdp-ref-clear cdp-verb-clear" title="Clear">✕</button>
+        </div>
+        <div class="cdp-ref-suggestions cdp-verb-suggestions" style="display:none"></div>
+      </div>
+
+      {{!-- Subject search --}}
+      <div class="cdp-ref-search-group">
+        <label class="cdp-ref-search-label">SUBJECT LOOKUP</label>
+        <div class="cdp-ref-search-wrap">
+          <input type="text"
+                 class="cdp-ref-search cdp-subject-search"
+                 placeholder="e.g. Demon, Door…"
+                 autocomplete="off"
+                 spellcheck="false" />
+          <button type="button" class="cdp-ref-clear cdp-subject-clear" title="Clear">✕</button>
+        </div>
+        <div class="cdp-ref-suggestions cdp-subject-suggestions" style="display:none"></div>
+      </div>
+    </div>
+
+    {{!-- Result panel — hidden until a match is found --}}
+    <div class="cdp-ref-result" style="display:none">
+      <div class="cdp-ref-result-inner">
+        <div class="cdp-ref-result-badge"></div>
+        <div class="cdp-ref-result-body">
+          <div class="cdp-ref-result-name"></div>
+          <div class="cdp-ref-result-meta"></div>
+          <div class="cdp-ref-result-desc"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  {{!-- ── SAVE / LOAD BAR ─────────────────────────────────────────────── --}}
+  <div class="cdp-saveload-row">
+    <button type="button" class="cdp-save-btn"  data-action="cyberdeckSave"  title="Save deck setup to character">💾 Save to Character</button>
+    <button type="button" class="cdp-load-btn"  data-action="cyberdeckLoad"  title="Load deck setup from character">📂 Load from Character</button>
+    <select class="cdp-deck-sel cdp-sel" id="cdp-deck-selector">
+      {{#each cdp.deckNames as |dn|}}
+      <option value="{{dn}}" {{#if (eq dn ../cdp.deckName)}}selected{{/if}}>{{dn}}</option>
+      {{/each}}
+    </select>
+  </div>
+
+</div>{{!-- /.cwn-cyberdeck-panel --}}

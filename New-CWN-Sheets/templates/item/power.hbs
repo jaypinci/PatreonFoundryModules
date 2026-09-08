@@ -1,0 +1,192 @@
+{{!-- ══════════════════════════════════════════════════════════════════════
+  CWN ITEM SHEET — power.hbs
+════════════════════════════════════════════════════════════════════════ --}}
+<div class="cwn-item-body">
+
+  <header class="cwn-item-header">
+    <img class="cwn-item-portrait"
+         src="{{item.img}}" alt="{{item.name}}"
+         data-edit="img" data-action="onEditImage" />
+    <div class="cwn-item-header-fields">
+      <input class="cwn-item-name-input" type="text"
+             name="name" value="{{item.name}}"
+             {{#unless editable}}disabled{{/unless}} />
+      <div class="cwn-item-meta-row">
+        <span class="cwn-meta-label">Type</span>
+        <select name="system.subType" {{#unless editable}}disabled{{/unless}}>
+          {{#each powerSubTypes as |label key|}}
+          <option value="{{key}}" {{#if (cwnEq ../system.subType key)}}selected{{/if}}>{{label}}</option>
+          {{/each}}
+        </select>
+        <span class="cwn-meta-label">Level</span>
+        <input type="number" name="system.level" value="{{system.level}}"
+               min="0" style="width:52px" {{#unless editable}}disabled{{/unless}} />
+      </div>
+    </div>
+  </header>
+
+  {{!-- ── Power stats ─────────────────────────────────────────────────────── --}}
+  <section class="cwn-item-section">
+    <h3 class="cwn-section-title"><i class="fas fa-bolt"></i> Details</h3>
+    <div class="cwn-form-grid cwn-form-grid-3">
+      <div class="cwn-form-field">
+        <label>Source</label>
+        <input type="text" name="system.source" value="{{system.source}}"
+               placeholder="e.g. Psychic Tradition"
+               {{#unless editable}}disabled{{/unless}} />
+      </div>
+      <div class="cwn-form-field">
+        <label>Roll</label>
+        <input type="text" name="system.roll" value="{{system.roll}}"
+               placeholder="e.g. 2d6+@stats.int.mod"
+               {{#unless editable}}disabled{{/unless}} />
+      </div>
+      <div class="cwn-form-field">
+        <label>Save</label>
+        <select name="system.save" {{#unless editable}}disabled{{/unless}}>
+          <option value="" {{#unless system.save}}selected{{/unless}}>—</option>
+          {{#each saveTypes as |label key|}}
+          <option value="{{key}}" {{#if (cwnEq ../system.save key)}}selected{{/if}}>{{label}}</option>
+          {{/each}}
+        </select>
+      </div>
+      <div class="cwn-form-field">
+        <label>Duration</label>
+        <input type="text" name="system.duration" value="{{system.duration}}"
+               placeholder="e.g. 1 hour"
+               {{#unless editable}}disabled{{/unless}} />
+      </div>
+      <div class="cwn-form-field">
+        <label>Range</label>
+        <input type="text" name="system.range" value="{{system.range}}"
+               placeholder="e.g. 100m"
+               {{#unless editable}}disabled{{/unless}} />
+      </div>
+      <div class="cwn-form-field">
+        <label>Skill</label>
+        <input type="text" name="system.skill" value="{{system.skill}}"
+               placeholder="e.g. Telekinesis"
+               {{#unless editable}}disabled{{/unless}} />
+      </div>
+    </div>
+    <div class="cwn-flags-row">
+      <label class="cwn-checkbox-label">
+        <input type="checkbox" name="system.prepared" {{#if system.prepared}}checked{{/if}}
+               {{#unless editable}}disabled{{/unless}} />
+        Prepared
+      </label>
+    </div>
+  </section>
+
+  {{!-- ── Consumptions ─────────────────────────────────────────────────────── --}}
+  <section class="cwn-item-section">
+    <h3 class="cwn-section-title">
+      <i class="fas fa-fire"></i> Resource Costs
+      {{#if editable}}
+      <a class="cwn-add-inline" data-action="addConsumption" title="Add cost">
+        <i class="fas fa-plus"></i>
+      </a>
+      {{/if}}
+    </h3>
+
+    {{#if indexedConsumptions.length}}
+    <div class="cwn-consumptions-list">
+      {{#each indexedConsumptions as |c|}}
+      <div class="cwn-consumption-row">
+        <div class="cwn-form-grid cwn-form-grid-3" style="flex:1">
+          <div class="cwn-form-field">
+            <label>Type</label>
+            <select name="system.consumptions.{{c._index}}.type"
+                    {{#unless ../editable}}disabled{{/unless}}>
+              {{#each ../consumptionTypes as |label key|}}
+              <option value="{{key}}" {{#if (cwnEq ../../c.type key)}}selected{{/if}}>{{label}}</option>
+              {{/each}}
+            </select>
+          </div>
+          <div class="cwn-form-field">
+            <label>Timing</label>
+            <select name="system.consumptions.{{c._index}}.timing"
+                    {{#unless ../editable}}disabled{{/unless}}>
+              {{#each ../consumptionTiming as |label key|}}
+              <option value="{{key}}" {{#if (cwnEq ../../c.timing key)}}selected{{/if}}>{{label}}</option>
+              {{/each}}
+            </select>
+          </div>
+          <div class="cwn-form-field">
+            <label>Cost</label>
+            <input type="number" name="system.consumptions.{{c._index}}.usesCost"
+                   value="{{c.usesCost}}" min="0"
+                   {{#unless ../editable}}disabled{{/unless}} />
+          </div>
+          {{#if (cwnEq c.type "poolResource")}}
+          <div class="cwn-form-field">
+            <label>Resource</label>
+            <select name="system.consumptions.{{c._index}}.resourceName"
+                    {{#unless ../editable}}disabled{{/unless}}>
+              <option value="" {{#unless c.resourceName}}selected{{/unless}}>—</option>
+              {{#each ../poolResources as |label key|}}
+              <option value="{{key}}" {{#if (cwnEq ../../c.resourceName key)}}selected{{/if}}>{{label}}</option>
+              {{/each}}
+            </select>
+          </div>
+          <div class="cwn-form-field">
+            <label>Sub-Resource</label>
+            <input type="text" name="system.consumptions.{{c._index}}.subResource"
+                   value="{{c.subResource}}" placeholder="e.g. Psychic"
+                   {{#unless ../editable}}disabled{{/unless}} />
+          </div>
+          <div class="cwn-form-field">
+            <label>Cadence</label>
+            <select name="system.consumptions.{{c._index}}.cadence"
+                    {{#unless ../editable}}disabled{{/unless}}>
+              {{#each ../poolCadences as |label key|}}
+              <option value="{{key}}" {{#if (cwnEq ../../c.cadence key)}}selected{{/if}}>{{label}}</option>
+              {{/each}}
+            </select>
+          </div>
+          {{/if}}
+          {{#if (cwnEq c.type "uses")}}
+          <div class="cwn-form-field">
+            <label>Uses (current)</label>
+            <input type="number" name="system.consumptions.{{c._index}}.uses.value"
+                   value="{{c.uses.value}}" min="0"
+                   {{#unless ../editable}}disabled{{/unless}} />
+          </div>
+          <div class="cwn-form-field">
+            <label>Uses (max)</label>
+            <input type="number" name="system.consumptions.{{c._index}}.uses.max"
+                   value="{{c.uses.max}}" min="0"
+                   {{#unless ../editable}}disabled{{/unless}} />
+          </div>
+          {{/if}}
+          {{#if (cwnEq c.type "consumableItem")}}
+          <div class="cwn-form-field" style="grid-column:span 2">
+            <label>Item Description</label>
+            <input type="text" name="system.consumptions.{{c._index}}.itemText"
+                   value="{{c.itemText}}" placeholder="e.g. one ampule of stims"
+                   {{#unless ../editable}}disabled{{/unless}} />
+          </div>
+          {{/if}}
+        </div>
+        {{#if ../editable}}
+        <a class="cwn-remove-btn" data-action="removeConsumption"
+           data-consumption-index="{{c._index}}" title="Remove cost">
+          <i class="fas fa-trash"></i>
+        </a>
+        {{/if}}
+      </div>
+      {{/each}}
+    </div>
+    {{else}}
+    <p class="cwn-empty-hint">No resource costs. Click <i class="fas fa-plus"></i> to add one.</p>
+    {{/if}}
+  </section>
+
+  <section class="cwn-item-section cwn-item-description">
+    <h3 class="cwn-section-title"><i class="fas fa-book-open"></i> Description</h3>
+    <div class="cwn-editor-wrap">
+      <div class="cwn-desc-editor" data-field="system.description">{{{enrichedDescription}}}</div>
+    </div>
+  </section>
+
+</div>

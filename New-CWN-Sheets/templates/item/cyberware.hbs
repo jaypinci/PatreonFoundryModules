@@ -1,0 +1,88 @@
+{{!-- ══════════════════════════════════════════════════════════════════════
+  CWN ITEM SHEET — cyberware.hbs
+════════════════════════════════════════════════════════════════════════ --}}
+<div class="cwn-item-body">
+
+  <header class="cwn-item-header">
+    <img class="cwn-item-portrait"
+         src="{{item.img}}" alt="{{item.name}}"
+         data-edit="img" data-action="onEditImage" />
+    <div class="cwn-item-header-fields">
+      <input class="cwn-item-name-input" type="text"
+             name="name" value="{{item.name}}"
+             {{#unless editable}}disabled{{/unless}} />
+      <div class="cwn-item-meta-row">
+        <span class="cwn-meta-label">Location</span>
+        <select name="system.type" {{#unless editable}}disabled{{/unless}}>
+          {{#each cyberTypes as |label key|}}
+          <option value="{{key}}" {{#if (cwnEq ../system.type key)}}selected{{/if}}>{{label}}</option>
+          {{/each}}
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <section class="cwn-item-section">
+    <h3 class="cwn-section-title"><i class="fas fa-microchip"></i> Cyberware</h3>
+    <div class="cwn-form-grid cwn-form-grid-3">
+
+      <div class="cwn-form-field">
+        <label>Strain</label>
+        <input type="number" name="system.strain" value="{{system.strain}}"
+               {{#unless editable}}disabled{{/unless}} />
+      </div>
+
+      <div class="cwn-form-field">
+        <label>Tech Level</label>
+        <input type="number" name="system.tl" value="{{system.tl}}"
+               min="0" max="5" {{#unless editable}}disabled{{/unless}} />
+      </div>
+
+      <div class="cwn-form-field">
+        <label>Cost (cr)</label>
+        <input type="number" name="system.cost" value="{{system.cost}}"
+               min="0" {{#unless editable}}disabled{{/unless}} />
+      </div>
+
+      <div class="cwn-form-field">
+        <label>Concealment</label>
+        <select name="system.concealment" {{#unless editable}}disabled{{/unless}}>
+          {{#each concealmentTypes as |label key|}}
+          <option value="{{key}}" {{#if (cwnEq ../system.concealment key)}}selected{{/if}}>{{label}}</option>
+          {{/each}}
+        </select>
+      </div>
+
+      <div class="cwn-form-field" style="grid-column:span 2">
+        <label>Effect</label>
+        <input type="text" name="system.effect" value="{{system.effect}}"
+               placeholder="Mechanical effect summary…"
+               {{#unless editable}}disabled{{/unless}} />
+      </div>
+
+    </div>
+
+    <div class="cwn-form-field" style="margin-top:8px">
+      <label>Complication</label>
+      <input type="text" name="system.complication" value="{{system.complication}}"
+             placeholder="Optional complication…"
+             {{#unless editable}}disabled{{/unless}} />
+    </div>
+
+    <div class="cwn-flags-row" style="margin-top:10px">
+      <label class="cwn-checkbox-label">
+        <input type="checkbox" name="system.disabled" {{#if system.disabled}}checked{{/if}}
+               {{#unless editable}}disabled{{/unless}} />
+        Disabled
+      </label>
+    </div>
+  </section>
+
+  <section class="cwn-item-section cwn-item-description">
+    <h3 class="cwn-section-title"><i class="fas fa-book-open"></i> Description</h3>
+    <div class="cwn-editor-wrap">
+      <div class="cwn-desc-editor" data-field="system.description">{{{enrichedDescription}}}</div>
+    </div>
+  </section>
+
+</div>

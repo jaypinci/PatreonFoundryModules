@@ -1,0 +1,60 @@
+{{!-- ══════════════════════════════════════════════════════════════════════
+  CWN CHAT CARD — item-card.hbs
+  Displays item info when posted to chat
+════════════════════════════════════════════════════════════════════════ --}}
+<div class="cwn-chat-card item-card">
+  <header class="card-header flexrow">
+    <img src="{{item.img}}" title="{{item.name}}" width="36" height="36"/>
+    <h3 class="item-name">{{item.name}}</h3>
+  </header>
+
+  <div class="card-content">
+    {{#if item.system.description}}
+    <div class="item-description">
+      {{{item.system.description}}}
+    </div>
+    {{/if}}
+
+    {{#if (eq item.type 'weapon')}}
+    <div class="item-stats flexrow">
+      <span class="stat"><i class="fas fa-crosshairs"></i> {{item.system.damage}}</span>
+      {{#if item.system.shock}}<span class="stat"><i class="fas fa-bolt"></i> Shock: {{item.system.shock.damage}} vs AC ≤ {{item.system.shock.ac}}</span>{{/if}}
+      {{#if item.system.ammo}}<span class="stat"><i class="fas fa-box-archive"></i> Ammo: {{item.system.ammo.current}}/{{item.system.ammo.max}}</span>{{/if}}
+    </div>
+    {{/if}}
+
+    {{#if (eq item.type 'armor')}}
+    <div class="item-stats flexrow">
+      <span class="stat"><i class="fas fa-shield-halved"></i> AC {{item.system.ac}}</span>
+      {{#if item.system.traumaDie}}<span class="stat"><i class="fas fa-heart-pulse"></i> Trauma: {{item.system.traumaDie}}</span>{{/if}}
+    </div>
+    {{/if}}
+
+    {{#if (eq item.type 'skill')}}
+    <div class="item-stats flexrow">
+      <span class="stat"><i class="fas fa-graduation-cap"></i> Rank: +{{item.system.rank}}</span>
+      {{#if item.system.source}}<span class="stat">Source: {{item.system.source}}</span>{{/if}}
+    </div>
+    {{/if}}
+
+    {{#if (eq item.type 'feature')}}
+    {{#if item.system.source}}<div class="item-source">Source: {{item.system.source}}</div>{{/if}}
+    {{/if}}
+
+    {{#if item.system.cost}}
+    <div class="item-cost"><i class="fas fa-coins"></i> {{item.system.cost}} CR</div>
+    {{/if}}
+
+    {{#if item.system.encumbrance}}
+    <div class="item-enc"><i class="fas fa-weight-hanging"></i> {{item.system.encumbrance}}</div>
+    {{/if}}
+  </div>
+
+  {{#if item.system.effects}}
+  <div class="card-footer">
+    {{#each item.system.effects as |effect|}}
+    <span class="tag">{{effect}}</span>
+    {{/each}}
+  </div>
+  {{/if}}
+</div>

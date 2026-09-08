@@ -1,0 +1,226 @@
+{{!-- ══════════════════════════════════════════════════════════════════════
+  CWN ITEM SHEET — weapon.hbs
+════════════════════════════════════════════════════════════════════════ --}}
+<div class="cwn-item-body">
+
+  {{!-- Header --}}
+  <header class="cwn-item-header">
+    <img class="cwn-item-portrait"
+         src="{{item.img}}" alt="{{item.name}}"
+         data-edit="img" data-action="onEditImage" />
+    <div class="cwn-item-header-fields">
+      <input class="cwn-item-name-input" type="text"
+             name="name" value="{{item.name}}"
+             {{#unless editable}}disabled{{/unless}} />
+      <div class="cwn-item-meta-row">
+        <span class="cwn-meta-label">Location</span>
+        <select name="system.location" {{#unless editable}}disabled{{/unless}}>
+          {{#each locations as |label key|}}
+          <option value="{{key}}" {{#if (cwnEq ../system.location key)}}selected{{/if}}>{{label}}</option>
+          {{/each}}
+        </select>
+        <span class="cwn-meta-label">Qty</span>
+        <input type="number" name="system.quantity" value="{{system.quantity}}" min="0"
+               style="width:52px" {{#unless editable}}disabled{{/unless}} />
+        <span class="cwn-meta-label">Enc</span>
+        <input type="number" name="system.encumbrance" value="{{system.encumbrance}}" min="0"
+               style="width:52px" {{#unless editable}}disabled{{/unless}} />
+      </div>
+    </div>
+  </header>
+
+  {{!-- ── Core attack stats ──────────────────────────────────────────────── --}}
+  <section class="cwn-item-section">
+    <h3 class="cwn-section-title"><i class="fas fa-crosshairs"></i> Attack</h3>
+    <div class="cwn-form-grid cwn-form-grid-3">
+
+      <div class="cwn-form-field">
+        <label>Damage</label>
+        <input type="text" name="system.damage" value="{{system.damage}}"
+               placeholder="1d6" {{#unless editable}}disabled{{/unless}} />
+      </div>
+
+      <div class="cwn-form-field">
+        <label>Attack Bonus</label>
+        <input type="number" name="system.ab" value="{{system.ab}}"
+               {{#unless editable}}disabled{{/unless}} />
+      </div>
+
+      <div class="cwn-form-field">
+        <label>Stat</label>
+        <select name="system.stat" {{#unless editable}}disabled{{/unless}}>
+          <option value="ask" {{#if (cwnEq system.stat "ask")}}selected{{/if}}>Ask</option>
+          {{#each stats as |label key|}}
+          <option value="{{key}}" {{#if (cwnEq ../system.stat key)}}selected{{/if}}>{{label}}</option>
+          {{/each}}
+        </select>
+      </div>
+
+      <div class="cwn-form-field">
+        <label>Skill</label>
+        <input type="text" name="system.skill" value="{{system.skill}}"
+               placeholder="ask" {{#unless editable}}disabled{{/unless}} />
+      </div>
+
+      <div class="cwn-form-field">
+        <label>Range (Normal)</label>
+        <input type="number" name="system.range.normal" value="{{system.range.normal}}"
+               {{#unless editable}}disabled{{/unless}} />
+      </div>
+
+      <div class="cwn-form-field">
+        <label>Range (Max)</label>
+        <input type="number" name="system.range.max" value="{{system.range.max}}"
+               {{#unless editable}}disabled{{/unless}} />
+      </div>
+
+    </div>
+
+    {{!-- Flags row --}}
+    <div class="cwn-flags-row">
+      <label class="cwn-checkbox-label">
+        <input type="checkbox" name="system.isMelee" {{#if system.isMelee}}checked{{/if}}
+               {{#unless editable}}disabled{{/unless}} />
+        Melee
+      </label>
+      <label class="cwn-checkbox-label">
+        <input type="checkbox" name="system.isTwoHanded" {{#if system.isTwoHanded}}checked{{/if}}
+               {{#unless editable}}disabled{{/unless}} />
+        Two-Handed
+      </label>
+      <label class="cwn-checkbox-label">
+        <input type="checkbox" name="system.isNonLethal" {{#if system.isNonLethal}}checked{{/if}}
+               {{#unless editable}}disabled{{/unless}} />
+        Non-Lethal
+      </label>
+      <label class="cwn-checkbox-label">
+        <input type="checkbox" name="system.skillBoostsDamage" {{#if system.skillBoostsDamage}}checked{{/if}}
+               {{#unless editable}}disabled{{/unless}} />
+        Skill → Damage
+      </label>
+      <label class="cwn-checkbox-label">
+        <input type="checkbox" name="system.skillBoostsShock" {{#if system.skillBoostsShock}}checked{{/if}}
+               {{#unless editable}}disabled{{/unless}} />
+        Skill → Shock
+      </label>
+    </div>
+  </section>
+
+  {{!-- ── Shock ──────────────────────────────────────────────────────────── --}}
+  <section class="cwn-item-section">
+    <h3 class="cwn-section-title"><i class="fas fa-bolt"></i> Shock</h3>
+    <div class="cwn-form-grid cwn-form-grid-3">
+      <div class="cwn-form-field">
+        <label>Shock Damage</label>
+        <input type="text" name="system.shock.dmg" value="{{system.shock.dmg}}"
+               placeholder="0" {{#unless editable}}disabled{{/unless}} />
+      </div>
+      <div class="cwn-form-field">
+        <label>Shock vs AC ≤</label>
+        <input type="number" name="system.shock.ac" value="{{system.shock.ac}}"
+               {{#unless editable}}disabled{{/unless}} />
+      </div>
+      <div class="cwn-form-field">
+        <label>Save</label>
+        <select name="system.save" {{#unless editable}}disabled{{/unless}}>
+          <option value="" {{#unless system.save}}selected{{/unless}}>—</option>
+          {{#each saveTypes as |label key|}}
+          <option value="{{key}}" {{#if (cwnEq ../system.save key)}}selected{{/if}}>{{label}}</option>
+          {{/each}}
+        </select>
+      </div>
+    </div>
+  </section>
+
+  {{!-- ── Ammo ───────────────────────────────────────────────────────────── --}}
+  <section class="cwn-item-section">
+    <h3 class="cwn-section-title"><i class="fas fa-circle-dot"></i> Ammo</h3>
+    <div class="cwn-form-grid cwn-form-grid-3">
+      <div class="cwn-form-field">
+        <label>Type</label>
+        <select name="system.ammo.type" {{#unless editable}}disabled{{/unless}}>
+          {{#each ammoTypes as |label key|}}
+          <option value="{{key}}" {{#if (cwnEq ../system.ammo.type key)}}selected{{/if}}>{{label}}</option>
+          {{/each}}
+        </select>
+      </div>
+      <div class="cwn-form-field">
+        <label>Current</label>
+        <input type="number" name="system.ammo.value" value="{{system.ammo.value}}"
+               min="0" {{#unless editable}}disabled{{/unless}} />
+      </div>
+      <div class="cwn-form-field">
+        <label>Max</label>
+        <input type="number" name="system.ammo.max" value="{{system.ammo.max}}"
+               min="0" {{#unless editable}}disabled{{/unless}} />
+      </div>
+    </div>
+    <div class="cwn-flags-row">
+      <label class="cwn-checkbox-label">
+        <input type="checkbox" name="system.ammo.burst" {{#if system.ammo.burst}}checked{{/if}}
+               {{#unless editable}}disabled{{/unless}} />
+        Burst Fire
+      </label>
+      <label class="cwn-checkbox-label">
+        <input type="checkbox" name="system.ammo.longReload" {{#if system.ammo.longReload}}checked{{/if}}
+               {{#unless editable}}disabled{{/unless}} />
+        Long Reload
+      </label>
+      <label class="cwn-checkbox-label">
+        <input type="checkbox" name="system.ammo.suppress" {{#if system.ammo.suppress}}checked{{/if}}
+               {{#unless editable}}disabled{{/unless}} />
+        Suppressive
+      </label>
+    </div>
+  </section>
+
+  {{!-- ── Trauma ──────────────────────────────────────────────────────────── --}}
+  <section class="cwn-item-section">
+    <h3 class="cwn-section-title"><i class="fas fa-skull"></i> Trauma (AWN)</h3>
+    <div class="cwn-form-grid cwn-form-grid-2">
+      <div class="cwn-form-field">
+        <label>Trauma Die</label>
+        <input type="text" name="system.trauma.die" value="{{system.trauma.die}}"
+               placeholder="1d6" {{#unless editable}}disabled{{/unless}} />
+      </div>
+      <div class="cwn-form-field">
+        <label>Trauma Rating</label>
+        <input type="number" name="system.trauma.rating" value="{{system.trauma.rating}}"
+               placeholder="—" {{#unless editable}}disabled{{/unless}} />
+      </div>
+    </div>
+  </section>
+
+  {{!-- ── Cost / TL ──────────────────────────────────────────────────────── --}}
+  <section class="cwn-item-section">
+    <div class="cwn-form-grid cwn-form-grid-3">
+      <div class="cwn-form-field">
+        <label>Cost (cr)</label>
+        <input type="number" name="system.cost" value="{{system.cost}}"
+               min="0" {{#unless editable}}disabled{{/unless}} />
+      </div>
+      <div class="cwn-form-field">
+        <label>Tech Level</label>
+        <input type="number" name="system.tl" value="{{system.tl}}"
+               min="0" max="5" {{#unless editable}}disabled{{/unless}} />
+      </div>
+      <div class="cwn-form-field">
+        <label>Condition</label>
+        <select name="system.condition" {{#unless editable}}disabled{{/unless}}>
+          {{#each conditions as |label key|}}
+          <option value="{{key}}" {{#if (cwnEq ../system.condition key)}}selected{{/if}}>{{label}}</option>
+          {{/each}}
+        </select>
+      </div>
+    </div>
+  </section>
+
+  {{!-- ── Description ──────────────────────────────────────────────────────── --}}
+  <section class="cwn-item-section cwn-item-description">
+    <h3 class="cwn-section-title"><i class="fas fa-book-open"></i> Description</h3>
+    <div class="cwn-editor-wrap">
+      <div class="cwn-desc-editor" data-field="system.description">{{{enrichedDescription}}}</div>
+    </div>
+  </section>
+
+</div>
