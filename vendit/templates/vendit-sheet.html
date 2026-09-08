@@ -1,0 +1,263 @@
+<form class="vendit-root {{cssClass}}" autocomplete="off">
+
+  <!-- Ambient glow blobs -->
+  <div class="vendit-glow-l"></div>
+  <div class="vendit-glow-r"></div>
+
+  <!-- Processing overlay -->
+  <div class="vendit-processing" id="vendit-overlay">
+    <div class="vendit-proc-ring"></div>
+    <div class="vendit-proc-text" id="vendit-overlay-text">PROCESSING TRANSACTION</div>
+  </div>
+
+  <!-- ── Header ──────────────────────────────────────────────── -->
+  <div class="vendit-header">
+    <div class="vendit-brand-row">
+      <div class="vendit-logo">VEN<em>DIT</em></div>
+      <input class="vendit-name-input"
+             name="name" type="text"
+             value="{{actor.name}}"
+             placeholder="TERMINAL DESIGNATION"
+             autocomplete="off" />
+      <!-- Surge indicator badge (shown when surge is active) -->
+      <div class="vendit-surge-badge" id="vd-surge-badge" style="display:none">
+        <i class="fas fa-bolt"></i>
+        <span id="vd-surge-pct">+0%</span> SURGE
+      </div>
+    </div>
+    <!-- Ticker tape — content doubled for seamless loop -->
+    <div class="vendit-ticker-outer">
+      <div class="vendit-ticker" id="vd-ticker">
+        <span>AUTOMATED RETAIL TERMINAL ONLINE</span>
+        <span>ALL TRANSACTIONS ARE FINAL — NO REFUNDS</span>
+        <span>SURVEILLANCE IS IN EFFECT AT ALL TIMES</span>
+        <span>CREDIT BALANCES UPDATED IN REAL TIME</span>
+        <span>VENDIT CORP — MAKING THE CITY WORK FOR YOU</span>
+        <span>THANK YOU FOR YOUR CONSUMPTION</span>
+        <span>AUTOMATED RETAIL TERMINAL ONLINE</span>
+        <span>ALL TRANSACTIONS ARE FINAL — NO REFUNDS</span>
+        <span>SURVEILLANCE IS IN EFFECT AT ALL TIMES</span>
+        <span>CREDIT BALANCES UPDATED IN REAL TIME</span>
+        <span>VENDIT CORP — MAKING THE CITY WORK FOR YOU</span>
+        <span>THANK YOU FOR YOUR CONSUMPTION</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Tabs ────────────────────────────────────────────────── -->
+  <div class="vendit-tabs">
+    <button type="button" class="vendit-tab v-active" data-vtab="inventory">
+      <i class="fas fa-store"></i> INVENTORY
+    </button>
+    <button type="button" class="vendit-tab" data-vtab="description">
+      <i class="fas fa-terminal"></i> TERMINAL INFO
+    </button>
+    <!-- Special buttons pushed right -->
+    <div class="vendit-tab-spacer"></div>
+    {{#if isGM}}
+    <button type="button" class="vendit-special-btn surge-btn {{#if surgeActive}}surge-on{{/if}}"
+            id="vd-surge-btn" title="Toggle dynamic surge pricing (GM only)">
+      <i class="fas fa-bolt"></i>
+      {{#if surgeActive}}SURGE ON{{else}}SURGE{{/if}}
+    </button>
+    {{/if}}
+    <button type="button" class="vendit-special-btn spin-btn"
+            id="vd-spin-btn" title="Lucky Spin — free coupon roll">
+      <i class="fas fa-dice"></i> LUCKY SPIN
+    </button>
+    <button type="button" class="vendit-special-btn mystery-btn"
+            id="vd-mystery-btn" title="Mystery Box — 100 CR, unknown contents">
+      <i class="fas fa-box-open"></i> MYSTERY BOX
+    </button>
+  </div>
+
+  <!-- ── Tab Body ────────────────────────────────────────────── -->
+  <div class="vendit-body">
+
+    <!-- ═══════════════════ INVENTORY PANEL ══════════════════ -->
+    <div class="v-panel v-active" data-vpanel="inventory">
+      <div class="vendit-inv-layout">
+
+        <!-- LEFT: item list -->
+        <div class="vendit-list-col">
+
+          <!-- Category filter -->
+          <div class="vendit-category-row">
+            <i class="fas fa-filter"></i>
+            <select class="vendit-category-select" id="vd-category">
+              <option value="" {{#if (eq selectedCategory "")}}selected{{/if}}>ALL CATEGORIES</option>
+              {{#each categories}}
+              <option value="{{this}}" {{#if (eq this ../selectedCategory)}}selected{{/if}}>{{this}}</option>
+              {{/each}}
+            </select>
+            {{#if isGM}}
+            <button type="button" class="vendit-category-btn" id="vd-configure-categories" title="Configure categories (GM only)">
+              <i class="fas fa-cog"></i>
+            </button>
+            {{/if}}
+          </div>
+
+          <!-- Search + coupon strip -->
+          <div class="vendit-search-row">
+            <i class="fas fa-search"></i>
+            <input class="vendit-search" type="text"
+                   placeholder="SEARCH INVENTORY..." autocomplete="off" />
+            <button type="button" class="vendit-search-clear" title="Clear">✕</button>
+          </div>
+
+          <!-- Active coupon display -->
+          <div class="vendit-coupon-strip" id="vd-coupon-strip" style="display:none">
+            <i class="fas fa-ticket-alt"></i>
+            <span id="vd-coupon-label">COUPON ACTIVE</span>
+            <button type="button" class="vendit-coupon-dismiss" id="vd-coupon-dismiss" title="Dismiss coupon">✕</button>
+          </div>
+
+          <!-- Column headers -->
+          <div class="vendit-list-head">
+            <span></span>
+            <span>DESIGNATION</span>
+            <span style="text-align:right">PRICE</span>
+            <span style="text-align:center">QTY</span>
+            <span></span>
+            {{#if isGM}}<span></span>{{/if}}
+            {{#if isGM}}<span></span>{{/if}}
+          </div>
+
+          <!-- Rows -->
+          <div class="vendit-list-scroll" id="vendit-list">
+            {{#each inventory}}
+            <div class="vendit-item-row {{#if (eq this.system.quantity 0)}}v-oos{{/if}}"
+                 data-item-id="{{this.id}}"
+                 data-base-cost="{{this.system.cost}}">
+              <img class="vendit-row-icon"
+                   src="{{this.img}}"
+                   alt="{{this.name}}"
+                   onerror="this.src='icons/svg/item-bag.svg'" />
+              <span class="vendit-row-name">{{this.name}}</span>
+              <span class="vendit-row-cost" data-base="{{this.system.cost}}">{{this.system.cost}} CR</span>
+              <span class="vendit-row-qty {{#if (eq this.system.quantity 0)}}oos{{else if (lte this.system.quantity 2)}}low{{/if}}">
+                ×{{this.system.quantity}}
+              </span>
+              <button type="button"
+                      class="vendit-row-btn"
+                      data-item-id="{{this.id}}"
+                      {{#if (eq this.system.quantity 0)}}disabled{{/if}}>
+                DISPENSE
+              </button>
+              {{#if ../isGM}}
+              <button type="button"
+                      class="vendit-delete-btn"
+                      data-item-id="{{this.id}}"
+                      title="Remove item from inventory">
+                <i class="fas fa-trash"></i>
+              </button>
+              {{/if}}
+              {{#if ../isGM}}
+              <button type="button"
+                      class="vendit-category-btn"
+                      data-item-id="{{this.id}}"
+                      title="Assign category">
+                <i class="fas fa-tag"></i>
+              </button>
+              {{/if}}
+            </div>
+            {{else}}
+            <div class="vendit-list-empty">
+              <div class="vendit-list-empty-icon">⬡</div>
+              <div class="vendit-list-empty-text">TERMINAL OFFLINE</div>
+            </div>
+            {{/each}}
+          </div>
+        </div>
+
+        <!-- RIGHT: detail panel -->
+        <div class="vendit-detail-col">
+
+          <div class="vendit-detail-head">
+            <div class="vendit-detail-lbl">SELECTED PRODUCT</div>
+            <div class="vendit-detail-name" id="vd-name">
+              <span class="vendit-detail-name-placeholder">← SELECT AN ITEM</span>
+            </div>
+          </div>
+
+          <div class="vendit-img-stage">
+            <div class="vendit-img-placeholder" id="vd-placeholder"><i class="fas fa-cube"></i></div>
+            <img class="vendit-detail-img" id="vd-img" src="" alt="" style="display:none" />
+          </div>
+
+          <div class="vendit-stat-grid" id="vd-stats" style="display:none">
+            <div class="vendit-stat-cell">
+              <span class="vendit-stat-key">UNIT PRICE</span>
+              <span class="vendit-stat-val gold" id="vd-price">—</span>
+            </div>
+            <div class="vendit-stat-cell">
+              <span class="vendit-stat-key">IN STOCK</span>
+              <span class="vendit-stat-val" id="vd-qty">—</span>
+            </div>
+            <div class="vendit-stat-cell">
+              <span class="vendit-stat-key">ENCUMBRANCE</span>
+              <span class="vendit-stat-val" id="vd-enc">—</span>
+            </div>
+            <div class="vendit-stat-cell">
+              <span class="vendit-stat-key">STATUS</span>
+              <span class="vendit-stat-val green" id="vd-cond">AVAILABLE</span>
+            </div>
+          </div>
+
+          <div class="vendit-desc-body" id="vd-desc">
+            <span class="vendit-desc-placeholder">No item selected.</span>
+          </div>
+
+          <!-- Purchase strip -->
+          <div class="vendit-purchase">
+            <div class="vendit-buyer-row">
+              <span class="vendit-buyer-lbl">ACCOUNT</span>
+              <select class="vendit-buyer-select" id="vd-buyer">
+                <option value="">— SELECT ACCOUNT —</option>
+                {{#each actorList}}
+                <option value="{{this.id}}">{{this.name}}</option>
+                {{/each}}
+              </select>
+            </div>
+            <div class="vendit-balance">
+              <span class="vendit-balance-lbl">BALANCE</span>
+              <span class="vendit-balance-val" id="vd-balance">— CR</span>
+            </div>
+            <!-- Effective price row — shows surge / coupon adjustment -->
+            <div class="vendit-eff-price-row" id="vd-eff-row" style="display:none">
+              <span class="vendit-eff-lbl" id="vd-eff-lbl">ADJUSTED PRICE</span>
+              <span class="vendit-eff-val" id="vd-eff-val">— CR</span>
+            </div>
+            <button type="button" class="vendit-dispense" id="vd-dispense" disabled>
+              <i class="fas fa-credit-card"></i> DISPENSE
+            </button>
+          </div>
+
+        </div><!-- /detail col -->
+      </div>
+    </div><!-- /inventory panel -->
+
+    <!-- ═══════════════════ DESCRIPTION PANEL ════════════════ -->
+    <div class="v-panel" data-vpanel="description">
+      <div class="vendit-desc-tab">
+        <label class="vendit-desc-tab-lbl">TERMINAL INFORMATION / SHOP NOTES</label>
+        <textarea class="vendit-desc-textarea"
+                  name="system.description"
+                  placeholder="Enter terminal description, shop lore, GM notes...">{{system.description}}</textarea>
+      </div>
+    </div>
+
+  </div><!-- /vendit-body -->
+
+  <!-- Status bar -->
+  <div class="vendit-status">
+    <span class="vendit-status-l">
+      <span class="vendit-dot" id="vd-dot"></span>
+      <span id="vd-status-text">VENDIT CORP AUTOMATED RETAIL v4.2.1</span>
+    </span>
+    <span class="vendit-status-r" id="vd-item-count">
+      {{inventory.length}} ITEM(S) IN STOCK
+    </span>
+  </div>
+
+</form>

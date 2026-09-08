@@ -1,0 +1,45 @@
+{
+  "id": "vendit",
+  "title": "VENDIT — Automated Retail Terminal",
+  "description": "Immersive neon vending machine shop UI for Cities Without Number (swnr system). Socket-based purchasing deducts from player wallets via Financial System Lite, with GM-configurable categories, dynamic surge pricing, Lucky Spin coupons, and Mystery Box loot.",
+  "version": "1.0.3",
+  "compatibility": {
+    "minimum": "13",
+    "verified": "13",
+    "maximum": "14"
+  },
+  "authors": [
+    {
+      "name": "FailingUp",
+      "url": "https://www.patreon.com/FailingUp"
+    }
+  ],
+  "socket": true,
+  "esmodules": ["module/vendit.js"],
+  "styles": ["css/vendit.css"],
+  "languages": [
+    { "lang": "en", "name": "English", "path": "lang/en.json" }
+  ],
+  "systems": ["swnr"],
+  "relationships": {
+    "requires": [
+      {
+        "id": "socketlib",
+        "type": "module",
+        "manifest": "https://raw.githubusercontent.com/manuelVo/foundryvtt-socketlib/master/module.json",
+        "compatibility": {}
+      },
+      {
+        "id": "financial-system-lite",
+        "type": "module",
+        "compatibility": { "minimum": "0.1.0" }
+      }
+    ]
+  },
+  "url": "https://www.patreon.com/FailingUp",
+  "manifest": "",
+  "download": "",
+  "readme": "README.md",
+  "bugs": "",
+  "license": "LICENSE"
+}

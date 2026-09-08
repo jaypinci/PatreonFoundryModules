@@ -1,0 +1,13 @@
+{
+  "VENDIT.Title":        "VENDIT AUTOMATED RETAIL",
+  "VENDIT.Buy":          "DISPENSE",
+  "VENDIT.NoStock":      "TERMINAL OFFLINE",
+  "VENDIT.Purchasing":   "PROCESSING TRANSACTION",
+  "VENDIT.Success":      "ITEM DISPENSED",
+  "VENDIT.Failed":       "TRANSACTION DECLINED",
+  "VENDIT.NoBuyer":      "NO ACCOUNT SELECTED",
+  "VENDIT.NoSocket":     "NETWORK ERROR",
+  "VENDIT.Settings.Categories.Name":  "Shop Categories",
+  "VENDIT.Settings.Categories.Label": "Configure Categories",
+  "VENDIT.Settings.Categories.Hint":  "Edit the list of item categories available in VENDIT shop terminals."
+}
