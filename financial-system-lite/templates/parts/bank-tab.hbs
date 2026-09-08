@@ -1,0 +1,36 @@
+<div class="tab {{#if tabs.bank.active}}active{{/if}}" data-tab="bank" data-group="primary">
+  <section class="fsl-open-accounts">
+    <h3>{{localize "financial-system-lite.bank.accounts"}}</h3>
+    {{#each openBanks as |bank|}}
+      <div class="fsl-account-row">
+        <div class="fsl-account-header">
+          <strong>{{bank.name}}</strong> ({{bank.economyName}})
+          <span class="fsl-balance">{{bank.balance}} {{bank.currency}}</span>
+        </div>
+        <input type="number" name="bank-amount-{{bank.id}}" min="0" step="0.01" placeholder="{{localize 'financial-system-lite.general.amount'}}">
+        <button type="button" data-action="bankAdjust" data-bank-id="{{bank.id}}" data-direction="deposit">
+          {{localize "financial-system-lite.bank.deposit"}}
+        </button>
+        <button type="button" data-action="bankAdjust" data-bank-id="{{bank.id}}" data-direction="withdraw">
+          {{localize "financial-system-lite.bank.withdraw"}}
+        </button>
+      </div>
+    {{else}}
+      <p class="fsl-empty">{{localize "financial-system-lite.bank.noAccounts"}}</p>
+    {{/each}}
+  </section>
+
+  <section class="fsl-open-new">
+    <h3>{{localize "financial-system-lite.bank.openNew"}}</h3>
+    {{#each closedBanks as |bank|}}
+      <div class="fsl-bank-option">
+        {{bank.name}} ({{bank.economyName}})
+        <button type="button" data-action="openAccount" data-bank-id="{{bank.id}}" data-economy-id="{{bank.economyId}}">
+          {{localize "financial-system-lite.bank.open"}}
+        </button>
+      </div>
+    {{else}}
+      <p class="fsl-empty">{{localize "financial-system-lite.bank.noBanksAvailable"}}</p>
+    {{/each}}
+  </section>
+</div>

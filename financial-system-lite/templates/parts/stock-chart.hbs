@@ -1,0 +1,20 @@
+<div class="fsl-stock-chart">
+  <div class="fsl-chart-header">
+    <div class="fsl-chart-title">
+      <strong>{{symbol}}</strong> {{name}}
+    </div>
+    <div class="fsl-balance">${{currentPrice}}</div>
+  </div>
+
+  {{#if hasEnoughData}}
+    <div class="fsl-chart-wrap">{{{svgChart}}}</div>
+  {{else}}
+    <p class="fsl-empty">{{localize "financial-system-lite.stock.chart.notEnoughData"}}</p>
+  {{/if}}
+
+  <div class="fsl-chart-stats">
+    <span class="fsl-chart-stat">{{localize "financial-system-lite.stock.chart.high"}}: <strong>${{high}}</strong></span>
+    <span class="fsl-chart-stat">{{localize "financial-system-lite.stock.chart.low"}}: <strong>${{low}}</strong></span>
+    <span class="fsl-chart-stat fsl-trend {{changeClass}}">{{changePercent}}%</span>
+  </div>
+</div>

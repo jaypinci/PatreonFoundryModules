@@ -1,0 +1,55 @@
+<div class="tab {{#if tabs.stocks.active}}active{{/if}}" data-tab="stocks" data-group="primary">
+  <section class="fsl-portfolio">
+    <h3>{{localize "financial-system-lite.stock.portfolio"}}</h3>
+    {{#each ownedStocks as |stock|}}
+      <div class="fsl-stock-row">
+        <span class="fsl-stock-link" data-action="viewStockChart" data-stock-id="{{stock.id}}" role="button" tabindex="0">
+          <strong>{{stock.symbol}}</strong> {{stock.name}}
+        </span>
+        — {{stock.shares}} {{localize "financial-system-lite.stock.shares"}}
+        (<span class="fsl-portfolio-value {{#if (gt stock.trend 0)}}positive{{else if (lt stock.trend 0)}}negative{{/if}}">${{stock.totalValue}}</span>
+        <span class="fsl-trend {{#if (gt stock.trend 0)}}positive{{else if (lt stock.trend 0)}}negative{{/if}}">{{stock.trend}}%</span>)
+        <input type="number" name="shares-sell-{{stock.id}}" min="1" step="1" placeholder="#">
+        <button type="button" data-action="tradeStock" data-stock-id="{{stock.id}}" data-direction="sell">
+          {{localize "financial-system-lite.stock.sell"}}
+        </button>
+      </div>
+    {{else}}
+      <p class="fsl-empty">{{localize "financial-system-lite.stock.noneOwned"}}</p>
+    {{/each}}
+  </section>
+
+  <section class="fsl-market">
+    <h3>{{localize "financial-system-lite.stock.market"}}</h3>
+    <div class="fsl-stock-sortbar">
+      <span class="fsl-sort-label">{{localize "financial-system-lite.stock.sort.label"}}</span>
+      <button type="button" class="fsl-sort-btn {{#if (eq stockSort.by "symbol")}}active{{/if}}" data-action="setStockSort" data-sort="symbol">
+        {{localize "financial-system-lite.stock.sort.alpha"}}{{#if (eq stockSort.by "symbol")}} {{#if (eq stockSort.dir "asc")}}▲{{else}}▼{{/if}}{{/if}}
+      </button>
+      <button type="button" class="fsl-sort-btn {{#if (eq stockSort.by "price")}}active{{/if}}" data-action="setStockSort" data-sort="price">
+        {{localize "financial-system-lite.stock.sort.price"}}{{#if (eq stockSort.by "price")}} {{#if (eq stockSort.dir "asc")}}▲{{else}}▼{{/if}}{{/if}}
+      </button>
+      <button type="button" class="fsl-sort-btn {{#if (eq stockSort.by "trend")}}active{{/if}}" data-action="setStockSort" data-sort="trend">
+        {{localize "financial-system-lite.stock.sort.change"}}{{#if (eq stockSort.by "trend")}} {{#if (eq stockSort.dir "asc")}}▲{{else}}▼{{/if}}{{/if}}
+      </button>
+    </div>
+    {{#each stocks as |stock|}}
+      <div class="fsl-stock-row">
+        <span class="fsl-stock-link" data-action="viewStockChart" data-stock-id="{{stock.id}}" role="button" tabindex="0">
+          <strong>{{stock.symbol}}</strong> {{stock.name}}
+        </span>
+        — ${{stock.price}}
+        <span class="fsl-trend {{#if (gt stock.trend 0)}}positive{{else if (lt stock.trend 0)}}negative{{/if}}">
+          {{stock.trend}}%
+        </span>
+        <span class="fsl-shares-available">{{stock.sharesAvailable}}/{{stock.totalShares}} {{localize "financial-system-lite.stock.available"}}</span>
+        <input type="number" name="shares-buy-{{stock.id}}" min="1" step="1" placeholder="#">
+        <button type="button" data-action="tradeStock" data-stock-id="{{stock.id}}" data-direction="buy">
+          {{localize "financial-system-lite.stock.buy"}}
+        </button>
+      </div>
+    {{else}}
+      <p class="fsl-empty">{{localize "financial-system-lite.stock.noneAvailable"}}</p>
+    {{/each}}
+  </section>
+</div>

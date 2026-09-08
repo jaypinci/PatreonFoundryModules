@@ -1,0 +1,144 @@
+{
+  "financial-system-lite": {
+    "app": {
+      "title": "Finances",
+      "tabs": {
+        "wallet": "Wallet",
+        "bank": "Bank",
+        "stocks": "Stocks"
+      }
+    },
+    "general": {
+      "amount": "Amount",
+      "delete": "Delete",
+      "close": "Close"
+    },
+    "wallet": {
+      "balance": "Wallet Balance",
+      "deposit": "Add",
+      "withdraw": "Spend"
+    },
+    "bank": {
+      "title": "Banks",
+      "accounts": "Your Accounts",
+      "openNew": "Open a New Account",
+      "open": "Open Account",
+      "deposit": "Deposit",
+      "withdraw": "Withdraw",
+      "noAccounts": "You don't have any bank accounts yet.",
+      "noBanksAvailable": "No banks available.",
+      "noBanks": "No banks in this economy yet.",
+      "create": "Add Bank",
+      "name": "Bank Name",
+      "interestRate": "Interest Rate %"
+    },
+    "stock": {
+      "title": "Stocks",
+      "portfolio": "Your Portfolio",
+      "market": "Market",
+      "shares": "shares",
+      "buy": "Buy",
+      "sell": "Sell",
+      "available": "available",
+      "noneOwned": "You don't own any stocks.",
+      "noneAvailable": "No stocks available.",
+      "noStocks": "No stocks in this economy yet.",
+      "sort": {
+        "label": "Sort",
+        "alpha": "A–Z",
+        "price": "Price",
+        "change": "% Change"
+      },
+      "create": "Add Stock",
+      "name": "Stock Name",
+      "currentPrice": "Starting Price",
+      "totalShares": "Total Shares",
+      "shiftMarket": "Shift Price",
+      "rollAll": "Roll ALL Stocks:",
+      "notEnoughSharesAvailable": "Not enough shares available.",
+      "volatility": {
+        "stable": "Stable (±1%)",
+        "semiStable": "Semi-Stable (±5%)",
+        "volatile": "Volatile (±20%)",
+        "extremelyVolatile": "Extremely Volatile (±50%)",
+        "unstable": "Unstable (±100%)"
+      },
+      "chart": {
+        "title": "Price History",
+        "high": "High",
+        "low": "Low",
+        "notEnoughData": "Not enough price history yet — the market needs to shift at least once."
+      }
+    },
+    "economy": {
+      "create": "New Economy",
+      "delete": "Delete Economy",
+      "name": "Economy Name",
+      "defaultName": "New Economy",
+      "defaultCurrency": "Gold",
+      "noEconomies": "No economies created yet."
+    },
+    "ledger": {
+      "title": "Recent Activity",
+      "empty": "No transactions yet.",
+      "types": {
+        "walletDeposit": "Wallet Deposit",
+        "walletWithdraw": "Wallet Withdraw",
+        "bankDeposit": "Bank Deposit",
+        "bankWithdraw": "Bank Withdraw",
+        "stockBuy": "Stock Buy",
+        "stockSell": "Stock Sell",
+        "vendorPurchase": "Vendor Purchase",
+        "externalAdjustment": "External Adjustment"
+      }
+    },
+    "log": {
+      "title": "Transaction Log",
+      "allActors": "All Characters",
+      "allTypes": "All Types",
+      "filter": "Filter",
+      "reset": "Reset",
+      "date": "Date",
+      "actor": "Character",
+      "type": "Type",
+      "amount": "Amount",
+      "detail": "Detail",
+      "empty": "No transactions match these filters."
+    },
+    "gmConfig": {
+      "title": "Financial System — GM Config",
+      "viewAsPlayer": "View as Player",
+      "openFinances": "Open Finances",
+      "noActors": "No player or NPC characters found."
+    },
+    "import": {
+      "button": "Import Legacy Data",
+      "title": "Import from Financial System",
+      "legacyNotActive": "The old \"Foundry Financial System\" module must be active to import from it.",
+      "previewIntro": "This will import the following from the legacy module:",
+      "previewEconomies": "{count} economies",
+      "previewBanks": "{count} banks",
+      "previewStocks": "{count} stocks",
+      "previewAccounts": "{count} bank account records",
+      "previewWallets": "{count} character wallets",
+      "previewPortfolios": "{count} character stock portfolios",
+      "multiCurrencyWarning": "{count} character(s) held wallet balances in more than one economy. This module uses a single flat wallet, so those balances will be summed together.",
+      "overwriteWarning": "This will overwrite any existing economies, stocks, and matching character financial data in this module. Continue?",
+      "doneTitle": "Import Complete",
+      "resultActors": "{count} characters received data",
+      "resultAccounts": "{count} bank accounts imported",
+      "resultWallets": "{count} wallets imported",
+      "resultPortfolios": "{count} portfolios imported",
+      "resultCollapsed": "{count} multi-currency wallet(s) were summed into one balance"
+    },
+    "errors": {
+      "insufficientWallet": "Not enough funds in wallet.",
+      "insufficientBalance": "Not enough funds in account.",
+      "insufficientShares": "Not enough shares.",
+      "accountNotFound": "Account not found.",
+      "economyNotFound": "Economy not found.",
+      "stockNotFound": "Stock not found.",
+      "noActorSelected": "Select a token or assign a character first."
+    }
+  }
+}

@@ -1,0 +1,596 @@
+/* ============================================================
+   Financial System Lite — "Vendit" terminal theme
+   Cyberpunk neon/CRT styling matching the Vendit Megamart look:
+   near-black panels, cyan structure, magenta accent, yellow-gold
+   currency figures, uppercase tech type.
+   Everything is scoped under .vendit-theme so it only affects
+   this module's own ApplicationV2 windows.
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Share+Tech+Mono&display=swap');
+
+.vendit-theme {
+  --vendit-bg: #04070a;
+  --vendit-panel: #0a1116;
+  --vendit-panel-alt: #0d151b;
+  --vendit-border: #113842;
+  --vendit-cyan: #22e8ff;
+  --vendit-cyan-dim: #0f5c68;
+  --vendit-magenta: #ff2f92;
+  --vendit-yellow: #ffd23f;
+  --vendit-green: #39ff9c;
+  --vendit-red: #ff4d5e;
+  --vendit-text: #d9f6fb;
+  --vendit-text-dim: #6f97a0;
+  --vendit-font-head: 'Orbitron', 'Segoe UI', sans-serif;
+  --vendit-font-body: 'Share Tech Mono', 'Consolas', 'Courier New', monospace;
+}
+
+/* ---------- window chrome ---------- */
+.vendit-theme {
+  background: var(--vendit-bg);
+  color: var(--vendit-text);
+  font-family: var(--vendit-font-body);
+  border: 1px solid var(--vendit-cyan-dim);
+  box-shadow: 0 0 24px rgba(34, 232, 255, 0.15), 0 0 2px rgba(34, 232, 255, 0.6);
+}
+
+.vendit-theme .window-header {
+  background: linear-gradient(180deg, #0b141a 0%, #060b0e 100%);
+  border-bottom: 1px solid var(--vendit-cyan-dim);
+}
+
+.vendit-theme .window-title {
+  font-family: var(--vendit-font-head);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--vendit-cyan);
+  text-shadow: 0 0 8px rgba(34, 232, 255, 0.65);
+}
+
+.vendit-theme .window-header .header-control {
+  color: var(--vendit-text-dim);
+}
+.vendit-theme .window-header .header-control:hover {
+  color: var(--vendit-magenta);
+}
+
+.vendit-theme .window-content {
+  background: var(--vendit-bg);
+  padding: 1em;
+  position: relative;
+  /* Layout as a fixed-height column: the tab nav pins to the top and
+     the active tab body fills the rest of the window and scrolls on
+     its own, instead of forcing the whole window to be resized to
+     see everything. */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* subtle CRT scanline overlay */
+.vendit-theme .window-content::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(34, 232, 255, 0.025) 0px,
+    rgba(34, 232, 255, 0.025) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  z-index: 0;
+}
+.vendit-theme .window-content > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* ---------- typography ---------- */
+.vendit-theme h2,
+.vendit-theme h3,
+.vendit-theme h4,
+.vendit-theme legend {
+  font-family: var(--vendit-font-head);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--vendit-cyan);
+  border-bottom: 1px solid var(--vendit-border);
+  padding-bottom: 0.3em;
+  margin: 0.6em 0 0.5em;
+}
+.vendit-theme h2:first-child,
+.vendit-theme h3:first-child {
+  margin-top: 0;
+}
+
+/* ---------- tab nav ---------- */
+.vendit-theme .sheet-tabs.tabs {
+  border-bottom: 1px solid var(--vendit-border);
+  padding-bottom: 0.4em;
+}
+.vendit-theme .sheet-tabs.tabs .item {
+  font-family: var(--vendit-font-head);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.85em;
+  color: var(--vendit-text-dim);
+  opacity: 1;
+  border-bottom: 2px solid transparent;
+  padding: 0.3em 0.6em;
+  transition: color 0.15s, border-color 0.15s;
+}
+.vendit-theme .sheet-tabs.tabs .item:hover {
+  color: var(--vendit-cyan);
+}
+.vendit-theme .sheet-tabs.tabs .item.active {
+  color: var(--vendit-cyan);
+  border-bottom-color: var(--vendit-cyan);
+  text-shadow: 0 0 6px rgba(34, 232, 255, 0.6);
+}
+
+/* ---------- key figures ---------- */
+.vendit-theme .fsl-balance {
+  font-family: var(--vendit-font-head);
+  font-size: 1.8em;
+  font-weight: 700;
+  color: var(--vendit-cyan);
+  text-shadow: 0 0 10px rgba(34, 232, 255, 0.55);
+}
+
+.vendit-theme .fsl-trend.positive,
+.vendit-theme .fsl-ledger-delta.positive,
+.vendit-theme .fsl-log-table td.positive,
+.vendit-theme .fsl-portfolio-value.positive {
+  color: var(--vendit-green);
+  text-shadow: 0 0 6px rgba(57, 255, 156, 0.5);
+}
+.vendit-theme .fsl-trend.negative,
+.vendit-theme .fsl-ledger-delta.negative,
+.vendit-theme .fsl-log-table td.negative,
+.vendit-theme .fsl-portfolio-value.negative {
+  color: var(--vendit-red);
+  text-shadow: 0 0 6px rgba(255, 77, 94, 0.5);
+}
+
+/* currency figures (bank balances, stock prices) read gold, like Vendit's price column */
+.vendit-theme .fsl-account-header .fsl-balance,
+.vendit-theme .fsl-stock-row strong,
+.vendit-theme .fsl-log-table td:nth-child(4) {
+  color: var(--vendit-yellow);
+  text-shadow: 0 0 6px rgba(255, 210, 63, 0.4);
+}
+
+/* ---------- rows / lists ---------- */
+.vendit-theme .fsl-account-row,
+.vendit-theme .fsl-stock-row,
+.vendit-theme .fsl-bank-option,
+.vendit-theme .fsl-actor-list li {
+  border-bottom: 1px solid var(--vendit-border);
+  transition: background 0.15s;
+}
+.vendit-theme .fsl-account-row:hover,
+.vendit-theme .fsl-stock-row:hover,
+.vendit-theme .fsl-bank-option:hover,
+.vendit-theme .fsl-actor-list li:hover {
+  background: rgba(34, 232, 255, 0.05);
+}
+
+.vendit-theme .fsl-account-header {
+  font-family: var(--vendit-font-head);
+  letter-spacing: 0.03em;
+}
+
+.vendit-theme .fsl-empty {
+  color: var(--vendit-text-dim);
+  opacity: 1;
+  font-family: var(--vendit-font-body);
+}
+
+/* ---------- fieldsets (GM config economy blocks) ---------- */
+.vendit-theme .fsl-economy-block {
+  border: 1px solid var(--vendit-border);
+  border-radius: 2px;
+  padding: 0.75em;
+  background: var(--vendit-panel);
+}
+.vendit-theme .fsl-economy-block legend {
+  border-bottom: none;
+  padding: 0 0.4em;
+}
+
+/* ---------- buttons ---------- */
+.vendit-theme button {
+  font-family: var(--vendit-font-head);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 0.8em;
+  background: rgba(34, 232, 255, 0.06);
+  color: var(--vendit-cyan);
+  border: 1px solid var(--vendit-cyan-dim);
+  border-radius: 2px;
+  padding: 0.35em 0.8em;
+  cursor: pointer;
+  transition: background 0.15s, box-shadow 0.15s, color 0.15s;
+}
+.vendit-theme button:hover {
+  background: rgba(34, 232, 255, 0.15);
+  box-shadow: 0 0 10px rgba(34, 232, 255, 0.35);
+  color: #eafeff;
+}
+.vendit-theme button:active {
+  background: rgba(34, 232, 255, 0.25);
+}
+
+/* destructive actions read red, matching Vendit's trash icons */
+.vendit-theme button[data-action="deleteEconomy"],
+.vendit-theme button[data-action="removeBank"],
+.vendit-theme button[data-action="deleteStock"] {
+  color: var(--vendit-red);
+  border-color: rgba(255, 77, 94, 0.4);
+  background: rgba(255, 77, 94, 0.06);
+}
+.vendit-theme button[data-action="deleteEconomy"]:hover,
+.vendit-theme button[data-action="removeBank"]:hover,
+.vendit-theme button[data-action="deleteStock"]:hover {
+  background: rgba(255, 77, 94, 0.15);
+  box-shadow: 0 0 10px rgba(255, 77, 94, 0.35);
+}
+
+/* sell actions read magenta as a secondary accent */
+.vendit-theme button[data-action="tradeStock"][data-direction="sell"] {
+  color: var(--vendit-magenta);
+  border-color: rgba(255, 47, 146, 0.4);
+  background: rgba(255, 47, 146, 0.06);
+}
+.vendit-theme button[data-action="tradeStock"][data-direction="sell"]:hover {
+  background: rgba(255, 47, 146, 0.15);
+  box-shadow: 0 0 10px rgba(255, 47, 146, 0.35);
+}
+
+/* ---------- inputs / selects ---------- */
+.vendit-theme input,
+.vendit-theme select {
+  font-family: var(--vendit-font-body);
+  background: var(--vendit-panel-alt);
+  color: var(--vendit-text);
+  border: 1px solid var(--vendit-border);
+  border-radius: 2px;
+  padding: 0.3em 0.5em;
+}
+.vendit-theme input:focus,
+.vendit-theme select:focus {
+  outline: none;
+  border-color: var(--vendit-cyan);
+  box-shadow: 0 0 6px rgba(34, 232, 255, 0.4);
+}
+.vendit-theme input[name^="wallet-amount"],
+.vendit-theme input[name^="bank-amount-"],
+.vendit-theme input[name^="shares-"] {
+  width: 5em;
+}
+
+/* ---------- GM toolbar / actor list ---------- */
+.vendit-theme .fsl-gm-toolbar {
+  border-bottom: 1px solid var(--vendit-border);
+  padding-bottom: 0.75em;
+}
+
+.vendit-theme .fsl-actor-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.vendit-theme .fsl-actor-list img {
+  border: 1px solid var(--vendit-cyan-dim);
+  border-radius: 2px;
+}
+.vendit-theme .fsl-actor-list button {
+  margin-left: auto;
+  width: auto;
+}
+
+/* ---------- transaction log table ---------- */
+.vendit-theme .fsl-log-table {
+  border: 1px solid var(--vendit-border);
+}
+.vendit-theme .fsl-log-table th {
+  font-family: var(--vendit-font-head);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 0.75em;
+  color: var(--vendit-cyan);
+  border-bottom: 1px solid var(--vendit-cyan-dim);
+  background: var(--vendit-panel);
+}
+.vendit-theme .fsl-log-table td {
+  border-bottom: 1px solid var(--vendit-border);
+}
+.vendit-theme .fsl-log-table tr:hover td {
+  background: rgba(34, 232, 255, 0.05);
+}
+
+.vendit-theme .fsl-import-warning {
+  color: var(--vendit-red);
+  text-shadow: 0 0 6px rgba(255, 77, 94, 0.4);
+}
+
+/* ---------- stock sort bar (Market section) ---------- */
+.vendit-theme .fsl-stock-sortbar {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  flex-wrap: wrap;
+  margin: 0.3em 0 0.6em;
+}
+.vendit-theme .fsl-sort-label {
+  font-family: var(--vendit-font-head);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 0.75em;
+  color: var(--vendit-text-dim);
+}
+.vendit-theme .fsl-sort-btn {
+  font-size: 0.7em;
+  padding: 0.25em 0.6em;
+}
+.vendit-theme .fsl-sort-btn.active {
+  color: var(--vendit-cyan);
+  border-color: var(--vendit-cyan);
+  background: rgba(34, 232, 255, 0.15);
+  box-shadow: 0 0 8px rgba(34, 232, 255, 0.35);
+}
+
+/* ---------- stock chart window ---------- */
+.vendit-theme .fsl-stock-link {
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+  border-radius: 2px;
+  transition: color 0.15s, text-shadow 0.15s;
+}
+.vendit-theme .fsl-stock-link:hover,
+.vendit-theme .fsl-stock-link:focus-visible {
+  outline: none;
+}
+.vendit-theme .fsl-stock-link:hover strong,
+.vendit-theme .fsl-stock-link:focus-visible strong {
+  color: var(--vendit-cyan);
+  text-shadow: 0 0 6px rgba(34, 232, 255, 0.6);
+}
+
+.vendit-theme .fsl-stock-chart {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9em;
+}
+.vendit-theme .fsl-chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1em;
+}
+.vendit-theme .fsl-chart-title strong {
+  color: var(--vendit-yellow);
+  text-shadow: 0 0 6px rgba(255, 210, 63, 0.4);
+}
+.vendit-theme .fsl-chart-wrap {
+  border: 1px solid var(--vendit-border);
+  border-radius: 2px;
+  background: var(--vendit-panel);
+  padding: 0.6em;
+}
+.vendit-theme .fsl-chart-svg-inner {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.vendit-theme .fsl-chart-line {
+  fill: none;
+  stroke: var(--vendit-cyan);
+  stroke-width: 2;
+  filter: drop-shadow(0 0 4px rgba(34, 232, 255, 0.5));
+}
+.vendit-theme .fsl-chart-area {
+  fill: rgba(34, 232, 255, 0.12);
+  stroke: none;
+}
+.vendit-theme .fsl-chart-grid {
+  stroke: var(--vendit-border);
+  stroke-width: 1;
+  stroke-dasharray: 2 3;
+}
+.vendit-theme .fsl-chart-axis-label {
+  font-family: var(--vendit-font-body);
+  font-size: 9px;
+  fill: var(--vendit-text-dim);
+}
+.vendit-theme .fsl-chart-dot {
+  fill: var(--vendit-bg);
+  stroke: var(--vendit-cyan);
+  stroke-width: 1.5;
+  cursor: pointer;
+}
+.vendit-theme .fsl-chart-dot:hover {
+  fill: var(--vendit-cyan);
+}
+.vendit-theme .fsl-chart-stats {
+  display: flex;
+  gap: 1.25em;
+  flex-wrap: wrap;
+  font-size: 0.9em;
+}
+.vendit-theme .fsl-chart-stat strong {
+  color: var(--vendit-text);
+}
+
+/* ---------- scrollbars ---------- */
+.vendit-theme ::-webkit-scrollbar {
+  width: 8px;
+}
+.vendit-theme ::-webkit-scrollbar-track {
+  background: var(--vendit-bg);
+}
+.vendit-theme ::-webkit-scrollbar-thumb {
+  background: var(--vendit-cyan-dim);
+  border-radius: 4px;
+}
+.vendit-theme ::-webkit-scrollbar-thumb:hover {
+  background: var(--vendit-cyan);
+}
+
+/* ---------- layout helpers reused from earlier pass ---------- */
+.vendit-theme .tab {
+  display: none;
+}
+.vendit-theme .tab.active {
+  display: block;
+  /* Fill whatever space is left under the tab nav inside the flex-column
+     .window-content, and scroll internally once content overflows,
+     rather than the window needing to be dragged taller. min-height: 0
+     is required so a block-level flex item is actually allowed to
+     shrink below its content size. */
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* the tab nav itself should never be squeezed by the scrolling tab body */
+.vendit-theme .sheet-tabs.tabs {
+  flex: 0 0 auto;
+}
+
+/* Non-tabbed windows (GM config, transaction log, stock chart) don't use
+   .tab — their template root fills the window-content column and scrolls
+   the same way. */
+.vendit-theme .window-content > .fsl-gm-config,
+.vendit-theme .window-content > .fsl-transaction-log,
+.vendit-theme .window-content > .fsl-stock-chart {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.vendit-theme .fsl-account-row,
+.vendit-theme .fsl-stock-row,
+.vendit-theme .fsl-bank-option {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  padding: 0.4em 0;
+  flex-wrap: wrap;
+}
+.vendit-theme .fsl-account-header {
+  flex-basis: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.vendit-theme .fsl-gm-toolbar {
+  display: flex;
+  gap: 0.5em;
+  margin-bottom: 0.75em;
+}
+.vendit-theme .fsl-gm-players {
+  margin-bottom: 1em;
+}
+.vendit-theme .fsl-actor-list li {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  padding: 0.3em 0;
+}
+
+.vendit-theme .fsl-log-filters {
+  display: flex;
+  gap: 0.5em;
+  flex-wrap: wrap;
+  margin-bottom: 0.75em;
+}
+.vendit-theme .fsl-log-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.vendit-theme .fsl-log-table th,
+.vendit-theme .fsl-log-table td {
+  text-align: left;
+  padding: 0.35em 0.6em;
+}
+
+.vendit-theme .fsl-gm-config .fsl-economy-block {
+  margin-bottom: 1em;
+}
+
+/* ---------- stock volatility controls (GM config) ---------- */
+.vendit-theme .fsl-stock-config-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  flex-wrap: wrap;
+}
+.vendit-theme .fsl-volatility-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4em;
+  flex-wrap: wrap;
+  margin: 0.35em 0 0.6em;
+}
+.vendit-theme .fsl-volatility-row--all {
+  border: 1px solid var(--vendit-border);
+  border-radius: 2px;
+  background: var(--vendit-panel-alt);
+  padding: 0.4em 0.6em;
+  margin-top: 0.2em;
+}
+.vendit-theme .fsl-volatility-btn {
+  font-size: 0.7em;
+  padding: 0.25em 0.5em;
+}
+/* Risk-tier colour ramp, reusing the theme's existing accent colours so it
+   reads as calm → alarming without introducing new hues. */
+.vendit-theme .fsl-volatility-btn[data-volatility="stable"] {
+  color: var(--vendit-green);
+  border-color: rgba(57, 255, 156, 0.4);
+  background: rgba(57, 255, 156, 0.06);
+}
+.vendit-theme .fsl-volatility-btn[data-volatility="stable"]:hover {
+  background: rgba(57, 255, 156, 0.15);
+  box-shadow: 0 0 10px rgba(57, 255, 156, 0.35);
+}
+.vendit-theme .fsl-volatility-btn[data-volatility="semiStable"] {
+  color: var(--vendit-cyan);
+}
+.vendit-theme .fsl-volatility-btn[data-volatility="volatile"] {
+  color: var(--vendit-yellow);
+  border-color: rgba(255, 210, 63, 0.4);
+  background: rgba(255, 210, 63, 0.06);
+}
+.vendit-theme .fsl-volatility-btn[data-volatility="volatile"]:hover {
+  background: rgba(255, 210, 63, 0.15);
+  box-shadow: 0 0 10px rgba(255, 210, 63, 0.35);
+}
+.vendit-theme .fsl-volatility-btn[data-volatility="extremelyVolatile"] {
+  color: var(--vendit-magenta);
+  border-color: rgba(255, 47, 146, 0.4);
+  background: rgba(255, 47, 146, 0.06);
+}
+.vendit-theme .fsl-volatility-btn[data-volatility="extremelyVolatile"]:hover {
+  background: rgba(255, 47, 146, 0.15);
+  box-shadow: 0 0 10px rgba(255, 47, 146, 0.35);
+}
+.vendit-theme .fsl-volatility-btn[data-volatility="unstable"] {
+  color: var(--vendit-red);
+  border-color: rgba(255, 77, 94, 0.4);
+  background: rgba(255, 77, 94, 0.06);
+}
+.vendit-theme .fsl-volatility-btn[data-volatility="unstable"]:hover {
+  background: rgba(255, 77, 94, 0.15);
+  box-shadow: 0 0 10px rgba(255, 77, 94, 0.35);
+}

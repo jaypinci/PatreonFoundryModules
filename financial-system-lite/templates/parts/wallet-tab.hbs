@@ -1,0 +1,32 @@
+<div class="tab {{#if tabs.wallet.active}}active{{/if}}" data-tab="wallet" data-group="primary">
+  <section class="fsl-wallet-summary">
+    <h2>{{localize "financial-system-lite.wallet.balance"}}</h2>
+    <p class="fsl-balance">{{walletBalance}}</p>
+  </section>
+
+  <section class="fsl-wallet-actions">
+    <input type="number" name="wallet-amount" min="0" step="0.01" placeholder="{{localize 'financial-system-lite.general.amount'}}">
+    <button type="button" data-action="walletAdjust" data-direction="deposit">
+      {{localize "financial-system-lite.wallet.deposit"}}
+    </button>
+    <button type="button" data-action="walletAdjust" data-direction="withdraw">
+      {{localize "financial-system-lite.wallet.withdraw"}}
+    </button>
+  </section>
+
+  <section class="fsl-ledger">
+    <h3>{{localize "financial-system-lite.ledger.title"}}</h3>
+    <ul>
+      {{#each ledger as |entry|}}
+        <li>
+          <span class="fsl-ledger-type">{{localize (concat "financial-system-lite.ledger.types." entry.type)}}</span>
+          <span class="fsl-ledger-delta {{#if entry.delta}}{{#if (gt entry.delta 0)}}positive{{else}}negative{{/if}}{{/if}}">
+            {{entry.delta}}
+          </span>
+        </li>
+      {{else}}
+        <li class="fsl-empty">{{localize "financial-system-lite.ledger.empty"}}</li>
+      {{/each}}
+    </ul>
+  </section>
+</div>

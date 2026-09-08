@@ -1,0 +1,50 @@
+<div class="fsl-transaction-log">
+  <form class="fsl-log-filters">
+    <select name="actorId">
+      <option value="all">{{localize "financial-system-lite.log.allActors"}}</option>
+      {{#each actors as |actor|}}
+        <option value="{{actor.id}}" {{#if (eq actor.id ../filters.actorId)}}selected{{/if}}>{{actor.name}}</option>
+      {{/each}}
+    </select>
+
+    <select name="type">
+      <option value="all">{{localize "financial-system-lite.log.allTypes"}}</option>
+      {{#each types as |type|}}
+        <option value="{{type}}" {{#if (eq type ../filters.type)}}selected{{/if}}>
+          {{localize (concat "financial-system-lite.ledger.types." type)}}
+        </option>
+      {{/each}}
+    </select>
+
+    <input type="date" name="start" value="{{filters.start}}">
+    <input type="date" name="end" value="{{filters.end}}">
+
+    <button type="button" data-action="applyFilters">{{localize "financial-system-lite.log.filter"}}</button>
+    <button type="button" data-action="resetFilters">{{localize "financial-system-lite.log.reset"}}</button>
+  </form>
+
+  <table class="fsl-log-table">
+    <thead>
+      <tr>
+        <th>{{localize "financial-system-lite.log.date"}}</th>
+        <th>{{localize "financial-system-lite.log.actor"}}</th>
+        <th>{{localize "financial-system-lite.log.type"}}</th>
+        <th>{{localize "financial-system-lite.log.amount"}}</th>
+        <th>{{localize "financial-system-lite.log.detail"}}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each entries as |entry|}}
+        <tr>
+          <td>{{entry.dateLabel}}</td>
+          <td>{{entry.actorName}}</td>
+          <td>{{localize (concat "financial-system-lite.ledger.types." entry.type)}}</td>
+          <td class="{{#if (gt entry.delta 0)}}positive{{else if (lt entry.delta 0)}}negative{{/if}}">{{entry.delta}}</td>
+          <td>{{entry.detail}}</td>
+        </tr>
+      {{else}}
+        <tr><td colspan="5" class="fsl-empty">{{localize "financial-system-lite.log.empty"}}</td></tr>
+      {{/each}}
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,30 @@
+{
+  "id": "financial-system-lite",
+  "title": "Financial System Lite",
+  "description": "Wallet, bank accounts, and a stock market for your Foundry world. Actor-flag based, fully ApplicationV2, with a GM transaction log and legacy-import support. Other modules (e.g. VENDIT) can hook into player wallets via a small exposed API.",
+  "version": "1.0.0",
+  "protected": false,
+  "socket": true,
+  "authors": [
+    {
+      "name": "FailingUp",
+      "url": "https://www.patreon.com/FailingUp"
+    }
+  ],
+  "compatibility": {
+    "minimum": "13",
+    "verified": "13",
+    "maximum": "14"
+  },
+  "esmodules": ["scripts/main.js"],
+  "styles": ["styles/financial-system.css"],
+  "languages": [
+    { "lang": "en", "name": "English", "path": "lang/en.json" }
+  ],
+  "url": "https://www.patreon.com/FailingUp",
+  "manifest": "",
+  "download": "",
+  "readme": "README.md",
+  "bugs": "",
+  "license": "LICENSE"
+}

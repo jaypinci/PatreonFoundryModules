@@ -1,0 +1,117 @@
+<div class="fsl-gm-config">
+  <section class="fsl-gm-toolbar">
+    <button type="button" data-action="createEconomy">
+      <i class="fa-solid fa-plus"></i> {{localize "financial-system-lite.economy.create"}}
+    </button>
+    <button type="button" data-action="openTransactionLog">
+      <i class="fa-solid fa-file-invoice-dollar"></i> {{localize "financial-system-lite.log.title"}}
+    </button>
+    {{#if legacyAvailable}}
+      <button type="button" data-action="importLegacyData">
+        <i class="fa-solid fa-file-import"></i> {{localize "financial-system-lite.import.button"}}
+      </button>
+    {{/if}}
+  </section>
+
+  <section class="fsl-gm-players">
+    <h3>{{localize "financial-system-lite.gmConfig.viewAsPlayer"}}</h3>
+    <ul class="fsl-actor-list">
+      {{#each actors as |actor|}}
+        <li>
+          <img src="{{actor.img}}" width="24" height="24" alt="">
+          {{actor.name}}
+          <button type="button" data-action="viewActorFinances" data-actor-id="{{actor.id}}">
+            {{localize "financial-system-lite.gmConfig.openFinances"}}
+          </button>
+        </li>
+      {{else}}
+        <li class="fsl-empty">{{localize "financial-system-lite.gmConfig.noActors"}}</li>
+      {{/each}}
+    </ul>
+  </section>
+
+  {{#each economies as |economy|}}
+    <fieldset class="fsl-economy-block">
+      <legend>{{economy.name}} ({{economy.currency}})</legend>
+      <button type="button" data-action="deleteEconomy" data-economy-id="{{economy.id}}">
+        {{localize "financial-system-lite.economy.delete"}}
+      </button>
+
+      <h4>{{localize "financial-system-lite.bank.title"}}</h4>
+      <ul>
+        {{#each economy.banks as |bank|}}
+          <li>
+            {{bank.name}} ({{bank.interestRate}}%)
+            <button type="button" data-action="removeBank" data-economy-id="{{economy.id}}" data-bank-id="{{bank.id}}">
+              {{localize "financial-system-lite.general.delete"}}
+            </button>
+          </li>
+        {{else}}
+          <li class="fsl-empty">{{localize "financial-system-lite.bank.noBanks"}}</li>
+        {{/each}}
+      </ul>
+      <button type="button" data-action="addBank" data-economy-id="{{economy.id}}">
+        {{localize "financial-system-lite.bank.create"}}
+      </button>
+
+      <h4>{{localize "financial-system-lite.stock.title"}}</h4>
+      <div class="fsl-volatility-row fsl-volatility-row--all">
+        <span class="fsl-sort-label">{{localize "financial-system-lite.stock.rollAll"}}</span>
+        <button type="button" class="fsl-volatility-btn" data-volatility="stable" data-action="shiftEconomyStocksRandom" data-economy-id="{{economy.id}}">
+          {{localize "financial-system-lite.stock.volatility.stable"}}
+        </button>
+        <button type="button" class="fsl-volatility-btn" data-volatility="semiStable" data-action="shiftEconomyStocksRandom" data-economy-id="{{economy.id}}">
+          {{localize "financial-system-lite.stock.volatility.semiStable"}}
+        </button>
+        <button type="button" class="fsl-volatility-btn" data-volatility="volatile" data-action="shiftEconomyStocksRandom" data-economy-id="{{economy.id}}">
+          {{localize "financial-system-lite.stock.volatility.volatile"}}
+        </button>
+        <button type="button" class="fsl-volatility-btn" data-volatility="extremelyVolatile" data-action="shiftEconomyStocksRandom" data-economy-id="{{economy.id}}">
+          {{localize "financial-system-lite.stock.volatility.extremelyVolatile"}}
+        </button>
+        <button type="button" class="fsl-volatility-btn" data-volatility="unstable" data-action="shiftEconomyStocksRandom" data-economy-id="{{economy.id}}">
+          {{localize "financial-system-lite.stock.volatility.unstable"}}
+        </button>
+      </div>
+      <ul>
+        {{#each economy.stocks as |stock|}}
+          <li>
+            <div class="fsl-stock-config-row">
+              <strong>{{stock.symbol}}</strong> {{stock.name}} — ${{stock.price}} ({{stock.trend}}%)
+              <button type="button" data-action="shiftStock" data-stock-id="{{stock.id}}">
+                {{localize "financial-system-lite.stock.shiftMarket"}}
+              </button>
+              <button type="button" data-action="deleteStock" data-stock-id="{{stock.id}}">
+                {{localize "financial-system-lite.general.delete"}}
+              </button>
+            </div>
+            <div class="fsl-volatility-row">
+              <button type="button" class="fsl-volatility-btn" data-volatility="stable" data-action="shiftStockRandom" data-stock-id="{{stock.id}}">
+                {{localize "financial-system-lite.stock.volatility.stable"}}
+              </button>
+              <button type="button" class="fsl-volatility-btn" data-volatility="semiStable" data-action="shiftStockRandom" data-stock-id="{{stock.id}}">
+                {{localize "financial-system-lite.stock.volatility.semiStable"}}
+              </button>
+              <button type="button" class="fsl-volatility-btn" data-volatility="volatile" data-action="shiftStockRandom" data-stock-id="{{stock.id}}">
+                {{localize "financial-system-lite.stock.volatility.volatile"}}
+              </button>
+              <button type="button" class="fsl-volatility-btn" data-volatility="extremelyVolatile" data-action="shiftStockRandom" data-stock-id="{{stock.id}}">
+                {{localize "financial-system-lite.stock.volatility.extremelyVolatile"}}
+              </button>
+              <button type="button" class="fsl-volatility-btn" data-volatility="unstable" data-action="shiftStockRandom" data-stock-id="{{stock.id}}">
+                {{localize "financial-system-lite.stock.volatility.unstable"}}
+              </button>
+            </div>
+          </li>
+        {{else}}
+          <li class="fsl-empty">{{localize "financial-system-lite.stock.noStocks"}}</li>
+        {{/each}}
+      </ul>
+      <button type="button" data-action="createStock" data-economy-id="{{economy.id}}">
+        {{localize "financial-system-lite.stock.create"}}
+      </button>
+    </fieldset>
+  {{else}}
+    <p class="fsl-empty">{{localize "financial-system-lite.economy.noEconomies"}}</p>
+  {{/each}}
+</div>
